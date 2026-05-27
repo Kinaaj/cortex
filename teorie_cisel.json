@@ -1,0 +1,93 @@
+[
+    {
+        "id": 1,
+        "topic": "Diofantické aprox.",
+        "question": "1a. Dirichletova věta o diofantických aproximacích a její aplikace.",
+        "answer": "Věta o nerovnosti |alpha - p/q| < 1/q^2. Důkaz využívá Dirichletův princip (přihrádkový princip).",
+        "score": 1
+    },
+    {
+        "id": 2,
+        "topic": "Diofantické aprox.",
+        "question": "1b. Hurwitzova věta (důkaz pouze 2. části).",
+        "answer": "Zaměřit se na část důkazu týkající se aproximace racionálními čísly s konstantou 1/sqrt(5).",
+        "score": 1
+    },
+    {
+        "id": 3,
+        "topic": "Transcendentní čísla",
+        "question": "1c. Existence transcendentních čísel: Liouvilleova nerovnost.",
+        "answer": "Znění Liouvilleovy nerovnosti pro algebraická čísla. Konstrukce Liouvilleova čísla.",
+        "score": 1
+    },
+    {
+        "id": 4,
+        "topic": "Transcendentní čísla",
+        "question": "1d. Důkaz transcendence čísla e.",
+        "answer": "Kroky důkazu (obvykle sporem, předpoklad že 'e' je algebraické + vlastnosti integrálů).",
+        "score": 1
+    },
+    {
+        "id": 5,
+        "topic": "Diofantické rovnice",
+        "question": "2a. Popište teorii Pellových (diofantických) rovnic.",
+        "answer": "Rovnice tvaru x^2 - dy^2 = 1. Existence fundamentálního řešení a generování všech ostatních řešení přes jeho mocniny.",
+        "score": 1
+    },
+    {
+        "id": 6,
+        "topic": "Součty čtverců",
+        "question": "2b. Lagrangeova věta o čtyřech čtvercích, aritmetický důkaz.",
+        "answer": "Každé přirozené číslo je součtem 4 čtverců celých čísel. Důkaz využívá Eulerovu identitu pro součin a metodu nekonečného sestupu.",
+        "score": 1
+    },
+    {
+        "id": 7,
+        "topic": "Součty čtverců",
+        "question": "3a. Lagrangeova věta o čtyřech čtvercích, geometrický důkaz.",
+        "answer": "Důkaz pomocí Minkowského věty o konvexním tělese a mřížových bodech (Geometrie čísel).",
+        "score": 1
+    },
+    {
+        "id": 8,
+        "topic": "Prvočísla",
+        "question": "4a. Dokažte Čebyševovy odhady pro funkci počtu prvočísel pi(x).",
+        "answer": "Odvození horních a dolních odhadů pro pi(x) (řádu x/ln x) s využitím vlastností kombinačních čísel (2n nad n) nebo nejmenšího společného násobku.",
+        "score": 1
+    },
+    {
+        "id": 9,
+        "topic": "Aritmetické funkce",
+        "question": "4b. Odvoďte asymptotiku pro sumu_{n < x} tau(n), kde tau(n) je počet dělitelů n.",
+        "answer": "Dirichletova metoda hyperboly. Výsledek je přibližně x*ln(x) + (2gamma - 1)x.",
+        "score": 1
+    },
+    {
+        "id": 10,
+        "topic": "Prvočísla",
+        "question": "4c. Uveďte několik důkazů nekonečnosti prvočísel.",
+        "answer": "1. Eukleidův klasický důkaz. 2. Eulerův důkaz (divergence harmonické řady/součinový tvar). 3. Erdősův důkaz atd.",
+        "score": 1
+    },
+    {
+        "id": 11,
+        "topic": "Modulární aritmetika",
+        "question": "5. Vysvětlete teorii kvadratických zbytků včetně zákona reciprocity.",
+        "answer": "Definice Legendreova symbolu, Eulerovo kritérium, Gaussovo lemma, znění a důkaz Zákona kvadratické reciprocity.",
+        "score": 1
+    },
+    {
+        "id": 12,
+        "topic": "Rozklady (Partitions)",
+        "question": "6a. Vyslovte a dokažte Eulerovu identitu (liché vs. různé části), pomocí vytvořujících funkcí a bijektivně.",
+        "answer": "Identita: Počet rozkladů na liché části se rovná počtu rozkladů na vzájemně různé části. Důkaz přes generující funkce (nekonečný součin) a bijektivní důkaz (Glaisherova bijekce).",
+        "score": 1
+    },
+    {
+        "id": 13,
+        "topic": "Rozklady (Partitions)",
+        "question": "6b. Vyslovte a dokažte Cohen-Remmelovu větu o identitách pro číselné rozklady.",
+        "answer": "Zobecnění týkající se algebraických/kombinatorických identit pro partitions (rozklady).",
+        "score": 1
+    }
+]

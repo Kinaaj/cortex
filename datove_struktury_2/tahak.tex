@@ -1,0 +1,45 @@
+\documentclass[8pt]{extarticle}
+
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage[T1]{fontenc}
+
+% --- OKRAJE (2mm nahoře, 1mm jinde) ---
+\usepackage[a4paper, left=1mm, right=1mm, bottom=1mm, top=1mm, includeheadfoot, landscape]{geometry} 
+
+% --- KLÍČOVÁ OPRAVA: Vynulování skrytých mezer hlavičky ---
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\topskip}{0pt}
+
+\usepackage{multicol} 
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathptmx}
+\usepackage[protrusion=true,expansion=true,tracking=true]{microtype}
+
+% Extrémní smrsknutí matematiky
+\thickmuskip=1mu \medmuskip=1mu \thinmuskip=1mu 
+
+% Vynulování vnitřních systémových mezer
+\pagestyle{empty} 
+\setlength{\parindent}{0pt} 
+\setlength{\parskip}{0pt}   
+\setlength{\parsep}{0pt}
+
+% Drastické řádkování
+\renewcommand{\baselinestretch}{0.75} 
+\setlength{\columnsep}{2mm} 
+
+\begin{document}
+\fontsize{5pt}{5.5pt}\selectfont 
+\begin{multicols*}{5}
+
+% ZDE ZAČÍNÁ TVŮJ SOUVISLÝ TEXT (VLOŽ SEM SVÉ MATERIÁLY)
+% =========================================================================
+Zde zacina tvuj ultra-husty text bez jakychkoliv mezer. Pises vsechno za sebou bez odradkovani aby se vyuzil kazdy milimetr ctverecny. Definice: Necht $V$ je vektorovy prostor nad telesem $T$. Linearni nezavislost znamena ze rovnice $\sum c_i v_i = 0$ ma pouze trivialni reseni $c_i = 0$. Vsechny vzorce sázej striktne inline pomoci jednoho dolaru jako napriklad $\det(A-\lambda I)=0$ pro charakteristicky polynom vlastnich cisel matice $A$. Kazde odradkovani nebo prazdny radek je ted tvuj nepřítel. Pokud chces text opticky rozdelit pouzij treba tucne pismeno nebo sipku jako separator ale nepouzivej enter. Veta o dimenzi: $\dim \operatorname{Ker}(f) + \dim \operatorname{Im}(f) = \dim V$. Pokud pouzivas integraly nebo sumy indexy se diky inline sazbe zmensi vedle ymbolu coz setri vertikalni misto napr. $\int_a^b f(x)dx$.
+
+% --- UKÁZKA POKRAČOVÁNÍ TEXTU PRO PŘEDSTAVU HUSTOTY ---
+Kompaktni font Times (mathptmx) umoznuje nacpat na jeden radek ve sloupci obrovske mnozstvi znaku. Balicek microtype navic jemne stlacil mezery mezi pismeny takze text pusobi jako neprostupna zed informaci. Pozor na tiskarnu: protoze je okraj nastaven na geometrickych 0cm softwarove bude text zacinat na absolutnim okraji PDF. Vetsina beznych domacich a skolnich tiskaren ma ale hardwarovy tiskovy okraj kolem 3 az 5 milimetru podavaci kolecka nedokazu tisknout az na samy okraj papiru. Pokud to vytisknes na takove tiskarne text na okrajich stranky bude oříznut. Pokud nemas specialni borderless tiskarnu doporucuji v balicku geometry zmenit 'margin=0cm' na alespon 'margin=0.3cm'. Usetris si tim zklamani tesne pred zkouskou kdyz zjistis ze ti chybi prva a posledni pismena na strance. Hodne stesti u zkousky na matfyzu!
+
+\end{multicols*}
+\end{document}

@@ -1,0 +1,555 @@
+[
+    {
+        "id": 1,
+        "topic": "1. Introducing",
+        "question": "Definuj Průnikový graf (Intersection graph) a třídu IG(M).",
+        "answer": "Definice 1 a 2",
+        "score": 5
+    },
+    {
+        "id": 2,
+        "topic": "1. Introducing",
+        "question": "Vyjmenuj alespoň 5 tříd průnikových grafů a co reprezentují.",
+        "answer": "1.1.1 Examples",
+        "score": 5
+    },
+    {
+        "id": 3,
+        "topic": "1. Chordal Graphs",
+        "question": "Definuj Chordální graf (Chordal graph) a Simpliciální vrchol (Simplicial vertex).",
+        "answer": "Definice 3 a 4",
+        "score": 5
+    },
+    {
+        "id": 4,
+        "topic": "1. Chordal Graphs",
+        "question": "Co je to PES (Perfect Elimination Scheme)?",
+        "answer": "Definice 5",
+        "score": 5
+    },
+    {
+        "id": 5,
+        "topic": "1. Chordal Graphs",
+        "question": "Co říká lemma o minimálním vrcholovém řezu v chordálních grafech?",
+        "answer": "Lemma 1",
+        "score": 5
+    },
+    {
+        "id": 6,
+        "topic": "1. Chordal Graphs",
+        "question": "Co tvrdí lemma o existenci simpliciálních vrcholů v chordálním grafu?",
+        "answer": "Lemma 2",
+        "score": 5
+    },
+    {
+        "id": 7,
+        "topic": "1. Chordal Graphs",
+        "question": "Definuj Clique-tree decomposition (T = (Q, F)).",
+        "answer": "Definice 6",
+        "score": 3
+    },
+    {
+        "id": 8,
+        "topic": "1. Chordal Graphs",
+        "question": "Věta: Vyjmenuj 4 ekvivalentní tvrzení pro graf G (charakterizace chordálních grafů).",
+        "answer": "Věta 1",
+        "score": 2
+    },
+    {
+        "id": 9,
+        "topic": "1. Chordal Graphs",
+        "question": "Jsou chordální grafy perfektní (perfect)? Jakou metodu barvení zmiňuje důkaz?",
+        "answer": "Důsledek po Větě 1",
+        "score": 3
+    },
+    {
+        "id": 10,
+        "topic": "2. Interval Graphs",
+        "question": "Definuj Intervalový graf (Interval graph).",
+        "answer": "Definice 7: Graf je intervalový, pokud je isomorfní průnikovému grafu systému intervalů na přímce.",
+        "score": 5
+    },
+    {
+        "id": 11,
+        "topic": "2. Interval Graphs",
+        "question": "Definuj Clique-path decomposition.",
+        "answer": "Definice 8: Je to clique-tree decomposition, kde podkladový strom je cesta (path).",
+        "score": 5
+    },
+    {
+        "id": 12,
+        "topic": "2. Interval Graphs",
+        "question": "Věta 2: Vyjmenuj 3 ekvivalentní tvrzení pro graf G (charakterizace intervalových grafů).",
+        "answer": "Věta 2:\n1. G je intervalový graf.\n2. G má clique-path dekompozici.\n3. G je průnikový graf podcest cesty.",
+        "score": 2
+    },
+    {
+        "id": 13,
+        "topic": "2. Comparability Graphs",
+        "question": "Definuj Comparability graph (CO) a částečné uspořádání P=(V, <=).",
+        "answer": "Definice 9: Graf je CO, pokud existuje částečné uspořádání (antireflexivní, antisymetrické, tranzitivní) na vrcholech tak, že hrana existuje <==> vrcholy jsou porovnatelné.",
+        "score": 4
+    },
+    {
+        "id": 14,
+        "topic": "2. Comparability Graphs",
+        "question": "Jaká vlastnost orientace hran charakterizuje comparability grafy?",
+        "answer": "Observation pod Definicí 9: Jejich hrany lze tranzitivně orientovat.",
+        "score": 5
+    },
+    {
+        "id": 15,
+        "topic": "2. Comparability Graphs",
+        "question": "Jsou comparability grafy perfektní?",
+        "answer": "Ano, podle Věty 3 (Comparability graphs are perfect).",
+        "score": 5
+    },
+    {
+        "id": 16,
+        "topic": "2. Relations (Thm 4)",
+        "question": "Co znamená notace co-A?",
+        "answer": "Notation pod Větou 3: Třída obsahující doplňky grafů ze třídy A.",
+        "score": 5
+    },
+    {
+        "id": 17,
+        "topic": "2. Relations (Thm 4)",
+        "question": "Jaký je vztah mezi Function graphs (FUN) a Comparability graphs (CO)?",
+        "answer": "Věta 4, bod 1: FUN = co-CO",
+        "score": 4
+    },
+    {
+        "id": 18,
+        "topic": "2. Relations (Thm 4)",
+        "question": "Jak lze vyjádřit Permutation graphs (PER) pomocí třídy CO?",
+        "answer": "Věta 4, bod 2: PER = CO ∩ co-CO",
+        "score": 5
+    },
+    {
+        "id": 19,
+        "topic": "2. Relations (Thm 4)",
+        "question": "Jak lze vyjádřit Interval graphs (INT) pomocí tříd CHOR a CO?",
+        "answer": "Věta 4, bod 3: INT = CHOR ∩ co-CO",
+        "score": 2
+    },
+    {
+        "id": 20,
+        "topic": "3. Interval Filament Graphs",
+        "question": "Definuj Intervalové vlákno (Interval filament) a třídu IFA.",
+        "answer": "Definice 10: Křivka v polorovině s konci na hraniční přímce l, která leží celá ve vertikálním pruhu určeném jejími konci. IFA je třída průnikových grafů těchto vláken.",
+        "score": 5
+    },
+    {
+        "id": 21,
+        "topic": "3. Interval Filament Graphs",
+        "question": "Jaké vztahy platí mezi bázovými intervaly vláken a jejich protnutím?",
+        "answer": "Comment pod Obr 3.1:\n1. Intervaly se překrývají -> Vlákna se MUSÍ protnout.\n2. Intervaly disjunktní -> Vlákna se NEPROTNOU.\n3. Intervaly v inkluzi -> Vlákna se mohou i nemusí protnout.",
+        "score": 5
+    },
+    {
+        "id": 22,
+        "topic": "3. Interval Filament Graphs",
+        "question": "Které známé třídy grafů obsahuje třída IFA?",
+        "answer": "Observation: INT, CHOR, FUN, CIR, CA, PC.",
+        "score": 5
+    },
+    {
+        "id": 23,
+        "topic": "3. Interval Filament Graphs",
+        "question": "Definuj třídu A-mixed.",
+        "answer": "Definice 11 (opravená): Graf G=(V,E) je A-mixed, pokud lze E rozdělit na E1 a E2 tak, že:\n1. Graf (V, E1) patří do třídy A.\n2. E2 má tranzitivní orientaci.\n3. Platí mixing property (uv v E2 orientovaně a vw v E1 -> uw v E1).",
+        "score": 4
+    },
+    {
+        "id": 24,
+        "topic": "3. Interval Filament Graphs",
+        "question": "Jaký je vztah mezi co-IFA a co-INT?",
+        "answer": "Věta 8: co-IFA = (co-INT)-mixed. Plus celý důkaz.",
+        "score": 2
+    },
+    {
+        "id": 25,
+        "topic": "4.1 Interval Graphs",
+        "question": "Jak se řeší Weighted Clique na intervalových grafech?",
+        "answer": "Věta 10: Polynomiálně. Intervalové grafy mají jen lineárně mnoho maximálních klik, takže stačí projít všechny a vybrat tu s největší vahou.",
+        "score": 5
+    },
+    {
+        "id": 26,
+        "topic": "4.1 Interval Graphs",
+        "question": "Jak se řeší Weighted Independent Set na intervalových grafech?",
+        "answer": "Věta 11: Polynomiálně pomocí dynamického programování. Postupujeme po seřazených koncových bodech intervalů zleva doprava.",
+        "score": 5
+    },
+    {
+        "id": 27,
+        "topic": "4.2 Comparability Graphs",
+        "question": "Jak se řeší Weighted Clique na comparability grafech?",
+        "answer": "Věta 12: Polynomiálně. Využijeme tranzitivní orientaci pro topologické seřazení a následně dynamické programování ($w_i = w(v_i) + \\max w_j$).",
+        "score": 4
+    },
+    {
+        "id": 28,
+        "topic": "4.2 Comparability Graphs",
+        "question": "Jak se řeší Weighted Independent Set na comparability grafech?",
+        "answer": "Věta 13: Polynomiálně převedením na problém toku v síti (min-cost flow) na základě částečného uspořádání (rozšíření Dilworthovy věty).",
+        "score": 2
+    },
+    {
+        "id": 29,
+        "topic": "4.3 Interval-filament Graphs",
+        "question": "Jak se řeší Weighted Clique na interval-filament grafech (IFA)?",
+        "answer": "Věta 14: Polynomiálně (pokud máme reprezentaci). Graf se rozdělí na podgrafy indukované intervaly nad jednotlivými body, což jsou co-comparability grafy, kde to umíme řešit.",
+        "score": 3
+    },
+    {
+        "id": 30,
+        "topic": "4.3 Interval-filament Graphs",
+        "question": "Co platí pro Weighted Clique na A-mixed grafech?",
+        "answer": "Věta 15 (Meta-theorem): Pokud umíme řešit Weighted Clique polynomiálně pro třídu $A$, pak to umíme i pro $A$-mixed grafy (pokud máme daný rozklad hran).",
+        "score": 4
+    },
+    {
+        "id": 31,
+        "topic": "4.3 Interval-filament Graphs",
+        "question": "Je Weighted Independent Set řešitelný na IFA grafech?",
+        "answer": "Corollary: Ano, je polynomiální. Využívá se vztah, že co-IFA grafy jsou (co-INT)-mixed, a pro co-INT grafy umíme Weighted Clique řešit.",
+        "score": 5
+    },
+    {
+        "id": 32,
+        "topic": "5. Recognition of Chordal Graphs",
+        "question": "Jaká je časová složitost rozpoznávání chordálních grafů (naivní vs. optimální)?",
+        "answer": "Naivní přístup (hledání simpliciálního vrcholu) trvá $O(n^4)$. Optimální algoritmus využívající LexBFS běží v lineárním čase $O(m+n)$.",
+        "score": 4
+    },
+    {
+        "id": 33,
+        "topic": "5. Recognition of Chordal Graphs",
+        "question": "Co dělá algoritmus LexBFS (Lexicographic Breadth-First Search)?",
+        "answer": "Algoritmus 2: Prochází graf a čísluje vrcholy. V každém kroku vybírá vrchol, který má lexikograficky největší návěští (složené z čísel již očíslovaných sousedů).",
+        "score": 5
+    },
+    {
+        "id": 34,
+        "topic": "5. Recognition of Chordal Graphs",
+        "question": "Jaký je vztah mezi LexBFS a PES?",
+        "answer": "Věta 17: Pokud je graf $G$ chordální, pak uspořádání $\\sigma(n), \\sigma(n-1), \\dots, \\sigma(1)$ vygenerované LexBFS je Perfektní eliminační schéma (PES).",
+        "score": 4
+    },
+    {
+        "id": 35,
+        "topic": "5. Recognition of Chordal Graphs",
+        "question": "Stačí samotný LexBFS k důkazu, že je graf chordální?",
+        "answer": "Ne. LexBFS vždy vygeneruje nějaké pořadí. Musíme následně ověřit, zda je toto pořadí skutečně PES, k čemuž slouží algoritmus TestPES.",
+        "score": 5
+    },
+    {
+        "id": 36,
+        "topic": "5. Recognition of Chordal Graphs",
+        "question": "Co dělá algoritmus TestPES? A proč je korektní?",
+        "answer": "Algoritmus 3: V lineárním čase ověří, zda je zadané uspořádání vrcholů $\\sigma$ platným Perfektním eliminačním schématem (PES).",
+        "score": 3
+    },
+    {
+        "id": 37,
+        "topic": "5. Recognition of Chordal Graphs",
+        "question": "Může být libovolný vrchol chordálního grafu první v PES?",
+        "answer": "Ano. Remark na konci kapitoly říká, že jakýkoliv vrchol chordálního grafu může být použit jako první vrchol v PES (a LexBFS ho tam umí dát).",
+        "score": 5
+    },
+    {
+        "id": 38,
+        "topic": "6. Recognition of Comparability Graphs",
+        "question": "Definuj vlastnosti relace M: Sensitive, Complete, Faithful a Whole.",
+        "answer": "Definice 12: Sensitive: Vynucuje orientaci na indukovaných P3 (x->y a x-z-y bez hrany yz -> x->z).\nComplete: Sensitive + Transitive.\nFaithful: (x,y) v M implikuje, že xy je hrana v grafu.\nWhole: Každá hrana grafu je orientovaná alespoň jedním směrem.",
+        "score": 5
+    },
+    {
+        "id": 39,
+        "topic": "6. Recognition of Comparability Graphs",
+        "question": "Jaká kombinace vlastností přesně definuje 'tranzitivní orientaci' grafu?",
+        "answer": "Observation: Relace musí být Transitive, Whole a Faithful. (Z toho automaticky plyne, že je i Sensitive a Antisymmetric).",
+        "score": 4
+    },
+    {
+        "id": 40,
+        "topic": "6. Recognition of Comparability Graphs",
+        "question": "Co je to sensitivní (resp. tranzitivní) uzávěr relace M?",
+        "answer": "Definice 13: Je to nejmenší relace obsahující M, která je sensitivní (značíme <M>_S), resp. tranzitivní (<M>_T).",
+        "score": 4
+    },
+    {
+        "id": 41,
+        "topic": "6. Recognition of Comparability Graphs",
+        "question": "Jaký je vztah mezi úplným uzávěrem <M> a sensitivním/tranzitivním uzávěrem?",
+        "answer": "Lemma 3: Úplný uzávěr lze získat ve dvou krocích: Nejdříve uděláme sensitivní uzávěr, a pak tranzitivní. Tedy <M> = <<M>_S>_T.",
+        "score": 2
+    },
+    {
+        "id": 42,
+        "topic": "6. Recognition of Comparability Graphs",
+        "question": "Co je to Block (blok) a Pathway (cesta vynucení)?",
+        "answer": "Definice 14: Block <(x,y)>_S je sensitivní uzávěr jedné hrany. Pathway je posloupnost dvojic (x_i, y_i), která modeluje šíření orientace sensitivním pravidlem (vynucuje orientaci).",
+        "score": 5
+    },
+    {
+        "id": 43,
+        "topic": "6. Recognition of Comparability Graphs",
+        "question": "Závisí blok <(x,y)>_S na výběru hrany (x,y) uvnitř bloku?",
+        "answer": "Proposition 21: Ne. Pro každou hranu (u,v), která leží v bloku <(x,y)>_S, platí, že generuje ten samý blok. Tedy <(u,v)>_S = <(x,y)>_S. + DUKAZ!",
+        "score": 4
+    },
+    {
+        "id": 44,
+        "topic": "6. Recognition of Comparability Graphs",
+        "question": "Co platí, pokud je blok <(x,y)>_S antisymetrický?",
+        "answer": "Lemma 4: Pokud je blok antisymetrický, pak je automaticky i tranzitivní, faithful a complete. (Toto je klíčové pro algoritmus - stačí ověřit antisymetrii).",
+        "score": 2
+    },
+    {
+        "id": 45,
+        "topic": "6. Recognition of Comparability Graphs",
+        "question": "Nutná a postačující podmínka pro tranzitivní orientovatelnost?",
+        "answer": "Věta 25 (Theorem 25): Graf je tranzitivně orientovatelný (Comparability graph) PRÁVĚ TEHDY, KDYŽ je blok <(x,y)>_S antisymetrický pro každou hranu xy. + Lemma 5 a jeho důkaz",
+        "score": 2
+    },
+    {
+        "id": 46,
+        "topic": "6. Recognition of Comparability Graphs",
+        "question": "Algoritmus 4 (Transitive Orientation): Popiš stručně jeho průběh.",
+        "answer": "1. M je prázdná.\n2. Dokud M není 'Whole', vyber neorientovanou hranu xy.\n3. Vytvoř její blok U = <(x,y)>_S.\n4. Pokud U není antisymetrický -> STOP (není to CO graf).\n5. Jinak přidej U do M a tranzitivně uzavři. Opakuj.",
+        "score": 5
+    },
+    {
+        "id": 47,
+        "topic": "8. Boxicity and Grid Intersection",
+        "question": "Definuj Boxicity grafu G (box(G)).",
+        "answer": "Definice 19: Je to nejmenší celé číslo d takové, že G je průnikovým grafem d-dimenzionálních boxů (intervalů v d-dimenzionálním prostoru).",
+        "score": 4
+    },
+    {
+        "id": 48,
+        "topic": "8. Boxicity and Grid Intersection",
+        "question": "Jak lze boxicitu vyjádřit pomocí intervalových grafů?",
+        "answer": "Proposition 54: Boxicita se rovná minimálnímu počtu intervalových grafů, jejichž průnikem je graf G (hrana existuje v G <==> existuje ve všech těchto intervalových grafech).",
+        "score": 2
+    },
+    {
+        "id": 49,
+        "topic": "8. Boxicity and Grid Intersection",
+        "question": "Definuj Grid Intersection graph.",
+        "answer": "Definice 20: Graf je Grid Intersection, pokud má reprezentaci pomocí vertikálních a horizontálních úseček, kde se žádné dvě úsečky stejného směru neprotínají.",
+        "score": 5
+    },
+    {
+        "id": 50,
+        "topic": "8. Boxicity and Grid Intersection",
+        "question": "Kdy má bipartitní graf Grid Intersection reprezentaci respektující dané lineární uspořádání vrcholů?",
+        "answer": "Věta 55: Právě tehdy, když graf neobsahuje zakázanou konfiguraci 6 vrcholů nazývanou 'volkswagen' (vzhledem k daným uspořádáním).",
+        "score": 3
+    },
+    {
+        "id": 51,
+        "topic": "8. Boxicity and Grid Intersection",
+        "question": "Je problém rozpoznávání Grid Intersection grafů (bez zadaného uspořádání) lehký?",
+        "answer": "Ne. Text pod Větou 55 uvádí, že rozhodnout, zda je daný bipartitní graf Grid Intersection grafem, je NP-úplný problém.",
+        "score": 2
+    },
+    {
+        "id": 52,
+        "topic": "8. Boxicity and Grid Intersection",
+        "question": "Jaký je vztah mezi boxicitou a Grid Intersection grafy?",
+        "answer": "Věta 56: Každý bipartitní graf s boxicitou 2 je Grid Intersection grafem.",
+        "score": 2
+    },
+    {
+        "id": 53,
+        "topic": "9. String Graphs",
+        "question": "Definuj String graph.",
+        "answer": "Definice 21: Je to průnikový graf libovolných křivek (lines/strings) v rovině.",
+        "score": 5
+    },
+    {
+        "id": 54,
+        "topic": "9. String Graphs",
+        "question": "Definuj třídu OuterString a Constrained OuterString.",
+        "answer": "Definice 22: OuterString jsou průnikové grafy křivek, které začínají na hranici kruhu a pokračují dovnitř. Constrained navíc vyžaduje specifické pořadí výskytu křivek na kružnici.",
+        "score": 5
+    },
+    {
+        "id": 55,
+        "topic": "9. String Graphs",
+        "question": "Jaká je složitost rozpoznávání STRING grafů?",
+        "answer": "Věta 60: Rozpoznávání je NP-hard (důkaz redukcí z Planar 3-SAT). Zároveň Věta 64 říká, že je v NP.",
+        "score": 2
+    },
+    {
+        "id": 56,
+        "topic": "9. String Graphs",
+        "question": "Do jaké třídy složitosti patří rozpoznávání segmentových (SEG) a konvexních (CONV) grafů?",
+        "answer": "Věta 61: Patří do třídy $\\exists\\mathbb{R}$ (Existential Theory of the Reals), což je podmnožina PSPACE.",
+        "score": 3
+    },
+    {
+        "id": 57,
+        "topic": "9. String Graphs",
+        "question": "Co je to AT-graf (Abstract Topological graph)?",
+        "answer": "Definice 24: Je to dvojice $(G, R)$, kde $R$ je množina dvojic hran, které se *musí* protnout. Graf je realizovatelný, pokud existuje nakreslení, kde se protínají právě a jen dvojice z $R$.",
+        "score": 5
+    },
+    {
+        "id": 58,
+        "topic": "9. String Graphs",
+        "question": "Definuj hodnotu STR(n).",
+        "answer": "Definice 23: Je to minimální číslo $k$ takové, že každý realizovatelný STRING graf o $n$ vrcholech má reprezentaci s nejvýše $k$ průsečíky.",
+        "score": 4
+    },
+    {
+        "id": 59,
+        "topic": "9. String Graphs",
+        "question": "Definuj hodnotu AT(n).",
+        "answer": "Definice 23: Je to minimální číslo $k$ takové, že každý realizovatelný AT-graf o $n$ hranách má reprezentaci s nejvýše $k$ průsečíky.",
+        "score": 3
+    },
+    {
+        "id": 60,
+        "topic": "9. String Graphs",
+        "question": "Jaké jsou odhady pro počet průsečíků AT(n) resp. STR(n)?",
+        "answer": "Počet průsečíků může být exponenciální. Dolní odhad je $2^{cn}$ (Věta 63) a horní odhad je $n \\cdot 2^n$ (Věta 65). Navíc: AT(n) ~ STR(n)",
+        "score": 2
+    },
+    {
+        "id": 61,
+        "topic": "7. Visibility Rep. (Deep Dive)",
+        "question": "Jak se využívá 'Ear Decomposition' v důkazu existence s-t číslovaní?",
+        "answer": "Důkaz Prop 32: Graf se staví postupným přidáváním 'uší' (ears) k cyklu. Každé ucho se orientuje souhlasně se směrem od zdroje (s) ke stoku (t), čímž se zachová acykličnost a existence jediného s a t.",
+        "score": 3
+    },
+    {
+        "id": 62,
+        "topic": "7. Visibility Rep. (Deep Dive)",
+        "question": "Každý vrcholově 2-souvislý graf má s-t číslování a nakreslení do roviny takové, že...",
+        "answer": "Věta 33: 1. Každá hrana je y-monotónní křivka.\n2. Každá hrana je orientována směrem nahoru (upward).",
+        "score": 2
+    },
+    {
+        "id": 63,
+        "topic": "7. Visibility Rep. (Deep Dive)",
+        "question": "Algoritmus 5: Jak funguje a například jakou roli hraje duální graf G* při konstrukci obdélníkové reprezentace? A jeho důkaz.",
+        "answer": "Algoritmus 5: Zatímco s-t číslovaní primárního grafu G určuje y-souřadnice, topologické uspořádání orientovaného duálního grafu G* určuje x-souřadnice (zleva doprava).",
+        "score": 2
+    },
+    {
+        "id": 64,
+        "topic": "7. Visibility Rep. (Deep Dive)",
+        "question": "Jak je orientován duální graf G* v Algoritmu 5? A co o této orientaci víme?",
+        "answer": "Claim 36: Hrany G* jsou orientovány zleva doprava (přetínají hrany G, které jdou zdola nahoru). Tato orientace je acyklická a má jediný zdroj (stěna A) a jediný stok (stěna Z).",
+        "score": 2
+    },
+    {
+        "id": 65,
+        "topic": "7. Visibility Rep. (Deep Dive)",
+        "question": "Proč se segmenty v zkonstruované reprezentaci neprotínají?",
+        "answer": "Claim 42: Pokud by se protínaly, znamenalo by to existenci cyklu v G* nebo porušení topologického uspořádání (spor s tím, že hrany jdou v G* jen zleva doprava).",
+        "score": 2
+    },
+    {
+        "id": 66,
+        "topic": "7. Grid Contact Graphs",
+        "question": "Jaké základní vlastnosti mají Grid Intersection a Grid Contact grafy?",
+        "answer": "Proposition 44: 1. Každý Grid Intersection graf je bipartitní. (Protože svislé úsečky mohou prottnout jen vodorovné, ne sebe navzájem).\n2. Každý Grid Contact graf je rovinný. (Protože kontakt neznamená křížení).",
+        "score": 2
+    },
+    {
+        "id": 67,
+        "topic": "7. Grid Contact Graphs",
+        "question": "Která třída grafů přesně odpovídá Grid Contact grafům?",
+        "answer": "Věta 45: Každý rovinný bipartitní graf je Grid Contact grafem. (Tedy třída Grid Contact grafů je ekvivalentní třídě rovinných bipartitních grafů).",
+        "score": 2
+    },
+    {
+        "id": 68,
+        "topic": "7. Definitions",
+        "question": "Definuj přesně s-t numbering (bipolární orientaci).",
+        "answer": "Definice 15: Je to acyklická orientace hran grafu, která má přesně jeden zdroj (vrchol bez vstupujících hran) a přesně jeden stok (vrchol bez vystupujících hran).",
+        "score": 4
+    },
+    {
+        "id": 69,
+        "topic": "7. Definitions",
+        "question": "Definuj Rectangle visibility representation rovinného grafu G.",
+        "answer": "Definice 16: Je to uspořádání disjunktních, osám rovnoběžných obdélníků v rovině tak, že:\n1. (Sjednocení) horizontálních stran odpovídají vrcholům G.\n2. (Sjednocení) vertikálních stran odpovídají stěnám G.\n3. Každý obdélník odpovídá hraně spojující vrcholy (horní/dolní strana) a oddělující stěny (levá/pravá strana).",
+        "score": 4
+    },
+    {
+        "id": 70,
+        "topic": "7. Definitions",
+        "question": "Definuj Grid Intersection graph.",
+        "answer": "Definice 17 / 20: Graf je Grid Intersection graph, pokud má reprezentaci pomocí vertikálních a horizontálních úseček, kde žádné dvě úsečky stejného směru nesdílejí bod (jsou po dvou disjunktní).",
+        "score": 5
+    },
+    {
+        "id": 71,
+        "topic": "7. Definitions",
+        "question": "Definuj Grid Contact graph.",
+        "answer": "Definice 17: Je to Grid Intersection graph, který má reprezentaci, kde se žádné dvě úsečky neprotínají (cross), tj. jakékoliv dvě nedisjunktní úsečky se pouze dotýkají (touch).",
+        "score": 4
+    },
+    {
+        "id": 72,
+        "topic": "8. Definitions",
+        "question": "Definice 19: Definuj Boxicitu grafu G (box(G)).",
+        "answer": "Boxicita grafu G je nejmenší celé číslo d takové, že G je průnikovým grafem boxů v R^d (tj. d-dimenzionálních intervalů v d-dimenzionálním eukleidovském prostoru).",
+        "score": 4
+    },
+    {
+        "id": 73,
+        "topic": "8. Schnyder Woods",
+        "question": "Co je to Kanonické uspořádání (Canonical ordering) rovinné triangulace?",
+        "answer": "Definice 18: Je to očíslování vrcholů $1, \\dots, n$, kde $1,2,n$ tvoří vnější stěnu a pro každé $k$ (od 3 do $n-1$) platí:\n1. Podgraf $G_k$ indukovaný vrcholy $1\\dots k$ je 2-souvislý.\n2. Sousedé vrcholu $k+1$ v $G_k$ leží na hranici $G_k$ souvisle (vedle sebe).",
+        "score": 2
+    },
+    {
+        "id": 74,
+        "topic": "8. Schnyder Woods",
+        "question": "Jaký typ grafu má vždy kanonické uspořádání?",
+        "answer": "Věta 46: Ano, každá rovinná triangulace má kanonické uspořádání. Důkaz probíhá indukcí od $n$ dolů k 3 (odebíráním vhodného vrcholu na hranici).",
+        "score": 5
+    },
+    {
+        "id": 75,
+        "topic": "8. Schnyder Woods",
+        "question": "Algoritmus 6 (Schnyder Wood): Jak se orientují a barví hrany?",
+        "answer": "Pro každý vrchol $i$ (od 3 do $n-1$) se určí:\n1. Nejlevější soused v $G_{i-1}$ -> hrana $i \\to b(i)$ je modrá.\n2. Nejpravější soused v $G_{i-1}$ -> hrana $i \\to g(i)$ je zelená.\n3. Soused s nejvyšším číslem -> hrana $i \\to r(i)$ je červená.",
+        "score": 5
+    },
+    {
+        "id": 76,
+        "topic": "8. Schnyder Woods",
+        "question": "Jakou strukturu tvoří barevné hrany (Schnyder wood)?",
+        "answer": "Věta 47: Modré hrany tvoří strom kořenovaný v 1. Zelené hrany tvoří strom kořenovaný v 2. Červené hrany tvoří strom kořenovaný v $n$. Každá vnitřní hrana patří právě do jednoho z těchto stromů.",
+        "score": 5
+    },
+    {
+        "id": 77,
+        "topic": "8. Schnyder Woods",
+        "question": "Jak vypadá lokální okolí vnitřního vrcholu ve Schnyderově lese?",
+        "answer": "Proposition 48: Když obcházíme vrchol proti směru hodinových ručiček, vidíme v tomto pořadí: 1 výstupní modrou, skupinu vstupních červených, 1 výstupní zelenou, skupinu vstupních modrých, 1 výstupní červenou a skupinu vstupních zelených hran.",
+        "score": 5
+    },
+    {
+        "id": 78,
+        "topic": "8. Schnyder Woods",
+        "question": "Jaký je vztah mezi rovinnými grafy a kontaktními reprezentacemi trojúhelníků?",
+        "answer": "Věta 49: Každý rovinný graf je kontaktním grafem rovnoramenných trojúhelníků s horizontální základnou. (Konstrukce využívá Schnyder woods a kanonické uspořádání).",
+        "score": 3
+    },
+    {
+        "id": 79,
+        "topic": "8. Schnyder Woods",
+        "question": "Na jak velkou mřížku lze nakreslit rovinný graf o n vrcholech?",
+        "answer": "Věta 50: Každý rovinný graf o $n$ vrcholech má rovinné nakreslení úsečkami (straight-line embedding) na mřížce velikosti $n \\times n$.",
+        "score": 2
+    }
+]

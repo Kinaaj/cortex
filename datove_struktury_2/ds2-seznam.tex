@@ -1,0 +1,430 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\begin{document}
+
+\title{Seznam požadavků ke zkoušce z Datových struktur II\\-- Kapitoly a pojmy k ověření --}
+\author{Matfyz}
+\date{\today}
+\maketitle
+
+\section{Statické slovníky}
+
+\subsection{Teoretický úvod a výpočetní model}
+\begin{itemize}
+    \item \textbf{Výpočetní model Word-RAM}:
+    \begin{itemize}
+        \item Definice velikosti slova $w$ a vztah k velikosti univerza $U$ ($u = 2^w$).
+        \item Přehled operací prováděných v konstantním čase $O(1)$.
+        \item Paměťová omezení a adresace buněk.
+    \end{itemize}
+    \item \textbf{Formulace statického slovníkového problému}:
+    \begin{itemize}
+        \item Časový invariant operace \texttt{Lookup} v nejhorším případě ($O(1)$).
+        \item Prostorový požadavek na striktně lineární paměť ($O(n)$).
+    \end{itemize}
+\end{itemize}
+
+\subsection{Perfektní hešování FKS (Fredman, Komlós, Szemerédi)}
+\begin{itemize}
+    \item \textbf{Definice $c$-univerzálního systému}:
+    \item \textbf{Lemma o střední hodnotě počtu kolizí, při výběru náhodné heš. funkce}:
+    \begin{itemize}
+        \item Očekávaný počet kolizí v závislosti na parametrech $c$, $n$ a $m$.
+    \end{itemize}
+    \item \textbf{Nalezení perfektní hešovací funkce h pro $ m = \left\lceil n^2 \cdot c \right\rceil$ a $ m = n $ }:
+    \begin{itemize}
+        \item Markovova nerovnost.
+        \item Lemma o džbánu.
+        \item $\mathbb{E}[\# \textit{pokusů než najdeme takovou h}]$.
+    \end{itemize}
+    \item \textbf{FKS algoritmus}:
+    \begin{itemize}
+        \item Dvouúrovňové hešování: $ f, g_i $.
+        \item \textit{Lookup(x)}.
+        \item Velikost všech $Q_i$ je $ O(n) $ (trik $ p_i^2 = p_i + 2\binom{p_i}{2} $).
+        \item Spotřeba paměti a čas na konstrukci.
+    \end{itemize}
+    \item \textbf{Odbočka o třídění $ x \in_R [0,1] $}:
+    \begin{itemize}
+        \item $ n $ přihrádek.
+        \item Bubblesort v přihrádce v $ O(p_i^2) $.
+        \item Proč to má $ O(n) $ složitost?
+    \end{itemize}
+\end{itemize}
+\subsection{Deterministické slovníky}
+\begin{itemize}
+    \item \textbf{Redukce z obecného univerza na $ O(n^2) $.}
+    \item \textbf{Definice $q$-dobré funkce}
+    \item \textbf{Lemma pokud $(f,g)$ je $q$-dobrá a $r \geq log(n) + 1$, pak $ \exists (f', g') $, která je $q'$-dobrá}
+    \begin{itemize}
+        \item Umím vyrobit z funkce $(f,g)$ novou, s méně kolizema.
+    \end{itemize}
+    \item \textbf{Tříkrokový algoritmus, pro nalezení perfektní hešovací funkce}:
+    \begin{itemize}
+        \item Zvolit $r$. Množina $S \subset {0,1}^w$, kde $w \leq 2log(n) + O(1)$.
+        \item $(f,g) \rightarrow (f',g') \rightarrow (f'',g'')$.
+        \item $(f'', g'')$ je \textit{0-dobrá} funkce.
+    \end{itemize}
+    \item \textbf{Zahešování $x$}:
+    \begin{itemize}
+        \item Čas $O(1)$ a prostor $O(n)$.
+    \end{itemize}
+    \item \textbf{Důkaz Lemmatu}:
+    \begin{itemize}
+        \item Seřazení řádků.
+        \item Volíme posuny $a_i$ náhodně, odhadneme $\#$ nových kolizí ($\#NK$) nově posunutého řádku $S_i$ s do teď posunutými řádky $|S_{<i}|$.
+        \item Zkoušíme trefit $a_i$ do $O(1)$ pokusů (třeba 2). Ukážeme, kolik maximálně bude střední hodnota $\#NK$. 
+        \item Všechny $a_i$ jdou najít efektivně v čase průměrně $O(n)$.
+        \item Odhadneme počet všech kolizí, přes všechny řádky.
+        \begin{itemize}
+            \item Vyčistíme sumu od konce: triviální případy $|S_i| = 0$ nebo $|S_i| =1$.
+            \item Omezíme křížové součiny $|S_i|\cdot|S_{<i}|$.
+            \item Využijeme odhadu $d^2 \leq 4 \cdot \binom{d}{2}$, což platí pouze pro nějaká $d$, k provázání $|S_j|^2$ s $q$, kdy $q$ je celkový počet kolizí původních.
+            \item Dosadíme do velké původní sumy pro $\#$\textit{kolizí} a dostaneme odhad $\#$\textit{kolizí} $\leq n \cdot \left\lfloor 2^{3-r} \cdot q \right\rfloor $. 
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Derandomizace}:
+    \begin{itemize}
+        \item Metoda podmíněné střední hodnoty.
+        \item Jak počítat bity $a_i = {0,1}^r$ efektivně?
+        \item Složitost zpracování jednoho řádku, plus složitost datové struktury, ve které \\ si udržujeme počty prvků, v sloupečcích a podle ní počítáme bity $a_i$, pro řádek $S_i$.
+        \item Celková složitost derandomizovaného algoritmu $O(n \cdot log(n))$.
+    \end{itemize}
+\end{itemize}
+\section{Celočíselné datové struktury}
+\subsection{van Emde-Boasovy stromy}
+\begin{itemize}
+    \item \textbf{Anatomie vEB stromu}:
+    \begin{itemize}
+        \item $min(S)$
+        \item $max(S')$
+        \item Přihrádky $P_0,\ldots,P_{\sqrt{U}-1}$
+        \item Sumární strom ... $Sum$
+    \end{itemize}
+    \item \textbf{Find($x$)}
+    \item \textbf{Succ($x$) (nejbližší následník)}:
+    \begin{itemize}
+        \item Rychlá kontrola s $min$.
+        \item $x = (i,j)$.
+        \item Zkusíme přihrádku $P_i$.
+        \item Jinak vrátíme $P_{Sum.Succ(i)}.min$ . 
+    \end{itemize}
+    \item \textbf{Insert($x$)}:
+    \begin{itemize}
+        \item Rychlá kontrola s $min$.
+        \item Pokud neskončíme, vezmeme $x$.
+        \item Upravíme $max$ podle $x$.
+        \item $x = (i,j)$.
+        \item Rekurzíme se podle:
+        \begin{itemize}
+            \item Pokud $P_i$ existuje\dots
+            \item Pokud $P_i$ prázdná\dots
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Delete($x$)}:
+    \begin{itemize}
+        \item Pokud prázdný strom.
+        \item Jinak pokud mažeme minimum, tak se může změnit $x$\dots.
+        \item Pak $x = (i,j)$.
+        \item Zavoláme $P_i.Delete(j)$.
+        \item Pokud se $P_i$ vyprázdnila, musíme aktualizovat $Sum$.
+        \item Aktualizovat $max$, kdybychom ho smazali.
+    \end{itemize}
+    \item \textbf{Problém s velikostí potřebné paměti $O(|U|)$, kde $|U| = 2^w$}:
+    \begin{itemize}
+        \item Naivní řešení s obyčejným polem.
+        \item Trik pomocí $M$, $I$, $X$.
+        \item Operace $Read(i)$ a $Write(i, y)$.
+    \end{itemize}
+
+
+\end{itemize}
+
+\subsection{Van-Emde Boasov "intervalový" strom}
+    \begin{itemize}
+        \item \textbf{Struktura stromu}:
+        \begin{itemize}
+            \item Charakteristický vektor $S$.
+            \item $O(|U|)$ vrcholů.
+            \item Hloubka $O(log|U|) = O(w)$.
+            \item Monotónnost cesty z listu do kořene.
+        \end{itemize}
+        \item \textbf{Operace}:
+        \begin{itemize}
+            \item Rychlost operací $Pred(x)$, $Succ(x)$, $Find(x)$, pokud budeme umět rychle bin. vyhledávat na cestě z listu do kořene, bude $O(LL(|U|))$, jinak $O(L|U|)$.
+            \item Plus musíme udržovat $min$ a $max$ podstromů a spojový seznam prvků $S$, abychom zvládli i situaci, kdy se ptáme na $Pred$/$Succ$ prvku $x$, který je v množině $S$.
+            \item Problém s $Updaty$, běží v $O(L|U|)$.
+        \end{itemize}
+    \end{itemize}
+\subsection{X-fast trie}
+    \begin{itemize}
+        \item \textbf{Struktura stromu}:
+        \begin{itemize}
+            \item Vychází z "intervalového" stromu + kukaččí hešování.
+            \item Ukládáme pouze vrcholy, které jsou potřeba, tedy vrcholy odpovídající prefixům prvků, které jsou v $S$.
+            \item Vyhledáváme na cestě mezi listem a kořenem binárně, pomocí dotazu v $O(1)$, díky hešování.
+            \item Místo neexistujících synů nějakého vrcholu, si uložíme odkaz \\ na levého/pravého následníka (list) v jeho podstromě, který existuje. 
+        \end{itemize}
+        \item \textbf{Operace}:
+        \begin{itemize}
+            \item Operace $Find$, $Pred$, $Succ$ běží v čase $O(LL(|U|))$.
+            \item Operace $Insert$, $Delete$, běží v čase $O(L(|U|))$ průměrně amortizovaně.
+        \end{itemize}
+        \item \textbf{Paměťová složitost $O(n \cdot log(|U|))$}
+    \end{itemize}
+\subsection{Y-fast trie}
+    \begin{itemize}
+        \item \textbf{Struktura stromu}
+        \begin{itemize}
+            \item Setříděné prvky rozdělíme na bloky velikosti $B = \Theta(log (|U|))$.
+            \item Každý blok svého reprezentanta (typicky největší $x$). Uvnitř bloků BVS \\ $\rightarrow$ operace v $O(L(|B|)) = O(LL(|U|))$.
+            \item Globální úroveň je x-fast trie a do ní ukládáme pouze reprezentanty těchto BVS.
+            \item Prvků v x-fast trii je $O(n/log(|U|))$.
+        \end{itemize}
+        \item \textbf{Paměťová složitost}:
+        \begin{itemize}
+            \item Všechny BVS dohromady $O(n)$.
+            \item Globální x-fast trie $O(\#\text{prvků} \cdot log(|U|)) = O(n)$.
+        \end{itemize}
+        \item \textbf{Operace}:
+        \begin{itemize}
+            \item $Find(x)$, $Succ(x)$, $Pred(x)$ - globální strom mi řekne následníka a předchůdce, tedy dva BVS a v nich opakuji dotaz na $x$.
+            \item Složitost $O(L(B)) = O(LL(|U|))$.
+        \end{itemize}
+        \item \textbf{Updaty}:
+        \begin{itemize}
+            \item Normálně probíhají, bez reorganizace globální x-fast trie
+            \item Udržujeme invariant hustoty bloku $[\frac{1}{4}B,1B]$. Jakmile blok podteče/přeteče tak \\ slučujeme/dělíme.
+            \item Amortizovaně složitost $O(1)$. Dokazujeme skrz složitost globální x-fast trie vs. jak často se to děje?
+            \item \textbf{POZOR} na jednu věc u mazání. 
+        \end{itemize}
+    \end{itemize}
+\section{Haldy}
+\subsection{Srovnání hald}
+\begin{itemize}
+    \item \textbf{Binární vs. k-regulární halda}
+    \begin{itemize}
+        \item Složitosti operací $Insert$, $Min$, $ExtractMin$, $Decrease$, $Delete$, $Build$, $Merge$.
+        \item Dijkstruv algo. používá $n \times Insert$ a $n \times ExtractMin$ a $m \times Decrease$.
+        \item Pro $k$-regulární haldu, celková složitost minimální pro $k := \frac{m}{n}$.
+        \item Binomiální umí navíc $Merge$ v $O(log(n))$.
+    \end{itemize}
+\end{itemize}
+\subsection{Binomiální halda}
+\begin{itemize}
+    \item \textbf{Binomiální strom $B_k$}:
+    \begin{itemize}
+        \item Dvě rekurzivní definice.
+        \item Pozorování na počet vrcholů, počet hladin a maximální stupeň kořenu, což je i maximální stupeň ve stromě. 
+    \end{itemize}
+    \item \textbf{Binomiální halda}:
+    \begin{itemize}
+        \item Definice: Les binomiálních stromů, v každém vrcholu jeden prvek, platí haldové uspořádání.
+        \item Počtem prvků je jednoznačně určeno, které binomiální stromy v posloupnosti existují.
+        \item Do $O(log (n))$ se vleze:
+        \begin{itemize}
+            \item řády stromů,
+            \item $\#$ stromů v lese,
+            \item hloubky,
+            \item maximální $\#$ dětí.
+        \end{itemize}
+        \item Uložení v paměti, každý vrchol:
+        \begin{itemize}
+            \item prvek + priorita,
+            \item řád (počet dětí),
+            \item ukazatel na rodiče,
+            \item ukazatel na nejlevější dítě,
+            \item ukazatel na levého/pravého sourozence (zapojeni cyklicky, pokud jsou to kořeny tak\dots)
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Operace}:
+    \begin{itemize}
+        \item $Min$ v $O(log(n))$
+        \item $Merge$ v $O(log(n))$
+        \item $Insert$ v $O(log(n))$
+        \item $Build$ v $O(n)$
+        \item $ExtractMin$ v $O(log(n))$
+        \item $DecreaseKey$ v $O(log(n))$
+        \item $IncreaseKey$ v $O(log(n))$
+        \item $Delete$ v $O(log(n))$
+    \end{itemize}
+\end{itemize}
+\subsection{Líná binomiální halda}
+    \begin{itemize}
+        \item \textbf{Myšlenka lenosti.}
+        \item \textbf{Složitost operací $Merge$, $Insert$ a $Build$.}
+        \item \textbf{Analýza $ExtractMin$, složitost $O(t+log(n))$, kde $t := \# \text{stromů v lese}$.}
+        \begin{itemize}
+            \item Správně si zvolit potenciál.
+        \end{itemize}
+    \end{itemize}
+\subsection{Fibonacciho Halda}
+    \begin{itemize}
+        \item \textbf{Struktura haldy "Jak funguje, černý a bílý vrchol."}
+        \item \textbf{Operace $Insert$, $Merge$, $Build$.}
+        \item \textbf{Lemma 0 o Fibonacciho číslech}:
+        \begin{itemize}
+            \item Rekurzivní definice Fibonacciho čísla.
+            \item Jiná přímá definice Fibonacciho čísla, kterou uvádí Lemma.
+            \item Fibonacciho číslo roste exponenciálně!
+        \end{itemize}
+        \item \textbf{Lemma* o Tloušťce stromu}:
+        \begin{itemize}
+            \item Vrchol s $k$ dětmi má\dots
+            \item Pomocné tvrzení v důkazu o řádech dětí nějakého vrcholu: $\forall i: r_i \geq i - 2$.
+            \begin{itemize}
+                \item \dots
+            \end{itemize}
+            \item Důkaz Lemma*, které
+        \end{itemize}
+        \item \textbf{Operace $Decrease$ a $Cut$.}
+        \item \textbf{Těžká práce u $ExtractMin$.}
+    \end{itemize}
+\section{Splay stromy}
+\subsection{Analýza Splay stromů}
+    \begin{itemize}
+        \item \textbf{Opakování Splay Stromů}
+        \item \textbf{Věta Access Time}:
+        \begin{itemize}
+            \item Zadefinování pojmů jako $T(v)$, $s(v)$, $r(v)$, $\Phi(v)$.
+            \item Znění: Amortizovaná cena $Splay(x)\leq 3(r'(x)-r(x))+1$, což je v $O(log(n))$.
+            \item Přepis $A_i = R_i + (\Phi_i -\Phi_{i-1})$ pro $i\in[m]$, za použití teleskopické sumy, kdy chceme odhadnout $R_i$. 
+        \end{itemize}
+        \item \textbf{Věta $m \times Splay$ trvá $O(m\cdot log(n) + n \cdot log(n))$ \dots} 
+        \item \textbf{Váhová analýza}:
+        \begin{itemize}
+            \item Definice vah, pro vrcholy $w(v)$ a nové velikosti $s(v)$.
+            \item Pozorování 1, že věta Access Time stále platí.
+            \item Pozorování 2, $3(r'(x) -r(x))+1$ se už nevejde do $ O(log(n))$, ale je potřeba lépe odhadnout, pomocí: $r_{max}$ a $r_{min}$.
+        \end{itemize}
+        \item \textbf{Analýza operací $Find(x)$, $Insert(x)$ a $Delete(x)$}
+        \begin{itemize}
+            \item Všechny se vlezou do $O(r_{max}-r_{min} + 1)$.
+        \end{itemize}
+        \item \textbf{Lemma $W$}"
+        \begin{itemize}
+            \item Vzorec pro to, jak dlouho trvá $Splay(x)$, pokud známe váhu $x$ a celkovou váhu stromu.
+            \item Důkaz odhadneme $O(r_{max}-r_{min} + 1)$.
+        \end{itemize}
+        \item \textbf{Váhovou teorii s Lemmatem W aplikujeme na úplně obyčejný Splay strom, kde žádný prvek neupřednostňujeme, vyjde nám ta stará známá složitost $\mathcal{O}(\log n)$?}
+        \begin{itemize}
+            \item Nastavení vah rovnoměrně náhodně.
+            \item Dosazení do Lemmat.
+            \item Celková cena $m$ operací.
+            \item Proč můžeme předpokládat, že $W=1$?
+        \end{itemize}
+        \item \textbf{Staticky optimální strom.}
+        \item \textbf{Věta o Statické optimalitě}
+        \begin{itemize}
+            \item Znění, že Splay strom zpracuje asymptoticky sekvenci dotazů..
+            \item Důkaz
+            \begin{itemize}
+                \item $w(x)=3^{-c_T(x)}$
+                \item Celková váha $W<1$
+                \item Dosazení do Lemmatu $W$
+                \item Vyúčtování sekvence $m$ operací, tedy $\Phi_0 - \Phi_m$.
+            \end{itemize}
+        \end{itemize}
+        \item \textbf{Static Finger bound \dots PRESKAKUJI}
+        \item \textbf{Working Set Bound}
+        \begin{itemize}
+            \item Co to je Working set a velikost této množiny $z_i$.
+            \item Znění věty.
+            \item LRU seznam a že pozice v něm prvku $x$ je $p(x) = z(x)$.
+            \item Nastavíme váhy $w(x) = \frac{1}{(p(x)+1)^2}$.
+            \item Ukážeme, že $W$, je opět omezeno konstantou, tedy v $O(1)$.
+            \item Vyúčtování $\Phi_0 - \Phi_m$ - NECHAPU.
+        \end{itemize}
+    \end{itemize}
+\section{Cestové dotazy a updaty na stromech}
+    \subsection{Cesta}
+    \begin{itemize}
+        \item \textbf{Motivace - kostry!}
+        \item \textbf{Intervalový strom nad cestou}
+        \item \textbf{Všechny cestové dotazy i updaty v $O(log(n))$, pomocí kanonických podstromů a líného propagování změny.}
+    \end{itemize}
+    \subsection{Heavy-Light dekompozice (Strom)}
+    \begin{itemize}
+        \item \textbf{Definice HLD, definice těžké hrany.}
+        \item \textbf{3 Pozorování}:
+        \begin{itemize}
+            \item Každý vrchol má maximálně 1 těžkou hranu
+            \item Z toho plyne, že těžké hrany tvoří disjunktní cesty $\rightarrow$ můžeme na ně použít cestovou dekompozici.
+            \item Každá cesta kořen-list obsahuje maximálně $O(log(n))$ hran.
+        \end{itemize}
+        \item \textbf{Konstrukce pomocí dvou DFS v $O(n)$.}
+        \item \textbf{LCA v HLD v $O(log(n))$}
+        \begin{itemize}
+            \item Projdu po lehkých hranách.
+            \item Pokud narazím na stejnou těžkou cestu $\rightarrow$, tak beru z těch dvou vyšších vrcholů, což v $O(1)$, díky tomu, co si každá těžká cesta pamatuje.
+        \end{itemize}
+        \item \textbf{Cestový dotaz/update}
+        \begin{itemize}
+            \item Najdeme $LCA(u,v)$, a rozdělíme dotaz na dvě cesty.
+            \item Na každé navštívime max $O(log(n))$ lehkých hran a těžkých cest
+            \item Každý dotaz na těžké cestě v $O(log(n))$, celkově tedy $O(log^2(n) + log(n)) = O(log^2(n))$.
+        \end{itemize}
+    \end{itemize}
+    \subsection{Link-Cut Stromy}
+    \begin{itemize}
+    \item \textbf{Struktura LCS a rozhraní}:
+    \begin{itemize}
+        \item Tlusté a tenké hrany.
+        \item Strukturální operace: $Root(v)$, $Parent(v)$, $Cut(v)$, $Link(u, v)$, $Evert(v)$.
+        \item Hodnotové operace: $Cost(v)$, $PathMin(v)$, $SetCost(v)$, $PathUpdate(v, \delta)$.
+    \end{itemize}
+    \item \textbf{Mikro-architektura: Splay Strom pro jednu tlustou cestu}
+        \begin{itemize}
+            \item Splay strom = tlustá cesta.
+            \item Inorder průchod SS je pořadí na TC ze spoda nahoru.
+            \item Líné vyhodnocování: vrcholy SS si udržují minimum podstromu, $+\delta$ a $ReverseFlag$
+        \end{itemize}
+    \item \textbf{Makro-architektura}
+    \begin{itemize}
+        \item Kořen Splay stromu $\neq$ nejvyšší vrchol na příslušné tlusté cestě v LCS.
+        \item Kořen SS si pamatuje odkaz na svého lehkého rodiče.
+        \item Jeden LCS je jeden ze stromů, který se snažíme reprezentovat.
+    \end{itemize}
+    \item \textbf{Líné vyhodnocování}
+    \begin{itemize}
+        \item Při průchodu zespoda nahoru vytvoříme zásobník, pak už jen projdeme zásobník a tím procházíme od shora dolů.
+    \end{itemize}
+    \item \textbf{Globální pohled + Operace $Expose(v)$}
+    \item \textbf{Jak funguje $Expose(v)$ + amortizace\dots strany 39-41}
+    \item \textbf{Aplikace na Dinicově algoritmu. - PRESKAKUJI}
+    \end{itemize}
+\section{Dynamizace}
+\subsection{Dynamizace dvojrozměrných intervalových stromů}
+\begin{itemize}
+    \item \textbf{Dvojrozměrný intervalový strom}
+    \begin{itemize}
+        \item Struktura stromu, primární strom a sekundární stromy.
+        \item Obdelníkové dotazy v čase $O(log^2(n))$.
+        \item Velikost stromu je pouze $O(n\cdot log(n))$.
+        \item Budování stromu v čase $O(n\cdot log(n))$.
+    \end{itemize}
+    \item \textbf{Líné vyvážování}
+    \begin{itemize}
+        \item Vložení bodu.
+        \item Udržujeme $\alpha$ vyváženost.
+        \item Částečný rebuild, jakmile je někde podmínka porušena.
+        \item Amortizovaná cena $log^2(n)$.
+    \end{itemize}
+\end{itemize}
+\subsection{Obecná dynamizace}
+\begin{itemize}
+    \item \textbf{Definice: vyhledávací problém}
+    \begin{itemize}
+        \item $f : U_Q \times P_{fin}(U_X) \rightarrow U_R$
+    \end{itemize}
+    \item \textbf{Rozložitelnost: klíčová vlastnost}
+    \begin{itemize}
+        \item $\exists \sqcup: U_R \times U_R \rightarrow U_R$, vyčíslitelná v konstatním čase, taková, že\dots
+    \end{itemize}
+\end{itemize}
+\end{document}
