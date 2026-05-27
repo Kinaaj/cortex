@@ -1,5 +1,6 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}       % Crucial for proper Czech/Slovak font rendering
 \usepackage[czech]{babel}
 \usepackage{amsmath, amssymb}
 \usepackage{geometry}
@@ -60,13 +61,13 @@
 \begin{itemize}
     \item \textbf{Redukce z obecného univerza na $ O(n^2) $.}
     \item \textbf{Definice $q$-dobré funkce}
-    \item \textbf{Lemma pokud $(f,g)$ je $q$-dobrá a $r \geq log(n) + 1$, pak $ \exists (f', g') $, která je $q'$-dobrá}
+    \item \textbf{Lemma pokud $(f,g)$ je $q$-dobrá a $r \geq \log(n) + 1$, pak $ \exists (f', g') $, která je $q'$-dobrá}
     \begin{itemize}
         \item Umím vyrobit z funkce $(f,g)$ novou, s méně kolizema.
     \end{itemize}
     \item \textbf{Tříkrokový algoritmus, pro nalezení perfektní hešovací funkce}:
     \begin{itemize}
-        \item Zvolit $r$. Množina $S \subset {0,1}^w$, kde $w \leq 2log(n) + O(1)$.
+        \item Zvolit $r$. Množina $S \subset {0,1}^w$, kde $w \leq 2\log(n) + O(1)$.
         \item $(f,g) \rightarrow (f',g') \rightarrow (f'',g'')$.
         \item $(f'', g'')$ je \textit{0-dobrá} funkce.
     \end{itemize}
@@ -93,7 +94,7 @@
         \item Metoda podmíněné střední hodnoty.
         \item Jak počítat bity $a_i = {0,1}^r$ efektivně?
         \item Složitost zpracování jednoho řádku, plus složitost datové struktury, ve které \\ si udržujeme počty prvků, v sloupečcích a podle ní počítáme bity $a_i$, pro řádek $S_i$.
-        \item Celková složitost derandomizovaného algoritmu $O(n \cdot log(n))$.
+        \item Celková složitost derandomizovaného algoritmu $O(n \cdot \log(n))$.
     \end{itemize}
 \end{itemize}
 \section{Celočíselné datové struktury}
@@ -151,7 +152,7 @@
         \begin{itemize}
             \item Charakteristický vektor $S$.
             \item $O(|U|)$ vrcholů.
-            \item Hloubka $O(log|U|) = O(w)$.
+            \item Hloubka $O(\log|U|) = O(w)$.
             \item Monotónnost cesty z listu do kořene.
         \end{itemize}
         \item \textbf{Operace}:
@@ -175,21 +176,21 @@
             \item Operace $Find$, $Pred$, $Succ$ běží v čase $O(LL(|U|))$.
             \item Operace $Insert$, $Delete$, běží v čase $O(L(|U|))$ průměrně amortizovaně.
         \end{itemize}
-        \item \textbf{Paměťová složitost $O(n \cdot log(|U|))$}
+        \item \textbf{Paměťová složitost $O(n \cdot \log(|U|))$}
     \end{itemize}
 \subsection{Y-fast trie}
     \begin{itemize}
         \item \textbf{Struktura stromu}
         \begin{itemize}
-            \item Setříděné prvky rozdělíme na bloky velikosti $B = \Theta(log (|U|))$.
+            \item Setříděné prvky rozdělíme na bloky velikosti $B = \Theta(\log (|U|))$.
             \item Každý blok svého reprezentanta (typicky největší $x$). Uvnitř bloků BVS \\ $\rightarrow$ operace v $O(L(|B|)) = O(LL(|U|))$.
             \item Globální úroveň je x-fast trie a do ní ukládáme pouze reprezentanty těchto BVS.
-            \item Prvků v x-fast trii je $O(n/log(|U|))$.
+            \item Prvků v x-fast trii je $O(n/\log(|U|))$.
         \end{itemize}
         \item \textbf{Paměťová složitost}:
         \begin{itemize}
             \item Všechny BVS dohromady $O(n)$.
-            \item Globální x-fast trie $O(\#\text{prvků} \cdot log(|U|)) = O(n)$.
+            \item Globální x-fast trie $O(\#\text{prvků} \cdot \log(|U|)) = O(n)$.
         \end{itemize}
         \item \textbf{Operace}:
         \begin{itemize}
@@ -212,7 +213,7 @@
         \item Složitosti operací $Insert$, $Min$, $ExtractMin$, $Decrease$, $Delete$, $Build$, $Merge$.
         \item Dijkstruv algo. používá $n \times Insert$ a $n \times ExtractMin$ a $m \times Decrease$.
         \item Pro $k$-regulární haldu, celková složitost minimální pro $k := \frac{m}{n}$.
-        \item Binomiální umí navíc $Merge$ v $O(log(n))$.
+        \item Binomiální umí navíc $Merge$ v $O(\log(n))$.
     \end{itemize}
 \end{itemize}
 \subsection{Binomiální halda}
@@ -226,7 +227,7 @@
     \begin{itemize}
         \item Definice: Les binomiálních stromů, v každém vrcholu jeden prvek, platí haldové uspořádání.
         \item Počtem prvků je jednoznačně určeno, které binomiální stromy v posloupnosti existují.
-        \item Do $O(log (n))$ se vleze:
+        \item Do $O(\log (n))$ se vleze:
         \begin{itemize}
             \item řády stromů,
             \item $\#$ stromů v lese,
@@ -244,21 +245,21 @@
     \end{itemize}
     \item \textbf{Operace}:
     \begin{itemize}
-        \item $Min$ v $O(log(n))$
-        \item $Merge$ v $O(log(n))$
-        \item $Insert$ v $O(log(n))$
+        \item $Min$ v $O(\log(n))$
+        \item $Merge$ v $O(\log(n))$
+        \item $Insert$ v $O(\log(n))$
         \item $Build$ v $O(n)$
-        \item $ExtractMin$ v $O(log(n))$
-        \item $DecreaseKey$ v $O(log(n))$
-        \item $IncreaseKey$ v $O(log(n))$
-        \item $Delete$ v $O(log(n))$
+        \item $ExtractMin$ v $O(\log(n))$
+        \item $DecreaseKey$ v $O(\log(n))$
+        \item $IncreaseKey$ v $O(\log(n))$
+        \item $Delete$ v $O(\log(n))$
     \end{itemize}
 \end{itemize}
 \subsection{Líná binomiální halda}
     \begin{itemize}
         \item \textbf{Myšlenka lenosti.}
         \item \textbf{Složitost operací $Merge$, $Insert$ a $Build$.}
-        \item \textbf{Analýza $ExtractMin$, složitost $O(t+log(n))$, kde $t := \# \text{stromů v lese}$.}
+        \item \textbf{Analýza $ExtractMin$, složitost $O(t+\log(n))$, kde $t := \# \text{stromů v lese}$.}
         \begin{itemize}
             \item Správně si zvolit potenciál.
         \end{itemize}
@@ -292,15 +293,15 @@
         \item \textbf{Věta Access Time}:
         \begin{itemize}
             \item Zadefinování pojmů jako $T(v)$, $s(v)$, $r(v)$, $\Phi(v)$.
-            \item Znění: Amortizovaná cena $Splay(x)\leq 3(r'(x)-r(x))+1$, což je v $O(log(n))$.
+            \item Znění: Amortizovaná cena $Splay(x)\leq 3(r'(x)-r(x))+1$, což je v $O(\log(n))$.
             \item Přepis $A_i = R_i + (\Phi_i -\Phi_{i-1})$ pro $i\in[m]$, za použití teleskopické sumy, kdy chceme odhadnout $R_i$. 
         \end{itemize}
-        \item \textbf{Věta $m \times Splay$ trvá $O(m\cdot log(n) + n \cdot log(n))$ \dots} 
+        \item \textbf{Věta $m \times Splay$ trvá $O(m\cdot \log(n) + n \cdot \log(n))$ \dots} 
         \item \textbf{Váhová analýza}:
         \begin{itemize}
             \item Definice vah, pro vrcholy $w(v)$ a nové velikosti $s(v)$.
             \item Pozorování 1, že věta Access Time stále platí.
-            \item Pozorování 2, $3(r'(x) -r(x))+1$ se už nevejde do $ O(log(n))$, ale je potřeba lépe odhadnout, pomocí: $r_{max}$ a $r_{min}$.
+            \item Pozorování 2, $3(r'(x) -r(x))+1$ se už nevejde do $ O(\log(n))$, ale je potřeba lépe odhadnout, pomocí: $r_{max}$ a $r_{min}$.
         \end{itemize}
         \item \textbf{Analýza operací $Find(x)$, $Insert(x)$ a $Delete(x)$}
         \begin{itemize}
@@ -346,7 +347,7 @@
     \begin{itemize}
         \item \textbf{Motivace - kostry!}
         \item \textbf{Intervalový strom nad cestou}
-        \item \textbf{Všechny cestové dotazy i updaty v $O(log(n))$, pomocí kanonických podstromů a líného propagování změny.}
+        \item \textbf{Všechny cestové dotazy i updaty v $O(\log(n))$, pomocí kanonických podstromů a líného propagování změny.}
     \end{itemize}
     \subsection{Heavy-Light dekompozice (Strom)}
     \begin{itemize}
@@ -355,10 +356,10 @@
         \begin{itemize}
             \item Každý vrchol má maximálně 1 těžkou hranu
             \item Z toho plyne, že těžké hrany tvoří disjunktní cesty $\rightarrow$ můžeme na ně použít cestovou dekompozici.
-            \item Každá cesta kořen-list obsahuje maximálně $O(log(n))$ hran.
+            \item Každá cesta kořen-list obsahuje maximálně $O(\log(n))$ hran.
         \end{itemize}
         \item \textbf{Konstrukce pomocí dvou DFS v $O(n)$.}
-        \item \textbf{LCA v HLD v $O(log(n))$}
+        \item \textbf{LCA v HLD v $O(\log(n))$}
         \begin{itemize}
             \item Projdu po lehkých hranách.
             \item Pokud narazím na stejnou těžkou cestu $\rightarrow$, tak beru z těch dvou vyšších vrcholů, což v $O(1)$, díky tomu, co si každá těžká cesta pamatuje.
@@ -366,8 +367,8 @@
         \item \textbf{Cestový dotaz/update}
         \begin{itemize}
             \item Najdeme $LCA(u,v)$, a rozdělíme dotaz na dvě cesty.
-            \item Na každé navštívime max $O(log(n))$ lehkých hran a těžkých cest
-            \item Každý dotaz na těžké cestě v $O(log(n))$, celkově tedy $O(log^2(n) + log(n)) = O(log^2(n))$.
+            \item Na každé navštívime max $O(\log(n))$ lehkých hran a těžkých cest
+            \item Každý dotaz na těžké cestě v $O(\log(n))$, celkově tedy $O(\log^2(n) + \log(n)) = O(\log^2(n))$.
         \end{itemize}
     \end{itemize}
     \subsection{Link-Cut Stromy}
@@ -404,16 +405,16 @@
     \item \textbf{Dvojrozměrný intervalový strom}
     \begin{itemize}
         \item Struktura stromu, primární strom a sekundární stromy.
-        \item Obdelníkové dotazy v čase $O(log^2(n))$.
-        \item Velikost stromu je pouze $O(n\cdot log(n))$.
-        \item Budování stromu v čase $O(n\cdot log(n))$.
+        \item Obdelníkové dotazy v čase $O(\log^2(n))$.
+        \item Velikost stromu je pouze $O(n\cdot \log(n))$.
+        \item Budování stromu v čase $O(n\cdot \log(n))$.
     \end{itemize}
     \item \textbf{Líné vyvážování}
     \begin{itemize}
         \item Vložení bodu.
         \item Udržujeme $\alpha$ vyváženost.
         \item Částečný rebuild, jakmile je někde podmínka porušena.
-        \item Amortizovaná cena $log^2(n)$.
+        \item Amortizovaná cena $\log^2(n)$.
     \end{itemize}
 \end{itemize}
 \subsection{Obecná dynamizace}
@@ -425,6 +426,120 @@
     \item \textbf{Rozložitelnost: klíčová vlastnost}
     \begin{itemize}
         \item $\exists \sqcup: U_R \times U_R \rightarrow U_R$, vyčíslitelná v konstatním čase, taková, že\dots
+        \item Tři příklady rozložitelných a nerozložitelných problémů.
+    \end{itemize}
+    \item \textbf{Výchozí bod - Statická struktura, až SemiDynamizace a Dynamizace}
+    \begin{itemize}
+        \item Statická struktura - $B_S(n), Q_S(n), S_S(n)$ + rozumné chování těchto složitostí.
+        \item Semidynamická struktura - $Q_D(n)$ (w.c.),$S_D(n)$, $\overline{I_D(n)}$ (amortizovaně). Pokud chceme dynamickou, ještě musíme přidat delete v čase $\overline{D_D(n)}$ amortizovaně.
+        \item Struktura zdynamizování Statické.
+        \item $Query$ - zeptáme se každého bloku a zkombinujeme a jeho $Q_D(n)$.
+        \item $Insert$ - Najdeme nejbližší prázdný blok $B_i$, rozložíme bloky $<i$. Složíme do bloku $B_i$.
+        \item Odvození, že $S_D(n) \leq S_S(n)$.
+        \item Důkaz amortizované složitosti $\overline{I_D(n)}$.
+    \end{itemize}
+    \item \textbf{Worst-Case Dynamizace (STRANA 49)}
+    \begin{itemize}
+        \item Zlepšení těch dlouhých operací $Insert$, kdy dojde k přestavbě.
+        \item Životní cyklus bloků, vždy žijou dva bloky od jednoho řádu $i$ a building bloku $i+1$ delame prubezne.
+        \item Dotaz stále v $Q_D(n) \in O(Q_S(n) \cdot \log n)$
+        \item Vkládání má novou w.c. složitost $I_D(n) \in O(\frac{B_S(n)}{n} \cdot \log n)$.
+    \end{itemize}
+    \item \textbf{Úplná dynamizace $\rightarrow$ přidání $Delete$}
+    \begin{itemize}
+        \item Pomocný adresář, pro pamatování, ve kterém bloku prvek je.
+        \item Místo mazání prvku děláme pomníčky.
+        \item Jakmile moc pomníčků $\rightarrow$ re-build.
+        \item Amortizovaná cena $\overline{D_D(n)}$ je $O(\frac{B_S(n)}{n} \cdot \log n)$
     \end{itemize}
 \end{itemize}
+
+\section{Perzistence}
+\subsection{Typy Perzistence}
+\begin{itemize}
+    \item \textbf{Efemérní, Semiperzistentní, Plně perzistentní, Funkcionální stuktury.}
+    \item \textbf{Funkcionální seznamy s prependem - STRANA 51}
+    \begin{itemize}
+        \item Jednosměrný spojový seznam s přidáváním na začátek.
+    \end{itemize}
+    \item \textbf{Funkcionální BVS - STRANA 51}
+    \begin{itemize}
+        \item Kopírujeme cestu do kořene, verze je prostě odkaz na nový kořen.
+        \item Paměť na verzi $O(\log n)$ a čas $O(\log n)$.
+    \end{itemize}
+    \item \textbf{Aplikace funkcionálních BVS - Lokalizace bodu v rovině rozdělené polygony STRANA 52 - 53}
+    \begin{itemize}
+        \item První řešení, pomocí dvou seřazených struktur, podle pásů a úseček v pásu $\rightarrow$ prostor $\in O(n^2)$, vybudování $\in O(n^2)$, dotaz $\in O(\log n)$.
+        \item Lepší řešení pomocí funkcionálního BVS, kdy zametáme rovinu zeshora a vždy událost je přidání, odebrání úsečky. Pro každou událost postavíme verzi a každý pás úseček je pak tento funkc. BVS $\rightarrow$ dotaz stále $\in O(\log n)$, prostor $\in O(n \log n)$, vybudování $\in O(n \log n)$.
+    \end{itemize}
+\end{itemize}
+\subsection{Semi-Persistentní DS}
+\begin{itemize}
+    \item \textbf{Pointerové DS}
+    \begin{itemize}
+        \item Krabička - má $O(1)$ dat, $O(1)$ ukazatelů. Držátko $O(1)$ ukazatelů.
+        \item Operace co umíme s takovou DS: čtení krabičky, skok na jinou krabičku, modifikace krabičky, zakládání krabičky.
+    \end{itemize}
+    \item \textbf{Co vše musíme verzovat? Strukturální změny vs nestrukturální}
+    \item \textbf{První technika: Tlusté vrcholy}
+    \begin{itemize}
+        \item Vrchol si pamatuje celou svoji historii.
+        \item (počáteční vrchol, verze, změny)
+        \item Update v $O(1)$. Ale omezený počet verzí.
+        \item Query se zpomalí na $O(\log^2 n)$, kvůli binárnímu vyhledávání správné verze vrcholu.
+    \end{itemize}
+    \item \textbf{Obecná semi-perzistentní DS}
+    \begin{itemize}
+        \item Graf má omezený vstupní vrchol $\leq p$.
+        \item Anatomie krabičky: Počáteční verze, data, žurnál ($e$ slotů změn, platí $p\leq e$), zpětné pointery.
+        \item $Query$ - přijdu do krabičky, aplikuji všechny změny až do aktuální verze, těch je max $e$, což znamená, že konstatntně mnoho, tedy v $O(1)$.
+        \item $Update$ - pokud volno, prostě připíšeme změnu a jinak musíme přetečenou krabičku kopírovat a musíme změnit zpětné pointery rodičů na tuhle aktuální krabičku.
+        \item Trik na zacyklení, abychom nekopírovali do nekonečna.
+        \item Důkaz amortizace, že každá strukturální změna se děje v $O(1)$ amortizovaně.
+    \end{itemize}
+    \item \textbf{Úplná perzistence DS}
+    \begin{itemize}
+        \item Problém s amortizovanou složitostí, můžeme se totiž vracet do verze, kdy došlo k drahému kopírování a vždy ho vynutit.
+        \item Problém s porovnáním verzí, což se dá řešit projitím stromu "kolem", tedy linearizace historie.
+        \item Musíme navíc omezit konstantou výstupní stupeň.
+        \item Zbytek složitý\dots
+    \end{itemize}
+\end{itemize}
+\section{Cache struktury}
+\subsection{List Labeling problem}
+\begin{itemize}
+    \item \textbf{Definice problému. Jinými slovy List Order.}
+    \item \textbf{LL v exponenciálním rozsahu}
+    \begin{itemize}
+        \item \# prvků $\leq M$.
+        \item Zarážky jsou na pozicích $0, 2^M$.
+        \item Nový prvek dám na průměr sousedů.
+        \item Po $M$ insertech mezery aspoň 1.
+        \item $O(1)$ na insert w.c.
+        \item Funguje pouze pro $M \in O(w)$, kde $w$ je šířka slova.
+    \end{itemize}
+    \item \textbf{LL v polynomiálním rozsahu}
+    \begin{itemize}
+        \item Používáme bin. strom hloubky $O(\log M)$.
+        \item Externí vrcholy jsou prvky.
+        \item Kroky ve stromě L/P jsou bity v labelu.
+        \item Dřivější prvky dostanou nižší labely.
+        \item \# bitů labelu je $O(\log M)$.
+        \item $Insert$ znamená změnit příslušný externí vrchol na interní a pod něj připojit přelabelovaný prvek a nový prvek.
+        \item Vyvažovat budeme líně s BB-$\alpha$ stromy.
+        \item Přebudování stojí $O(k)$, kde $k$ je \# prvků podstromu a musíme je přelabelovat, to se ale schová do $O(k)$ a tedy amortizovaně insert běží jako v líně vyvažovaném, tedy $O(\log n)$. 
+    \end{itemize}
+    \item \textbf{Finální List Order v $O(1)$ amortizovaně}
+    \begin{itemize}
+        \item Rozdělíme posloupnost na bloky velikosti $\theta(\log n)$
+        \item Uvnitř bloků používáme labelování v exponenciálním rozashu.
+        \item Nad bloky používáme labelování v poly.
+        \item Prvek má (label bloku, label uvnitř bloku).
+        \item Dokud $Insert$ do bloku, tak v $O(1)$.
+        \item Jakmile přeteče, tak ho rozdělíme na dva poloviční a přidáme blok v globálních blocích, tedy musíme přelabelovat všechno uvnitř jednoho bloku.
+        \item Čas $O(\log n)$ na přelabelovaní, čas na globální $Insert$ $O(\log n)$ amortizovaně. Amortizovaně $O(\frac{1}{\log n})$ krát.
+        \item ZRADA, musí se přidat indirekce, kvůli přelabelování ostatních bloků při velkém globálním rebuildu, ve kterých je $O(\log n)$ prvků.  
+    \end{itemize}
+\end{itemize}
+
 \end{document}
