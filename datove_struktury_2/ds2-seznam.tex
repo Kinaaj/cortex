@@ -541,5 +541,114 @@
         \item ZRADA, musí se přidat indirekce, kvůli přelabelování ostatních bloků při velkém globálním rebuildu, ve kterých je $O(\log n)$ prvků.  
     \end{itemize}
 \end{itemize}
+\subsection{Van-Emde-Boasovo uložení binárního stromu}
+\begin{itemize}
+    \item \textbf{Opakování Cache modelu, $M$, $B$, cache-aware je $C/A$, cache-oblivious je $C/O$.}
+    \item \textbf{Uložení úplného bin. stromu s hloubkou $h=2^k$.}
+    \begin{itemize}
+        \item Rozřízneme v $h/2$.
+        \item Uložíme nejdříve vrchní strom, poté těch hodně nižších zleva doprava.
+        \item Pro paždý podstrom se rekurzíme.
+        \item Zascopujeme na hloubku rekurze $i$, kde už se $S_i \leq B$, nad touto hloubkou rekurze je $S_{i-1} > B$ a taky $S_{i-1} = S_{i^2}$.
+        \item Z toho plyne, že na této hloubce je $\sqrt{B} < S \le B$.
+        \item Hloubka $S$ je tedy $\frac{1}{2}\log B < \log S \le \log B \implies \log S \in \Theta(\log B)$.
+        \item Každý strom v tomto scopu se načte do cache v 1 až 2 operacích $\implies O(1)$ práce.
+        \item $\#$ kusů je $O(\frac{\log n}{\log B})$.
+        \item $\implies$ cesta z kořene do listu stojí $O(\frac{\log n}{\log B}) \cdot O(1) = O(\frac{\log n}{\log B})$
+    \end{itemize}
+    \item \textbf{Uložení úplného bin. stromu s obecnou hloubkou $h$.}
+    \begin{itemize}
+        \item Problém je, že při určování hloubek horního a spodních stromů musíme zaokrouhlovat nahoru nebo dolů (+-1) $\rightarrow$ může se posčítat blbě.
+        \item Trik: $h_b :=$ nejbližší mocnina 2 vzhledem k $h$, $h_t := h - h_b$.
+        \item Lze ukázat, že poté pouze první strom, úplně nahoře bude anomálně velký a jinak ostatní už pěkně mocnina 2.
+    \end{itemize}
+\end{itemize}
+\subsection{Packed Memory Array}
+\begin{itemize}
+    \item \textbf{Struktura}
+    \begin{itemize}
+        \item Mám pole s mezerami, rozdělím na kusy velikosti $\Theta(\log n)$, kdy $\#$ kusů = $2^h$, $h$ je hloubka bin. stromu, který nad kousky stavím.
+        \item hustota intervalu $:= \frac{\text{\# prvků}}{kapacita}$, standartní hustota v hloubce $i$ je $\in [\frac{1}{2} - \frac{i}{4h}, \frac{3}{4} + \frac{i}{4h}]$.
+    \end{itemize}
+
+    \item \textbf{$Insert(x)$} 
+    \begin{itemize}
+        \item Přidám ho do kousku, pokud přeteče, najdu na cestě kousek-kořen první vrchol, který nepřetekl přes svou std. hustotu.
+        \item $\forall$ prvky přerozdělím rovnoměrně pod tímto vrcholem. Pozorování, některé vrcholy nad tímto vrcholem budou stále přeteklé nad std. hust., ale to nevadí, protože hustota vrcholu je aritmetický průměr potomků na jedné hladině.
+        \item Pokud dojdu až do kořene, proběhně celostromová reorgranizace.
+    \end{itemize} 
+    \item \textbf{Amortizovaná cena $Insert(x)$}
+    \begin{itemize}
+        \item Provádíme reorganizaci vrcholu, který $\rho \leq \frac{3}{4} + \frac{i}{4h}$ a $\exists$dítě $d: \rho_d > \frac34 + \frac{i}{4h}$.
+        \item Pokles hustoty aspoň o $\frac1{4h}$. Pokud má rodič kapacitu $k$, tak ubude aspoň $(\frac1{4h})\cdot(\frac{k}2) = \frac{k}{8h} \circeq  \frac{k}{\log n}$ prvků. 
+        \item Přeorganizace intervalu délky $k$ trvá $O(k)$, proto amort. cena $Insert(x)$ je $O(log^2(n))$, protože ještě musíme sečíst přes všechny hladiny.
+    \end{itemize}
+    \item \textbf{Reorganizace celého pole}
+    \begin{itemize}
+        \item Musíme zvětšit pole tak, aby hustota v novém kořeni vyšla mezi $[\frac12, \frac34] \rightarrow$ mezi další globální reorg. musí proběhnout lineárně mnoho $Insert(x)$.
+        \item Počet nových kousků musí být mocnina 2. 
+    \end{itemize}
+    \item \textbf{Jak počítat hustoty?}
+    \begin{itemize}
+        \item Spočítáme hustotu, tedy počet prvků, jednoho nalezeného kousku\dots $\Theta(\log n)$
+        \item Přidáme levý/pravý sousedící interval dvakrát delší délky.
+        \item Opakujeme, dokud nepokrejeme interval velikosti $k$.
+        \item Stojí to $\Theta(k)$, reorganizace těchto prvků stojí $O(k)$, proto se to zaplatí.
+    \end{itemize}
+    \item \textbf{I/O složitost: počítání hustot a reorganizace}
+    \begin{itemize}
+        \item Čtení kousků, pro počítání hustoty jde pomocí dvou skenů, jeden $\leftarrowtail$ a druhý $\rightarrowtail$, kdy ty stále dvojnásobné intervaly, které přidávám vpravo čtu pomocí $\rightarrowtail$ a vice-versa.
+        \item Reorganizace: 1. zťukám prvky doprava v intervalu, který reorganizujeme, pomocí dvou skenů, kdy jeden čte, druhý zapisuje. 2. rozházím zťukané prvky pomocí dvou skenů, kdy oba stejný směr a jeden čte a druhý zapisuje. Nikdy nenarazím na zťukanou část.
+        \item Max šest skenů $\Rightarrow \Theta(\frac{k}{B} + 1)$
+        \item Amortizovaná I/O složitost bude $O(\frac{\log^2 n}{B} +1)$, protože Insert stojí amortizovaně tolik a I/O operací je $B$ krát méně.
+    \end{itemize}
+    \item \textbf{Udržování vEB bin. stromu nad PMA}
+    \begin{itemize}
+        \item Musíme přepočítat klíče v předcích prvků, které reorganizujeme.
+        \item Celková cena $O(\frac{\log n}{\log B} + \frac{k}{B} + \frac{\log k}{\log B})$.
+        \item $\frac{\log n}{\log B}$ za cestu z $LCA$(krajů reorganizovaného intervalu) do kořene, to ale stejně potřebujeme na nalezení kusu, do kterého budeme vkládat.
+        \item $\frac{k}{B}$ za všechny stromečky, co jsou uvnitř, vleze se do $O(\frac{k}B +1)$, tedy amortizovaně $\frac{\log^2 n}{B} + 1$.
+        \item $\frac{\log k}{\log B}$ za stromečky, co jsou na krajích, za každou hladinu max dva, to se ale vleze do $O(\frac{k}{B} + 1)$.
+        \item Celková amortizovaná složitost $Insert$ včetně udržování vEB bin. stromu nad je $O(\frac{\log^2 n}{B} + \frac{\log n}{\log B} + \frac{\log k}{\log B})$
+    \end{itemize}
+    \item \textbf{Indirekce - Zbavení se kvadrátu v logaritmu}
+    \begin{itemize}
+        \item Vytvoříme fragmenty, ve kterých budou uložené prvky, velikost fragmentu $\Theta(\log n)$.
+        \item Do původní struktury si ukládám pouze reprezentanty.
+        \item Najdu reprezentanta, tím najdu fragmenty (stojí $O(\frac{\log n}{\log B})$), do kterých prvek vkládám, pokud přeteče, tak řeším rozdělením fragmentu na dva a ten druhý vkládám.
+        \item Tím operace globální operace $Insert_G(fragment)$ a ta nastane velikost fragmentu $:= \log n$ krát méně často, tedy amortizovaně proběhne při každém $Insertu$ $\frac{1}{\log n}$ operací globálního $Insertu_G$.
+        \item Fragment je souvislá část paměti, operace s nimi v $O(\frac{\log n}{B})$.
+        \item Amortizovaně jeden $Insert$ bude v $O(\frac{\log n}{B} + 1)$ I/O složitosti.
+        \item $Find$ bude v $O(\frac{\log n}{\log B})$ I/O složitosti.
+    \end{itemize}
+\end{itemize}
+\section{Úsporné datové struktury}
+\subsection{Úvod}
+\begin{itemize}
+    \item \textbf{C je mn. objektů, min. počet bitů na uložení je OPT $=\lceil{\log|C|}\rceil$.}
+    \item \textbf{Implicitní, Úsporné, Kompaktní DS.}
+    \item \textbf{Reprezentace řetězce nad abecedou $\Sigma$.}
+    \begin{itemize}
+        \item $\Sigma = [10] \rightarrow \lceil\log10\rceil = 4$ bity.
+        \item Pokud budeme kódovat po dvojici, tak $\lceil\log_2{100}\rceil = 7$.
+        \item Obecně pro $k$ znaků můžeme uložit do $k \cdot \log_2{10}+1$ bitů, lepší než $k \cdot (\log_2{10}+1)$.
+        \item ALE zrušíme si lokální dekódovatelnost.
+    \end{itemize}
+    \item \textbf{$\text{Redundance} := \text{Skutečně zabraný prostor} - OPT$.}
+\end{itemize}
+\subsection{SOLE - Bezprefixové kódy}
+\begin{itemize}
+    \item \textbf{Naivní přístup:}
+    \begin{itemize}
+        \item Zprávu na bloky velikosti $b$.
+        \item Padding $10000\ldots$na konec zprávy, aby byla dělitelná $b$.
+        \item Za každý blok bit $0$ nebo $1$, zda zpráva pokračuje, či končí.
+        \item Redundance $= b + \lceil\frac{n}{b}\rceil = b + \frac{n}{b} + 1$.
+    \end{itemize}
+    \item \textbf{SOLE:}
+    \begin{itemize}
+        \item
+    \end{itemize}
+\end{itemize}
 
 \end{document}
