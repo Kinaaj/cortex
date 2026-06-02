@@ -1,0 +1,525 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+
+% Definice prostředí (číslování si LaTeX řídí sám)
+\newtheorem{definition}{Definice}[section]
+\newtheorem{theorem}{Věta}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Důsledek}[section]
+\newtheorem{observation}{Pozorování}[section]
+\newtheorem*{intuition}{Intuice k pochopení}
+
+\begin{document}
+
+\section{Introduction}
+
+Tato kapitola zavádí základní pojmy grafových minorů a jejich vztah ke kreslení grafů (planaritě). Všechny uvažované grafy jsou konečné, neorientované, jednoduché a bez smyček, pokud není řečeno jinak.
+
+\subsection{Basic definitions and properties of graph minors}
+
+Nejprve si musíme definovat základní operace, které můžeme s grafem provádět. Nechť $w \in V_G$ je vrchol a $e = (u,v) \in E_G$ je hrana:
+\begin{itemize}
+    \item \textbf{Smazání vrcholu (Deletion):} $G - w$.
+    \item \textbf{Smazání hrany (Deletion):} $G - e$.
+    \item \textbf{Rozdělení hrany (Subdivision):} $G \cdot e$ (hrana se nahradí cestou délky 2 přes nový vrchol).
+    \item \textbf{Kontrakce hrany (Contraction):} $G \circ e$ (vrcholy $u$ a $v$ se spojí do jednoho a hrana $e$ zmizí).
+    \item \textbf{Topologická kontrakce:} Kontrakce hrany, kde alespoň jeden z vrcholů hrany má v grafu $G$ stupeň přesně dva.
+\end{itemize}
+
+\begin{intuition}
+Topologická kontrakce je vlastně přesný opak rozdělení hrany (subdivision). Vyhlazuje cesty zpět na hrany.
+\end{intuition}
+
+\begin{definition} Definice minorů:
+\begin{itemize}
+    \item \textbf{Minor:} Graf $H$ je minor grafu $G$, pokud $H$ lze získat z podgrafu $G$ posloupností kontrakcí hran.
+    \item \textbf{Indukovaný minor:} $H$ se získá posloupností kontrakcí hran z \textit{indukovaného} podgrafu $G$.
+    \item \textbf{Topologický minor:} Všechny kontrakce použité k transformaci $G$ na $H$ byly \textit{topologické}. Ekvivalentně: $G$ obsahuje podrozdělení (subdivision) grafu $H$ jako podgraf.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Minor closed class]
+Třída grafů $\mathcal{G}$ je uzavřená na (indukované) minory, pokud s každým grafem $G \in \mathcal{G}$ obsahuje i všechny jeho (indukované) minory.
+\end{definition}
+
+\begin{lemma}[Alternativní definice minoru]
+Graf $H$ je (indukovaný) minor grafu $G$ právě tehdy, když existuje zobrazení $f$ z množiny vrcholů $H$ do množiny podmnožin vrcholů $G$ takové, že:
+\begin{enumerate}
+    \item Pro každé $u \in V_H$ je podgraf $G|_{f(u)}$ neprázdný a souvislý.
+    \item Pro každé $u, v \in V_H$ jsou množiny $f(u)$ a $f(v)$ disjunktní.
+    \item Hrana $(u,v)$ existuje v $H$ právě tehdy (u neindukovaných minorů stačí "pokud"), když existuje hrana $(u', v')$ v $G$ taková, že $u' \in f(u)$ a $v' \in f(v)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{intuition}
+Představ si minor staticky. Nemusíš graf postupně kontrahovat. Stačí si v původním grafu $G$ najít disjunktní souvislé "bubliny" (to jsou ta $f(u)$). Každá bublina se pak slije do jednoho vrcholu minoru $H$. Pokud byla mezi dvěma bublinami v $G$ hrana, bude hrana i v $H$.
+\end{intuition}
+
+\begin{lemma}
+Pokud má graf $H$ maximální stupeň nejvýše tři, pak $H$ je minor grafu $G$ právě tehdy, když je $H$ topologický minor grafu $G$.
+\end{lemma}
+
+\begin{intuition}
+U vrcholů s vysokým stupněm (4 a více) tě klasická kontrakce může donutit slít složité podgrafy (jako stromy), které zničí původní cesty. U stupně $\le 3$ se toto neděje, struktura se chová jako jednoduché cesty.
+\end{intuition}
+
+\subsection{Minors and graph drawing}
+
+\begin{theorem}[Kuratowski theorem]
+Graf je rovinný (planar) právě tehdy, když neobsahuje podrozdělení $K_5$ ani $K_{3,3}$ jako podgraf.
+\end{theorem}
+
+\begin{corollary}
+Graf $G$ je rovinný právě tehdy, když nemá $K_5$ ani $K_{3,3}$ jako minor.
+\end{corollary}
+
+\begin{observation}
+Pokud má $G$ minor $K_5$ nebo $K_{3,3}$, pak má $K_5$ nebo $K_{3,3}$ i jako topologický minor.
+\end{observation}
+
+Následně zavádíme duální graf:
+\begin{definition}[Dual graph]
+Duální graf $G^*$ ke grafu nakreslenému na ploše vznikne tak, že každá stěna původního grafu $G$ se stane vrcholem $G^*$. Dvě stěny v $G^*$ jsou spojeny hranou $e^*$, pokud spolu sousedily přes hranu $e$ v původním grafu $G$.
+\end{definition}
+
+\begin{observation}
+Pokud je nakreslení $H$ minorem nakreslení $G$, pak je nakreslení $H^*$ minorem nakreslení $G^*$.
+\end{observation}
+
+\begin{intuition}
+Smazání hrany v původním grafu znamená, že se dvě stěny slijí do jedné. To v duálu odpovídá kontrakci hrany. Naopak kontrakce hrany v původním grafu odpovídá tomu, že hrana v duálu zmizí (smazání).
+\end{intuition}
+
+Graf je outerplanar (vnějškově rovinný), pokud ho lze nakreslit tak, že všechny vrcholy leží na vnější stěně. $G^*_{in}$ značí podgraf duálu indukovaný vnitřními stěnami.
+
+\begin{lemma}
+Rovinné nakreslení grafu $G$ je outerplanar právě tehdy, když $G^*_{in}$ je les.
+\end{lemma}
+
+\begin{theorem}
+Graf $G$ je outerplanar právě tehdy, když neobsahuje $K_4$ ani $K_{2,3}$ jako minor.
+\end{theorem}
+
+\section{Well quasi-orderings and the minor theorem}
+
+Tato kapitola se zabývá konceptem dobrého kvaziuspořádání (WQO) a jeho zásadním významem pro teorii grafových minorů. Tyto koncepty poskytují teoretický základ pro to, proč existují konečné sady zakázaných minorů.
+
+\begin{definition}[Kvaziuspořádání a částečné uspořádání]
+Binární relace $\le$ na třídě $X$, která je reflexivní a tranzitivní, se nazývá \textbf{kvaziuspořádání} (quasi-ordering). Pokud je tato relace navíc antisymetrická, jedná se o \textbf{částečné uspořádání} (partial ordering).
+\end{definition}
+
+\begin{definition}[Well quasi-ordered - WQO]
+Kvaziuspořádaná třída $(X, \le)$ se nazývá \textbf{dobře kvaziuspořádaná} (well quasi-ordered, WQO), pokud pro každou nekonečnou posloupnost $(a_i)_{i=1}^{\infty}$ prvků z $X$ existují indexy $i < j$ takové, že $a_i \le a_j$.
+\end{definition}
+
+\begin{definition}[Dobrá a špatná posloupnost]
+Dvojice prvků $a_i, a_j$ v posloupnosti se nazývá \textbf{dobrá} (good), pokud platí $a_i \le a_j$ a zároveň $i < j$. Posloupnost se nazývá \textbf{špatná} (bad), pokud neobsahuje žádnou dobrou dvojici.
+\end{definition}
+
+\begin{intuition}
+Definice WQO říká, že struktura $(X, \le)$ je WQO právě tehdy, když v ní neexistuje žádná nekonečná \textit{špatná} posloupnost. Prakticky to znamená dvě věci:
+\begin{enumerate}
+    \item V dané struktuře nemůžeš utvořit nekonečný ostře klesající řetězec ($a_1 > a_2 > a_3 > \dots$).
+    \item Nemůžeš utvořit nekonečnou množinu prvků, které jsou navzájem neporovnatelné (tzv. nekonečná antihierarchie).
+\end{enumerate}
+Představ si to tak, že ať vybereš jakýchkoliv nekonečně mnoho prvků, dříve či později narazíš na prvek, který „vyrůstá“ z nějakého předchozího (je větší nebo roven).
+\end{intuition}
+
+\begin{observation}
+V jakékoliv dobře kvaziuspořádané třídě obsahuje každá posloupnost $(a_i)_{i=1}^{\infty}$ neklesající podposloupnost.
+\end{observation}
+
+\begin{definition}[Obstruction set - Množina překážek]
+Řekneme, že množina $F$ je \textbf{množinou překážek} (obstruction set) pro podtřídu $Y$ kvaziuspořádané třídy $X$, pokud platí následující dualita:
+$$\forall a \in X: a \notin Y \iff \exists b \in F: b \le a$$
+
+\end{definition}
+
+\begin{observation}
+Nechť $Y$ je podtřída dobře uspořádané třídy $X$ taková, že $Y$ je uzavřená na menší prvky vzhledem k $\le$ (formálně: $b \le a, a \in Y \Rightarrow b \in Y$). Pak její množina překážek $F$ existuje a je \textbf{konečná}.
+\end{observation}
+
+\begin{intuition}
+Tohle je klíčový most k testům u zkoušky! Pokud je celá nadmnožina prvků WQO a tvá podtřída $Y$ je uzavřená dolů (tj. vlastnost se dědí na menší prvky, jako je tomu u rovinných grafů a minorů), pak existuje jednoznačný a hlavně \textbf{konečný} seznam nejmenších prvků, které tuto vlastnost porušují. Nemůže jich být nekonečně mnoho, protože by tvořily nekonečnou neporovnatelnou množinu, což WQO zakazuje.
+\end{intuition}
+
+Nyní definujeme rozšíření kvaziuspořádání na konečné multimnožiny (označované jako $X^{<\omega}$), kde prvky se mohou opakovat. Řekneme, že konečné multimnožiny $A, B \subset X$ splňují $A \le B$, pokud existuje prosté (injektivní) zobrazení $f: A \to B$ takové, že $a \le f(a)$ pro všechna $a \in A$.
+
+\begin{theorem}[Higman's Theorem]
+Pokud je množina $X$ dobře kvaziuspořádaná relací $\le$, pak je multimnožinová třída $(X^{<\omega}, \le)$ také dobře kvaziuspořádaná.
+\end{theorem}
+
+\begin{intuition}
+Higmanovo lemma zjednodušeně říká: Pokud umíš dobře uspořádat jednotlivé základní objekty (prvky), pak umíš dobře uspořádat i jakékoliv konečné „hromady“ (multimnožiny) složené z těchto objektů. Stačí, když v té větší hromadě najdeš pro každý prvek z menší hromady jeho většího nebo rovného partnera.
+\end{intuition}
+
+\subsection{The minor order}
+
+Vztah „$H$ je minor grafu $G$“ definuje kvaziuspořádání na třídě všech konečných grafů (je reflexivní a tranzitivní). Pokud se omezíme na neizomorfní grafy, jedná se o částečné uspořádání. Pro tento vztah používáme zápis $H \le G$.
+
+\begin{theorem}[Robertson and Seymour - Wagnerova hypotéza]
+Třída konečných grafů uspořádaná relací minoru je dobře kvaziuspořádaná (WQO).
+\end{theorem}
+
+\begin{intuition}
+Tato věta (Robertson-Seymour theorem) je jedním z největších výsledků moderní matematiky. Říká, že v jakékoliv nekonečné posloupnosti grafů vždycky najdeš dva grafy takové, že ten dřívější je minorem toho pozdějšího. 
+
+Díky tomu platí ultimátní zkouškový důsledek: \textbf{Jakákoliv minorově uzavřená třída grafů} (např. rovinné grafy, grafy nakreslitelné na torus, apod.) \textbf{může být charakterizována konečnou množinou zakázaných minorů} (často nazývanou Kuratowského množina). Nemůže se stát, že by pro nějaký povrch existovalo nekonečně mnoho minimálních zakázaných grafů.
+\end{intuition}
+
+\begin{corollary}
+Test příslušnosti do libovolné minorově uzavřené třídy grafů lze provést v čase $O(n^3)$, kde $n$ je počet vrcholů grafu $G$ (za předpokladu, že zakázané minory jsou fixní).
+\end{corollary}
+
+\begin{theorem}[Mohar]
+Pro každý povrch $S$ existuje lineární algoritmus (běžící v čase $O(n)$), který rozhodne, zda lze daný graf $G$ do povrchu $S$ vnořit.
+\end{theorem}
+
+Nyní zavedeme topologický minor specificky pro zakořeněné stromy (rooted trees):
+Každý zakořeněný strom $T$ má unikátní orientaci $\vec{T}$ takovou, že každá hrana směřuje k rodičovskému vrcholu. Zakořeněný strom $T$ je topologickým minorem zakořeněného stromu $T'$, pokud lze $\vec{T}$ získat z podstromu $\vec{T}'$ posloupností kontrakcí hran, které incudují s vrcholy se vstupním stupněm (indegree) rovným jedné.
+
+\begin{theorem}[Kruskal's Theorem]
+Třída konečných zakořeněných stromů je dobře kvaziuspořádaná (WQO) relací topologického minoru.
+\end{theorem}
+
+\begin{intuition}
+Kruskalova věta je v podstatě předchůdcem a jednodušší variantou velkého Robertson-Seymourova teorému, ale omezená čistě na stromy. Říká, že pokud máme nekonečně mnoho zakořeněných stromů, jeden se vždy topologicky „schovává“ (jako podrozdělení) uvnitř nějakého pozdějšího, přičemž se respektuje hierarchie rodič-dítě.
+\end{intuition}
+
+\section{Treewidth}
+
+Koncept stromové šířky (treewidth) hraje centrální roli ve strukturální teorii grafů a v návrhu grafových algoritmů. Nezávisle na sobě ho objevilo více vědců, ale nejvíce ho proslavili Robertson a Seymour při důkazu Wagnerovy hypotézy.
+
+\subsection{Definition and basic properties}
+
+\begin{definition}[Tree decomposition - Stromový rozklad]
+Stromový rozklad grafu $G$ je strom $T$, který splňuje následující vlastnosti:
+\begin{enumerate}
+    \item $V(T) \subseteq \mathcal{P}(V_G)$, tj. uzly stromu $T$ (budeme je značit $X_i$) jsou podmnožiny vrcholů původního grafu $G$.
+    \item Pro každou hranu $(u,v) \in E_G$ existuje uzel $X_i$ ve stromu $T$ takový, že oba vrcholy $u$ i $v$ patří do $X_i$.
+    \item Pro každý vrchol $u \in V_G$ platí, že podgraf stromu $T$ indukovaný těmi uzly, které obsahují $u$, je neprázdný a \textbf{souvislý} (tvoří podstrom).
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Treewidth - Stromová šířka]
+\textbf{Šířka} stromového rozkladu $T$ je definována jako $\max_{X_i \in V_T} |X_i| - 1$ (tedy velikost největšího uzlu minus jedna). 
+\textbf{Stromová šířka grafu $G$}, značeno $tw(G)$, je minimální šířka přes všechny možné stromové rozklady grafu $G$.
+\end{definition}
+
+\begin{intuition}
+Co to vlastně fyzicky znamená? Stromový rozklad se snaží vzít jakýkoliv graf a "zmačkat" ho do struktury stromu. Uzly rozkladu ($X_i$) si můžeš představit jako "pytlíky", do kterých naházíš vrcholy grafu. 
+\begin{itemize}
+    \item Pravidlo 2 říká, že každá hrana grafu musí být celá uvnitř alespoň jednoho pytlíku.
+    \item Pravidlo 3 říká, že pokud je jeden vrchol ve více pytlících, musí tyto pytlíky tvořit souvislou cestu/podstrom v $T$. Nemůže se stát, že by se vrchol objevil v jednom koutě stromu, pak nikde nic a najednou zase na druhé straně.
+    \item A proč je v definici šířky to "mínus jedna"? Je to jen kosmetická úprava, aby \textbf{stromy měly stromovou šířku přesně 1} (protože pro strom stačí dávat do každého pytlíku po dvou vrcholech tvořících hranu).
+\end{itemize}
+\end{intuition}
+
+\begin{observation}
+Stromová šířka disjunktního sjednocení grafů $G_1 \cup G_2$ je $\max\{tw(G_1), tw(G_2)\}$.
+\end{observation}
+
+\begin{lemma}
+Pro každý graf $G$ platí, že $tw(G) \ge \omega(G) - 1$, kde $\omega(G)$ je velikost největší kliky v grafu.
+\end{lemma}
+
+\begin{intuition}
+Všechny vrcholy tvořící kliku (úplný podgraf) se zkrátka \textbf{musí} potkat společně alespoň v jednom pytlíku $X_i$ v libovolném stromovém rozkladu. Jinak bys nedokázal splnit podmínky rozkladu.
+\end{intuition}
+
+\begin{theorem}[Vlastnosti vzhledem k minorům]:
+\begin{itemize}
+    \item Pokud je $H$ minor grafu $G$, pak $tw(H) \le tw(G)$.
+    \item Pokud je $G$ podrozdělením (subdivision) grafu $H$, pak $tw(H) = tw(G)$.
+\end{itemize}
+\end{theorem}
+
+\subsection{Recursively defined graph classes}
+
+Grafy lze skládat rekurzivně spojováním grafů s vyznačenými terminály (k-terminal graphs) přes definované operace (sériové spojení, paralelní spojení, jackknife operace).
+
+\begin{definition}[Series-parallel graphs]
+Třída grafů definovaná rekurzivně pomocí paralelního a sériového spojování grafů (začínající z $K_2$).
+\end{definition}
+
+\begin{theorem}
+Graf má stromovou šířku nejvýše 2 právě tehdy, když je podgrafem nějakého sériově-paralelního grafu.
+\end{theorem}
+
+\begin{theorem}
+Graf je podgrafem sériově-paralelního grafu právě tehdy, když \textbf{neobsahuje $K_4$ jako minor}. (Tzn. grafy bez $K_4$ minoru mají $tw \le 2$).
+\end{theorem}
+
+\subsection{Chordal graphs}
+
+\begin{definition}[Chordal graph]
+Graf se nazývá chordální, pokud neobsahuje žádný indukovaný cyklus délky 4 nebo více. (Tedy každý cyklus delší než 3 musí mít "tětivu").
+\end{definition}
+
+\begin{observation}:
+\begin{itemize}
+    \item Každý chordální graf má vrchol, jehož sousedství indukuje kliku (tzv. simpliciální vrchol).
+    \item Každý chordální graf má stromový rozklad takový, že každý uzel $X_i$ indukuje kliku.
+\end{itemize}
+\end{observation}
+
+\begin{definition}[k-trees and partial k-trees]
+\textbf{k-strom} je graf, který vznikne z úplného grafu $K_{k+1}$ posloupností přidávání vrcholů, kde každý nově přidaný vrchol je spojen přesně s nějakou klikou velikosti $k$. Grafy se stromovou šířkou nejvýše $k$ jsou přesně podgrafy k-stromů a často se jim říká \textbf{parciální k-stromy} (partial k-trees).
+\end{definition}
+
+\begin{corollary}
+Pro každý graf $G$ platí: $tw(G) = \min\{\omega(G') : G \subseteq G', \text{kde } G' \text{ je chordální}\} - 1$.
+\end{corollary}
+
+\begin{intuition}
+Najít stromovou šířku grafu $G$ znamená vlastně najít způsob, jak do grafu $G$ dokreslit hrany tak, aby vznikl chordální graf, a to tak, aby velikost největší kliky v tomto novém chordálním grafu byla co nejmenší.
+\end{intuition}
+
+\subsection{Search games}
+
+\begin{intuition}
+\textbf{Hra na policajty a zloděje (Cops and Robber game):} 
+Nejlepší způsob, jak pochopit stromovou šířku. Představ si graf jako město. Zloděj má nekonečně rychlou motorku, policajti mají $k$ helikoptér, které přelétávají mezi křižovatkami (vrcholy). Zloděj vidí, kam helikoptéry letí a může uhnout, ale nesmí přejet přes křižovatku, kde už helikoptéra sedí. Cílem policie je zloděje obklíčit a přistát na něm.
+\end{intuition}
+
+\begin{theorem}
+Policie má vyhrávající strategii s $k+1$ helikoptérami právě tehdy, když má graf stromovou šířku nejvýše $k$.
+\end{theorem}
+
+\subsection{Separators}
+
+\begin{definition}[Separátor]
+Množina vrcholů $S \subseteq V_G$ separuje množiny $A$ a $B$, pokud každá cesta z $A$ do $B$ obsahuje vrchol ze $S$ (tzv. $(A,B)$-separátor).
+\end{definition}
+
+\begin{theorem}
+Nechť $T$ je stromový rozklad grafu $G$. Pro každou hranu rozkladu $(X_i, X_j) \in E_T$ platí, že průnik $X_i \cap X_j$ tvoří separátor v původním grafu $G$, který odděluje části grafu ležící v obou komponentách rozříznutého stromu $T$.
+\end{theorem}
+
+\begin{definition}[Good separator]
+Pro graf $G$ a množinu $W \subseteq V_G$ říkáme, že $S$ je \textbf{dobrý separátor} pro $W$, pokud každá komponenta $G \setminus S$ obsahuje nanejvýš $\frac{2}{3} |W|$ vrcholů z $W$.
+\end{definition}
+
+\begin{lemma}
+Pokud má graf $G$ stromovou šířku nejvýše $k$, pak jakákoliv podmnožina $W$ má dobrý separátor velikosti nanejvýš $k+1$.
+\end{lemma}
+
+\begin{intuition}
+Stromová šířka určuje "křehkost" grafu. Pokud má graf malou stromovou šířku, znamená to, že má úzká hrdla (separátory omezené velikostí $k+1$). Ať už si v grafu vybereš jakoukoliv velkou množinu $W$, existuje malý řez, který tuto množinu $W$ rozštípne na relativně vyrovnané kousky (žádný není větší než $2/3$). 
+\end{intuition}
+
+\begin{definition}[Strongly k-linked set]
+Množina $W \subseteq V_G$ je silně k-propojená, pokud \textbf{nemá} dobrý separátor velikosti nanejvýš $k$.
+\end{definition}
+
+\begin{theorem}[Lipton-Tarjan]
+Každý rovinný graf na $n$ vrcholech má separátor velikosti maximálně $2\sqrt{2n}$, který graf rozdělí tak, že žádná komponenta nemá více než $\frac{2}{3}n$ vrcholů. (Z toho plyne, že stromová šířka rovinného grafu je $O(\sqrt{n})$).
+\end{theorem}
+
+\subsection{Brambles}
+
+\begin{definition}[Bramble - Ostružiník]
+Systém $\mathcal{B}$ podmnožin vrcholů se nazývá bramble, pokud:
+\begin{enumerate}
+    \item Každé $B \in \mathcal{B}$ indukuje souvislý podgraf v $G$.
+    \item Pro každou dvojici množin $B, B' \in \mathcal{B}$ platí, že jejich sjednocení $B \cup B'$ tvoří souvislý podgraf (tedy buď se množiny protínají, nebo mezi nimi vede hrana). Říkáme, že se navzájem "dotýkají".
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Order of bramble]
+Říkáme, že množina $W$ \textbf{pokrývá} bramble $\mathcal{B}$, pokud má $W$ neprázdný průnik s každou množinou $B \in \mathcal{B}$. \textbf{Řád (order)} bramble $\mathcal{B}$ je velikost nejmenší množiny $W$, která ho pokrývá.
+\end{definition}
+
+\begin{intuition}
+Zatímco stromová šířka udává, jak moc se graf \textit{podobá stromu}, bramble naopak dokazuje, jak moc se \textit{stromu nepodobá} (jak moc je zacuchaný - odtud název ostružiník). Je to taková lokální silně provázaná struktura, kterou je velmi těžké "rozříznout" a pokrýt málo vrcholy. Typickým příkladem vysokého řádu bramble je čtvercová mřížka. 
+\end{intuition}
+
+\begin{theorem}[Seymour and Thomas - Treewidth minimax theorem]
+Graf $G$ obsahuje bramble řádu $k+1$ právě tehdy, když platí $tw(G) \ge k$.
+\end{theorem}
+
+\begin{intuition}
+Jde o klasickou dualitu typu min-max. Buď dokážeš graf rozložit na strom s malými pytlíky (šířka $\le k-1$), anebo v grafu najdeš zamotanou strukturu (bramble) tak tuhou, že k jejímu pokrytí potřebuješ alespoň $k$ vrcholů. Obě věci současně nemůžou platit.
+\end{intuition}
+
+\subsection{Treewidth and the minor theorem}
+
+\begin{theorem}[Zobecnění Kruskalovy věty]
+Pro každé konečné $k$ je třída grafů se stromovou šířkou omezenou $k$ dobře kvaziuspořádaná (WQO) relací minoru.
+\end{theorem}
+
+\begin{theorem}
+Pro každý graf $H$ platí následující ekvivalence: $H$ je rovinný právě tehdy, když třída grafů neobsahující $H$ jako minor má \textbf{omezenou stromovou šířku}.
+\end{theorem}
+
+\begin{theorem}[Exclusion of grid minors]
+Pro každé celé číslo $n$ existuje $k_n$ takové, že každý graf se stromovou šířkou alespoň $k_n$ obsahuje čtvercovou mřížku $\boxplus_n$ jako minor. (Pro rovinné grafy dokonce platí, že pokud je $tw(G) \ge 6k - 4$, pak graf obsahuje mřížku $\boxplus_k$ jako minor).
+\end{theorem}
+
+\begin{intuition}
+Pokud je stromová šířka nějakého grafu astronomicky vysoká, musí tento graf nevyhnutelně jako minor obsahovat velkou čtvercovou mřížku. Mřížka je takový etalon ne-stromovosti. 
+\end{intuition}
+
+\begin{theorem}[Zcela charakterizované třídy]
+Stromová šířka grafu $G$ je:
+\begin{itemize}
+    \item $\le 1$ právě tehdy, když $G$ neobsahuje $K_3$ jako minor (jedná se o lesy).
+    \item $\le 2$ právě tehdy, když $G$ neobsahuje $K_4$ jako minor.
+    \item $\le 3$ právě tehdy, když $G$ neobsahuje jako minor $K_5$, osmistěn, $W_8$ a další přesně definované grafy.
+\end{itemize}
+\end{theorem}
+
+\begin{theorem}[Hadwigerova hypotéza - Conjecture]
+Chromatické číslo $\chi(G)$ libovolného grafu $G$ je nejvýše velikost největšího úplného grafu, který je minorem $G$. (Tato hypotéza zůstává z velké části otevřená a její důkaz pro určité velikosti minorů implikuje například větu o čtyřech barvách).
+\end{theorem}
+
+\section{Further graph decompositions}
+
+Tato kapitola představuje další pokročilé dekompozice grafů, které buď zpřesňují stromový rozklad pro algoritmické účely, nebo nabízejí alternativní parametry (jako je šířka větví, kliková šířka či hodnostní šířka), jež dokážou lépe popsat i husté grafy (např. kliky).
+
+\subsection{Nice tree decomposition}
+
+\begin{definition}[Nice tree decomposition - Pěkný stromový rozklad]
+Pěkný stromový rozklad grafu $G$ je stromový rozklad, kde $T$ je zakořeněný binární strom a pro každý vnitřní uzel $X_i$ platí jedna z následujících podmínek:
+\begin{itemize}
+    \item \textbf{Join node (Uzel spojení):} $X_i$ má dva syny $X_j$ a $X_{j'}$, přičemž platí $X_i = X_j = X_{j'}$.
+    \item \textbf{Introduce node (Uzel zavedení):} $X_i$ má jednoho syna $X_j$ a obsahuje přesně jeden vrchol navíc oproti svému synovi (tj. $X_i = X_j \cup \{v\}$).
+    \item \textbf{Forget node (Uzel zapomnění):} $X_i$ má jednoho syna $X_j$ a jeden vrchol z rozkladu syna v něm chybí (tj. $X_i = X_j \setminus \{v\}$).
+\end{itemize}
+Někdy se navíc požaduje, aby všechny listy $T$ měly velikost přesně 1.
+\end{definition}
+
+\begin{intuition}
+Pěkný stromový rozklad je standardizovaná verze obyčejného stromového rozkladu. Místo toho, aby se uzly měnily chaoticky, se při postupu od listů ke kořenu mění v každém kroku vždy maximálně jedna věc – buď vrchol přidáme (introduce), ubereme (forget), nebo spojíme dvě identické větve výpočtu (join). To je naprosto ideální pro programování algoritmů pomocí dynamického programování.
+\end{intuition}
+
+\begin{observation}
+Jakýkoliv stromový rozklad lze v polynomiálním čase transformovat na pěkný stromový rozklad o stejné šířce.
+\end{observation}
+
+\begin{corollary}
+Každý graf $G$ má pěkný stromový rozklad s $O(|V_G| \cdot tw(G))$ uzly, kde všechny listy mají velikost jedna.
+\end{corollary}
+
+\begin{theorem}[Proposition 4.3]
+Pro každé $k$ existuje graf o $3k$ vrcholech, jehož jakýkoliv optimální pěkný stromový rozklad s listy o velikosti jedna má $\Omega(k^2)$ uzly.
+\end{theorem}
+
+\begin{theorem}[Proposition 4.4]
+Každý graf $G$ připouští optimální pěkný stromový rozklad (s listy libovolné velikosti) s nejvýše $4|V_G|$ uzly.
+\end{theorem}
+
+\subsection{Treewidth versus pathwidth}
+
+\begin{definition}[Path decomposition and pathwidth - Cestový rozklad a cestová šířka]
+\textbf{Cestový rozklad} grafu je stromový rozklad, kde podkladový strom $T$ tvoří cesta. \textbf{Cestová šířka} grafu $G$, značená $pw(G)$, je minimální šířka přes všechny jeho cestové rozklady.
+\end{definition}
+
+\begin{observation}
+Pro každý graf $G$ triviálně platí $tw(G) \le pw(G)$. Naopak grafy s omezenou stromovou šířkou mohou mít libovolně velkou cestovou šířku.
+\end{observation}
+
+\begin{theorem}[Proposition 4.5]
+Cestová šířka zakořeněného ternárního stromu $T_k$ s $k+1$ úrovněmi je alespoň $k$.
+\end{theorem}
+
+\begin{intuition}
+Cestový rozklad je mnohem restriktivnější než stromový. Představ si opět naši hru na helikoptéry: zatímco stromový rozklad odpovídá situaci, kdy policie zná pozici zloděje, cestová šířka $pw(G) \le k$ odpovídá hře, kde je zloděj \textbf{neviditelný} a $k+1$ helikoptér ho musí naslepo zamést a chytit na grafu.
+\end{intuition}
+
+\begin{theorem}
+Pro každý graf $G$ na $n$ vrcholech platí: $pw(G) = O(tw(G) \ln(n))$.
+\end{theorem}
+
+\subsection{Treewidth versus branchwidth}
+
+\begin{definition}[Branch decomposition - Větvený rozklad]
+\textbf{Větvený rozklad} grafu $G$ (který má alespoň dvě hrany) je strom $B$, kde každý vnitřní uzel má stupeň přesně tři a listy $B$ jsou v bijekci s hranami grafu $G$.
+Každá hrana $f \in E_B$ rozděluje hrany grafu $G$ na dvě disjunktní množiny $E_f$ a $E_f' = E_G \setminus E_f$.
+\end{definition}
+
+\begin{definition}[Branchwidth - Větvená šířka]
+\textbf{Šířka hrany} $f$ ve větveném rozkladu je počet vrcholů grafu, které jsou incidentní jak s hranou z $E_f$, tak s hranou z $E_f'$ (formálně $w(f) = |V_f| = |(\bigcup E_f) \cap (\bigcup E_f')|$). 
+\textbf{Větvená šířka} grafu $G$, značená $bw(G)$, je minimální šířka přes všechny možné větvené rozklady grafu $G$. (Pro graf s nejvýše jednou hranou je $bw(G) = 0$ ).
+\end{definition}
+
+\begin{observation}
+Větvená šířka je minorově uzavřená vlastnost, tedy platí $bw(H) \le bw(G)$, kdykoliv je $H$ minor $G$. Pro stromy platí $bw(T) \le 2$. Pro úplné grafy $K_n$ ($n \ge 3$) platí $bw(K_n) = \lceil \frac{2}{3}n \rceil$.
+\end{observation}
+
+\begin{theorem}
+Pro jakýkoliv graf $G$ s větvenou šířkou alespoň dva platí:
+$$bw(G) \le tw(G) + 1 \le \lfloor \frac{3}{2}bw(G) \rfloor$$
+\end{theorem}
+
+\begin{intuition}
+Větvený rozklad nepracuje s vrcholy jako stromový rozklad, ale dělí hierarchicky \textbf{hrany} grafu pomocí ternárního stromu. Šířka řezu je dána počtem vrcholů, které „přečnívají“ přes hranici tohoto rozdělení (mají sousedy na obou stranách). Věta 4.7 nám říká, že větvená šířka a stromová šířka jsou si funkčně nesmírně blízké (lineárně provázané). Pokud je jedna omezená konstantou, je omezená i druhá.
+\end{intuition}
+
+\subsection{Treewidth versus NLC-width}
+
+\begin{intuition}
+Hlavní nevýhoda $tw, pw$ a $bw$ je, že nedokážou zachytit strukturu hustých grafů. Například úplný graf $K_n$ má obrovskou stromovou šířku ($n-1$), přestože jeho struktura je triviální. Proto zavádíme algebraické dekompozice založené na značkování vrcholů (labels), které umí efektivně pracovat i s klikami.
+\end{intuition}
+
+\begin{definition}[Expression tree and NLC-width]
+Nechť $I = \{1, \dots, k\}$ je množina značek (labels). \textbf{Výrazový strom} (expression tree) grafu $G$ je binární strom $E$, jehož uzly jsou tří typů:
+\begin{enumerate}
+    \item \textbf{Introduce node $i(v)$:} List stromu $E$ představující graf s jediným vrcholem $v$ nesoucím značku $i \in I$.
+    \item \textbf{Join node $\oplus_S$:} Spojení dvou grafů disjunktním sjednocením, přičemž se přidají \textbf{všechny} hrany mezi vrcholy se značkou $i$ v levém podstromu a značkou $j$ v pravém podstromu pro každou dvojici $(i,j) \in S \subseteq I \times I$.
+    \item \textbf{Relabel node $\rho_\tau$:} Uzel s jedním synem, který přepíše značky vrcholů podle zobrazení $\tau: I \to I$.
+\end{enumerate}
+\textbf{NLC-width} (Node Label Controlled width) grafu $G$, značená $nlcw(G)$, je minimální počet značek $k$ potřebný k sestavení takového výrazového stromu.
+\end{definition}
+
+\begin{theorem}
+Pro každý graf $G$ platí: $nlcw(G) \le 2^{tw(G)+1} + tw(G) + 1$.
+\end{theorem}
+
+\begin{observation}
+Úplné grafy $K_n$ mají $nlcw(K_n) = 1$. Grafy s $nlcw(G) = 1$ bez operace relabel odpovídají třídě tzv. kografů (cographs).
+\end{observation}
+
+\begin{intuition}
+Algebraická konstrukce umožňuje jedním spojením $\oplus_S$ vygenerovat obrovské množství hran najednou (např. kompletní bipartitní graf nebo kliku), pokud mají vrcholy správné značky. Proto husté grafy mohou mít malou NLC-šířku. Vztah ke stromové šířce (Věta 4.8) ukazuje, že nízká stromová šířka zaručuje nízkou NLC-šířku, ale naopak to neplatí.
+\end{intuition}
+
+\begin{observation}[Cliquewidth - Kliková šířka]
+Velmi podobný parametr je \textbf{cliquewidth} ($cw(G)$). Rozdíly jsou v tom, že operace sjednocení $\oplus$ nepřidává hrany , relabel mění pouze jednu značku na druhou ($\rho_{i \to j}$) , a hrany se přidávají dedikovaným uzlem $\eta_{i,j}$ mezi všemi vrcholy se značkou $i$ a $j$.
+\end{observation}
+
+\subsection{NLC-width versus rankwidth}
+
+\begin{definition}[Rank decomposition and Rankwidth - Hodnostní rozklad a hodnostní šířka]
+\textbf{Hodnostní rozklad} grafu $G$ je ternární strom $R$, jehož listy jsou v bijekci s vrcholy grafu $G$. Každá hrana $f \in E_R$ odpovídá rozdělení vrcholů na dvě množiny $V_f$ a $\overline{V_f}$.
+\textbf{Šířka hrany} $f$ je definována jako \textbf{hodnost (rank)} incidenční matice sousednosti $A_f$ (mezi množinami $V_f$ a $\overline{V_f}$) nad tělesem $GF(2)$.
+\textbf{Rankwidth}, značená $rw(G)$, je minimální možná šířka přes všechny hodnostní rozklady.
+\end{definition}
+
+\begin{theorem}[Proposition 4.9]
+Pro každý graf $G$ platí:
+$$rw(G) \le nlcw(G) \le 2^{rw(G)}$$
+\end{theorem}
+
+\begin{definition}[Local complementation and Vertex minor]
+\textbf{Lokální komplementace} vrcholu $v$ v grafu $G$ (značeno $G * v$) je operace, která nahradí podgraf indukovaný na sousedech $v$ (tj. $G|_{N(v)}$) jeho grafovým doplňkem. 
+Graf $H$ je \textbf{vrcholový minor} (vertex minor) grafu $G$, pokud ho lze z $G$ získat posloupností mazání vrcholů a lokálních komplementací.
+\end{definition}
+
+\begin{theorem}[Proposition 4.10, Corollary 4.11]
+Lokální komplementace nemění šířku žádné hrany v hodnostním rozkladu. Pokud je $H$ vrcholový minor grafu $G$, pak platí $rw(H) \le rw(G)$.
+\end{theorem}
+
+\begin{theorem}
+Třída grafů s omezenou hodnostní šířkou je dobře kvaziuspořádaná (WQO) relací vrcholového minoru.
+\end{theorem}
+
+\begin{intuition}
+Hodnostní šířka měří lineární závislost sousedství mezi dvěma částmi grafu. Pokud mají vrcholy v jedné části vůči druhé části uniformní sousedství (řádky matice jsou lineárně závislé nad tělesem $\mathbb{Z}_2$), má matice nízkou hodnost. Je to hluboký struturní ekvivalent k větvené šířce, ale perfektně optimalizovaný pro husté grafy. Vrcholový minor je pak analogií klasického minoru přizpůsobenou pro tento typ algebraických rozkladů.
+\end{intuition}
+
+\end{document}
