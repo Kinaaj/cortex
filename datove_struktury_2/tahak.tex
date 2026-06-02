@@ -1,45 +1,52 @@
 \documentclass[8pt]{extarticle}
 
 \usepackage[utf8]{inputenc}
-\usepackage[czech]{babel}
+\usepackage[czech]{babel} % Správné české dělení slov a znaky
 \usepackage[T1]{fontenc}
 
-% --- OKRAJE (2mm nahoře, 1mm jinde) ---
-\usepackage[a4paper, left=1mm, right=1mm, bottom=1mm, top=1mm, includeheadfoot, landscape]{geometry} 
+% --- GEOMETRIE: A4 papír, ale textová oblast vycentrovaná do velikosti A5 ---
+% A4 na šířku má rozměry 297mm x 210mm. Cílová oblast A5 na šířku má 210mm x 148mm.
+% Aby byl textový blok A5 (s vnitřním okrajem 0.2mm) přesně uprostřed A4, 
+% musíme matematicky dopočítat přesné vnější okraje:
+% Horizontální: (297mm - (210mm - 0.4mm)) / 2 = 43.7mm
+% Vertikální:   (210mm - (148mm - 0.4mm)) / 2 = 31.2mm
+\usepackage[a4paper, left=43.7mm, right=43.7mm, top=31.2mm, bottom=31.2mm, noheadfoot, landscape]{geometry} 
 
-% --- KLÍČOVÁ OPRAVA: Vynulování skrytých mezer hlavičky ---
+% Vynulování skrytých systémových mezer hlavičky, patičky a horního okraje
 \setlength{\headheight}{0pt}
 \setlength{\headsep}{0pt}
 \setlength{\topskip}{0pt}
+\setlength{\footskip}{0pt}
 
 \usepackage{multicol} 
 \usepackage{amsmath, amssymb, amsthm}
-\usepackage{mathptmx}
+\usepackage{mathptmx} % Písmo Times - velmi kompaktní, klasické novinové sázející natěsno
 \usepackage[protrusion=true,expansion=true,tracking=true]{microtype}
 
-% Extrémní smrsknutí matematiky
+% Extrémní smrsknutí mezer uvnitř matematických vzorců
 \thickmuskip=1mu \medmuskip=1mu \thinmuskip=1mu 
 
-% Vynulování vnitřních systémových mezer
+% ZÁBRANA ZALOMENÍ VZORCŮ (Matematické věci zůstanou striktně na jednom řádku)
+\binoppenalty=10000
+\relpenalty=10000
+
+% Vynulování vnitřních mezer mezi odstavci a řádky
 \pagestyle{empty} 
 \setlength{\parindent}{0pt} 
 \setlength{\parskip}{0pt}   
 \setlength{\parsep}{0pt}
 
-% Drastické řádkování
-\renewcommand{\baselinestretch}{0.75} 
-\setlength{\columnsep}{2mm} 
+% Drastické zúžení řádkování a mezer mezi sloupci
+\renewcommand{\baselinestretch}{0.72} 
+\setlength{\columnsep}{1mm} 
 
 \begin{document}
-\fontsize{5pt}{5.5pt}\selectfont 
-\begin{multicols*}{5}
+% Extrémně malé písmo (4.8pt) s adekvátním řádkováním (5.2pt) pro maximální hustotu
+\fontsize{4.8pt}{5.2pt}\selectfont 
+\begin{multicols*}{4} % Rozdělení na 4 sloupce (ideální šířka pro vzorce na A5 na šířku)
 
-% ZDE ZAČÍNÁ TVŮJ SOUVISLÝ TEXT (VLOŽ SEM SVÉ MATERIÁLY)
-% =========================================================================
-Zde zacina tvuj ultra-husty text bez jakychkoliv mezer. Pises vsechno za sebou bez odradkovani aby se vyuzil kazdy milimetr ctverecny. Definice: Necht $V$ je vektorovy prostor nad telesem $T$. Linearni nezavislost znamena ze rovnice $\sum c_i v_i = 0$ ma pouze trivialni reseni $c_i = 0$. Vsechny vzorce sázej striktne inline pomoci jednoho dolaru jako napriklad $\det(A-\lambda I)=0$ pro charakteristicky polynom vlastnich cisel matice $A$. Kazde odradkovani nebo prazdny radek je ted tvuj nepřítel. Pokud chces text opticky rozdelit pouzij treba tucne pismeno nebo sipku jako separator ale nepouzivej enter. Veta o dimenzi: $\dim \operatorname{Ker}(f) + \dim \operatorname{Im}(f) = \dim V$. Pokud pouzivas integraly nebo sumy indexy se diky inline sazbe zmensi vedle ymbolu coz setri vertikalni misto napr. $\int_a^b f(x)dx$.
-
-% --- UKÁZKA POKRAČOVÁNÍ TEXTU PRO PŘEDSTAVU HUSTOTY ---
-Kompaktni font Times (mathptmx) umoznuje nacpat na jeden radek ve sloupci obrovske mnozstvi znaku. Balicek microtype navic jemne stlacil mezery mezi pismeny takze text pusobi jako neprostupna zed informaci. Pozor na tiskarnu: protoze je okraj nastaven na geometrickych 0cm softwarove bude text zacinat na absolutnim okraji PDF. Vetsina beznych domacich a skolnich tiskaren ma ale hardwarovy tiskovy okraj kolem 3 az 5 milimetru podavaci kolecka nedokazu tisknout az na samy okraj papiru. Pokud to vytisknes na takove tiskarne text na okrajich stranky bude oříznut. Pokud nemas specialni borderless tiskarnu doporucuji v balicku geometry zmenit 'margin=0cm' na alespon 'margin=0.3cm'. Usetris si tim zklamani tesne pred zkouskou kdyz zjistis ze ti chybi prva a posledni pismena na strance. Hodne stesti u zkousky na matfyzu!
+% =======================================================================
+DETER.SLOVNIK: $O(n^k)\rightarrow O(n^2)$ trie hloubky $k$, cil $O(n^2)\rightarrow O(n)$;$(f,g)$ je $q$-dobra, pokud $x \rightarrowtail (f(x),g(x))$ je proste a $f$ ma na $S$ max $q$ kolizi. Lemma $(f,g)$ je $q$-dobra a $r\geq Ln+1$, pak $\exists a_0-a_{2^r-1}, (f',g'), q'$-dobry a $q' = \text{min}(n, \lfloor 2^{3-r} \cdot q \rfloor \cdot n)$. Algo: zvolim $r > Ln +3 \rightarrow 2^{3-r}<1/n$, $S\subsetneq\{{0,1}\}^w, w\leq2Ln+O(1)$, 1. krok rozrezanim $x$ mam $(f,g)$, ktera je prosta, kolizi max $\binom{n}{2} \leq n^2$, pote 2x lemma. Na konci musime pamatovat $a_i$ a $b_i$.Dk Lemma:Setridime radky, podle \# prvku $S_i$, Aby $x \in S_{<i}$ \& $y \in S_i$ kolidovali, tak $g(x) \oplus a_x = g(y) \oplus a_i$, $a_i \in_R [2^r] \rightarrow \mathbb{E}[\#NK] = |S_{<i}|.|S_i|.2^{-r}$. Markov:$\mathbb{E}=2$ pokusech mame \#NK max 2x vetsi. $\Sigma$pres$\forall$oznacime $*$. A: $2^{1-r}\leq 1/n, S_{<i}\leq n \Rightarrow *\leq \Sigma |S_i| = n$. B: Odstranime trivialni pripady $|S_i|=0 or 1$, scitame prefix $* = \Sigma_{i<t}\lfloor 2^{1-r}|S_{<i}||S_i|\rfloor$, vyjadrime$|S{<i}||S_i|\leq \Sigma|S_j|^2$, $d^2 \leq 4\binom{d}{2}$, $\Sigma|S_j|^2 \leq 4q$. Derandomizace: $\mathbb{E}[T]=P(\alpha)\mathbb{E}[T|\alpha] + (1-P(\alpha))\mathbb{E}[T|\neg\alpha]$. Binarni strom nad sloupci, vrchol je \# prvku ve sloupci, nebo intervalu sloupcu. VAN.EB STROM:$U=[2^w],w=2^k,hi(x),lo(x)$. $vEB(S,U)$:$\min$ alone,$\max$, prihradky pro $0..\sqrt{U}$ $P_i:=\{lo(x)|x\in S', hi(x)=i\}$, nad ni $vEB(P_i, \sqrt{U})$ a Sum str $vEB({i|P_i\neq\emptyset}, \sqrt{U})$.$Find, Succ$ zanorime do prihrad $P_i$, if $\neq\emptyset$, jinak v Sum.$Succ(i)$, z nej v $O(1)$ min. $Insert$ porovnam s min,max, pak $P_i.Insert(j)$, if$P_i = \emptyset$, tak $P_i.Insert(j) v O(1)$ a $Sum.Insert(i)$. $\forall$ operace v $O(LLU)$. Pamet a jeji inic. az $O(U) \rightarrow$ simulace na RAMu predem vynul pameti, metoda MIX, $M$ pole velke $|U|$, $I$ indexy inic. prvku a $N$ pocet, $X$ pole ukazatelu na $I$.$X[i]\rightarrowtail I$. INTERVALOVY VEB: listy char. vektor mnoziny $S$. Hloubka$=w$, $U=2^w$. Vnitrni vrch. 1/0 podle toho, zda podinterval je neprazdny. $Find$, $Pred$, $Succ$ v $O(LLU)$, pokud umime bin. vyhled. na list-koren. X-FAST:  kukacci hesing, pamet $O(n\cdot LU)$, vyhledavame binarne pomoci prefixu do hesovaci tab, listy spojene do $\leftrightarrow$ spoj seznamu, levy prazdny odkaz syna x ukazuje nejlevejsi list v pravem podstromu x $\rightarrow$ queris $O(LLU)$, $Update$ v $\overline{O}(LU)$. Y-FAST: Indirekce $\rightarrow$ lepsi pamet a updates, $n$ prvku na bloky $B=\Theta(LU)$, uvnitr bloku bvs, nejvetsi prvek v bloku je reprezentant, tech je $O(n/LU)$, Pamet za $\forall$bvs $O(n)$ + pamet za x-trii $O((n/LU)\cdot LU)=O(n)$. $Update \rightarrow Find + Ins/Del_{bvs} \in O(LLU)$, kazdy blok $\rho\in[1/2B, 2B]$, pokud pre/podtece, tak delime/slucujeme a ins/del v x-trii, $O(LU)$, ale nejmene $\Omega(LU)$ $Ins/Del$, proto $\overline{O}(1)$. $Del$ reprezentanta $\rightarrow$ pomnicek! HALDA:$Ins,DecreaseKey\in O(L_{k}n)$, $ExtractMin\in O(k\cdot L_{k}n)$.Dijkstra $n\times Ins + m\times DKey +n \times EMin$ nabyva min pro $k=m/n$. BINOMIALNI H:Les Binom. stromu. $B_0 :=$ 1 vrchol, $B_k$ ma deti $B_{0..k-1}$, $k+1$ hladin, $2^k$ vrcholu, max $k$ deti. Strom radu $k$ max 1$\rightarrow$ jednoznacne urceno ktere. $\#$strmu $O(Ln)$ Repre v pameti: vrchol$:=$(prvek, priorita, ptr na rodice, ptr na nejlevejsi dite, ptr na left a right sibling). $Merge$ jak scitani dvou bin cisel$\in O(Ln)$, $Ins$ je $Merge$ s $B_0$. $Build$ v $O(n)$ misto $O(n\cdot Ln)$. $EMin\rightarrow$ $Find$ + $Merge \in O(Ln)$. $DKey \in O(Ln)$. $Del\rightarrow DKey(-\infty) + EMin$. LINE BIN H: Zlepseni
 
 \end{multicols*}
 \end{document}
