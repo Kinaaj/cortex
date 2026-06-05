@@ -1,0 +1,56 @@
+\documentclass[8pt]{extarticle}
+
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel} % Správné české dělení slov a znaky
+\usepackage[T1]{fontenc}
+
+% --- GEOMETRIE: A4 papír s minimálními okraji ---
+% Okraje nastaveny na 5mm, což je hranice, kterou zvládne 99 % běžných tiskáren bez oříznutí textu.
+\usepackage[a4paper, margin=10mm, noheadfoot, landscape]{geometry} 
+
+% Vynulování skrytých systémových mezer hlavičky, patičky a horního okraje
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\topskip}{0pt}
+\setlength{\footskip}{0pt}
+
+\usepackage{multicol} 
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathptmx} % Písmo Times - velmi kompaktní, klasické novinové sázející natěsno
+\usepackage[protrusion=true,expansion=true,tracking=true]{microtype}
+
+% Extrémní smrsknutí mezer uvnitř matematických vzorců
+\thickmuskip=1mu \medmuskip=1mu \thinmuskip=1mu 
+
+% ZÁBRANA ZALOMENÍ VZORCŮ (Matematické věci zůstanou striktně na jednom řádku)
+\binoppenalty=10000
+\relpenalty=10000
+
+% Vynulování vnitřních mezer mezi odstavci a řádky
+\pagestyle{empty} 
+\setlength{\parindent}{0pt} 
+\setlength{\parskip}{0pt}   
+\setlength{\parsep}{0pt}
+
+% Drastické zúžení řádkování a mezer mezi sloupci
+\renewcommand{\baselinestretch}{0.72} 
+\setlength{\columnsep}{1mm} 
+
+\begin{document}
+% Extrémně malé písmo (4.8pt) s adekvátním řádkováním (5.2pt) pro maximální hustotu
+\fontsize{4.8pt}{5.2pt}\selectfont 
+
+% Využíváme celou plochu A4 na šířku, takže 5 nebo i 6 sloupců je teď ideální
+\begin{multicols*}{5} 
+
+
+% =======================================================================
+ALG BOYERA-MYRVOLD: KRESLENI G DO ROVINY: Vstup: neorient G, Vystup: "je rovinny" + vyda nakresleni nebo "neni rovinny" a da dk kuratowskeho podgrafu. Cas $O(n)$. Z dfs - pouze stromove a zpetne hrany; dopredne a pricne nejsou. dfs strom je kostra G. Relace "hrany $e$ a $f$ lezi na spolecne kruznici" ($e\sim f$) je ekviv. Tridy jsou max 2-souvis podgrafy (bloky), ekv trid s jednou hranou (most) = trivialni blok, vrch $v$ je artikulace $\equiv$ sousedi hran z jinych bloku. Sitauce v dfs $u\rightarrowtail v\rightarrowtail w_1\_w_k$,$\odot$ zpetne $\overleftarrow{xv}$ vzdy $\overrightarrow{vx}\sim \overrightarrow{uv}$. $\odot$ if $\overrightarrow{uv} \sim \overrightarrow{vw_1}$, musi $\exists$ zpetna hrn $f$ z $T(w_1)$ nad $v$. $\odot$ if $vw_i\sim vw_j$, musi byt $\sim$ pres $uv$, lebo $\not\exists$ pricne hrn, if $\not\exists$ ani $uv$, tak nejsou $\sim$, napr $v$ je koren. 
+Pri dfs testuji $\exists$ zpet hrn: $Enter(v)$, $Ancestor(v)=$ min z $Enter(u)$, kdy $vu$ je zpet hrn, $LowPoint(v)=$ min z $Anc(x)$: $x\in T(v)$. $\odot$ lze spocitat v $O(n)$ pri dfs. Lemma: $u\rightarrowtail v\rightarrowtail w_1\_w_k$ v dfs strmu, pak strm hrany $uv\sim vw_i \equiv LowP(w_i)<Entr(v)$ a $v$ je artikulace $\equiv$ $\exists i: LowP(w_i)\geq Entr(v)$ a koren dfs je artikulace $\equiv$ \# jeho synu $> 1$. Kresleni: vrcholy od nejvyssiho $Entr$, udrzujeme blokovou $B_1, B_2..$ usporadanou strukturu jiz nakreslene casti, blok s vyssimi $Entrs$ driv, $\forall B_i$ ma svuj koren (minimalni $Entr$ v $B_i$), ten je artikulaci v nadrazenem $B_i+1$ (krome nejvyssiho blku); $\forall$ koreny, ktere jsou artikulace cp $\rightarrow$ lepsi repr v pameti a preklapeni v $O(1)$. $\forall B_i$ jdou nakreslit ohranicene kruznici, krom mostu ($B$ je jen hrana) $\rightarrow$ zdvojime hranu na 2-cyklus. $\odot$ $B_i$ lze preklopit dle koren artikulace (i se vsemi pod nim), neporusi rovinnost. Invariant: $\forall$ nenakreslene hrany vedou do vrcholu s mensim $Entr$ (lebo postupujeme nejvys $Entr$). Dusledek $\forall$ externi vrcholy (ty ke kterym jeste neco budem pripojovat), musi lezet ve stejne stene dosud nakresleneho podgrafu, kdyby vrchol dostal do jine uzavrene steny, uz se k nemu z vnejsku nedostanem. Buno tato stena je ta vnejsi; Zpracovani $v$: potreba pridat $\forall$ hrany do nasledniku (dfs), tedy vrcholy co uz nakreslene: 1. strm hrny - jdou vzdy pridat jako trivi bloky (2-cykly) 2.zpet hrny - tyto vrchy byly exter, nakreslenim hrny nahradime cestu po okraji a muze i sloucit bloky do jednoho, $\odot \forall$ hrna muze zmizet z vnejsi steny max 1x $\rightarrowtail$ amort. $O(1)$, if $\exists$ exter vrchol na odriznute ceste, musime preklopit dotcene blky. Vrchol $w$ je exter pri zpracovani $v$ $\equiv$ $Ancstr(w) < Entr(v)$ or if $\exists$ blok s aspon jednim vrcholem, tedy:$\exists x: LowP(x) < Entr(v)$, x je syn $w$ \& $x$ v jinem bloku, nez $w$ (2. plati, protoze koren bloku (tady $w$) ma max jednoho dfs syna, jinak by $\exists$ pricna hrna, proto na check blokuu, kterych je $w$ koren se staci podivat na prvniho syna v tomto bloku). Test if $v$ je exter v $O(1)$: Df: $BlockList(w)=$ seznam bloku pripojenych v danem okamziku pod $w$, repr koreny blku (klony $w$) a vzdy jedinym synem korene, vzestupne setrideny dle $LowP$ toho syna. Lemma: Vrch $w$ je exter, if $Ancstr(w) < Enter(v)$ or prvni prvek $BlockList(w)$ ma $LowP < Enter(v)$, a $BlockList$ lze udrzovat amort $O(1)$. Dk: 1. z def a 2. na zacatku pro $\forall$ trivialni bloky vytvorime $BlockListy$ pomoci bucketsort v $O(n)$, kdykoliv dojde ke slouceni blokuu, musime vymazat podrazeny slouceny blok z $BlockL$ prislusne artikulace ($v$ je artikulace $B_1$ a jeho klon $v'$ koren $B_2$, $BlockL$ je ulozen ve $v$) odstranime v $O(1)$ pomoci ptru, ktery ukazuje do $BlockL$, kazdy blok odstranen za beh alg max 1x a bloku je $O(n)$$\square$. Obchazeni hranice stejnym smerem $\rightarrow$ $\forall$ vrcholy na hranici, dva ukazatele, na sousedy, prijdu-li jednim, jdu druhym. $\forall$ $B_i$ si pamatuje orientaci (preklapeci bit ulozen v koreni) a zajima nas uz jen vnejsi hranice. Preklopeni $B_i$ a $\forall$ pod nim, pouze negace bitu. Preklopeni pouze $B_i \rightarrow$ negace bitu a projiti hranice a negace bitu v korenech podrazenych bloku. HERE |WalkUp (znaceni ziveho G):  zpracovavam $v$, chci nakreslit zpetne hrany z potomku do $v$, 
+
+
+% 3. Jak zapojíme novou hranu za běhu?Když chceme do vrcholu $w$ na hranici přidat novou hranu, potřebujeme znát absolutní orientaci jeho seznamu sousedů, abychom hranu zapojili do správné "mezery" (do vnější stěny).My ale k vrcholu $w$ nedoskočíme náhodně. My k němu fyzicky dojdeme z kořene (při fázi WalkDown) a po cestě si udržujeme kontext toho, jakým směrem aktuálně jdeme (víme, kterou stranou do $w$ vstupujeme).Díky tomuto kontextu z průchodu přesně víme, kde je "venku" a kde je "vevnitř", a hranu zapojíme správně bez ohledu na to, kolikrát se blok virtuálně překlopil.
+
+% 4. Finální průchod (Obnova absolutní orientace)Z důvodu časové složitosti jsme za běhu algoritmu hromadili "dluh" v podobě překlápěcích bitů. Na úplném konci algoritmu (když je graf kompletně nakreslený) musíme tuto hierarchii bitů vyřešit, abychom vydali platné datové struktury:Spustíme obyčejné DFS z absolutního kořene celého grafu.Cestou dolů si neseme kumulativní znaménko (např. začínáme s $+1$).Když vstoupíme do kořene bloku, vynásobíme naše kumulativní znaménko (nebo použijeme XOR) jeho překlápěcím bitem.Pokud je součin znamének na cestě do vrcholu roven $-1$, znamená to, že vrchol je v absolutním souřadnicovém systému překlopen. V takovém případě vezmeme jeho lokální spojový seznam sousedů a fyzicky ho invertujeme.Tento průchod navštíví každý vrchol a hranu právě jednou, takže trvá striktně $\mathcal{O}(n)$.
+\end{multicols*}
+\end{document}
