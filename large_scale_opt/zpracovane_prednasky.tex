@@ -1,0 +1,867 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definice}
+
+\title{NOPT061: Úvod, Heuristiky, Metaheuristiky \\ \large Výtah z 1. přednášky}
+\author{Příprava na zkoušku}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Úvod do kombinatorické optimalizace}
+Problém kombinatorické optimalizace (CO) je definován pomocí konečné množiny objektů $\mathcal{S}$ a účelové funkce $f:\mathcal{S}\mapsto\mathbb{R}^{+}$, která každému objektu přiřazuje nezápornou hodnotu. Proces optimalizace spočívá v nalezení objektu $s^{*}$ s minimální hodnotou účelové funkce. Minimalizace funkce $f$ je ekvivalentní maximalizaci funkce $-f$, proto lze každý CO problém popsat jako minimalizační problém.
+
+Přesné (exaktní) algoritmy garantují nalezení optimálního řešení v konečném čase pro instance konečné velikosti. Za předpokladu, že $P \neq NP$, však algoritmus řešící NP-těžký problém v polynomiálním čase neexistuje. Proto mohou přesné metody v nejhorším případě vyžadovat exponenciální čas. Z tohoto důvodu se využívají aproximační metody, které obětují garanci nalezení optima za účelem produkce vysoce kvalitních řešení v prakticky přijatelném čase.
+
+\section{Základní heuristické metody}
+
+\subsection{Konstruktivní heuristiky (Constructive Heuristics)}
+Předpokládáme, že řešení je složeno z množiny možných komponent $\mathcal{C}$. Platné řešení $s$ je reprezentováno jako podmnožina $\mathcal{C}$, tedy $s \subseteq \mathcal{C}$. Konstruktivní heuristiky generují řešení "od nuly" tak, že v každém kroku přidávají komponentu do zpočátku prázdného částečného (parciálního) řešení $s^p$. Množina možných rozšíření pro částečné řešení se značí $Ext(s^p) \subseteq \mathcal{C}$. 
+
+Nejznámějším příkladem je chamtivá (greedy) heuristika, která využívá greedy funkci k ohodnocení kvality komponent a v každém kroku vybírá rozšíření s nejvyšší hodnotou (např. hranu s nejmenší váhou).
+
+\begin{algorithm}[H]
+\caption{Constructive Heuristic }
+\begin{algorithmic}[1]
+\STATE $s^p \gets \emptyset$ 
+\WHILE{$Ext(s^p) \neq \emptyset$} 
+\STATE $c \gets Select(Ext(s^p))$ 
+\STATE přidej $c$ do $s^p$ 
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Místní hledání (Local Search)}
+Místní hledání začíná z počátečního řešení a v každém kroku nahrazuje aktuální řešení lepším řešením z jeho vhodně definovaného okolí.
+
+\begin{definition}[Funkce okolí]
+Funkce okolí $\mathcal{N}: \mathcal{S} \rightarrow 2^{\mathcal{S}}$ přiřazuje každému řešení $s \in \mathcal{S}$ množinu sousedů $\mathcal{N}(s) \subseteq \mathcal{S}$, která se nazývá okolí $s$.
+\end{definition}
+
+\begin{definition}[Lokální minimum]
+Lokální minimum vzhledem k funkci okolí $\mathcal{N}$ je řešení $\hat{s}$ takové, že $\forall s \in \mathcal{N}(\hat{s}): f(\hat{s}) \le f(s)$. Řešení $\hat{s}$ nazýváme striktní lokální minimum, pokud platí ostrá nerovnost $f(\hat{s}) < f(s)$.
+\end{definition}
+
+Existují dva hlavní přístupy pro výběr zlepšujícího souseda: \textit{First improvement} (vrací první nalezené řešení, které je lepší než $s$) a \textit{Best improvement} (prohledá celé okolí a vrátí nejlepší nalezené řešení).
+
+\begin{algorithm}[H]
+\caption{Local Search }
+\textbf{Vstup:} počáteční řešení $s$, funkce okolí $\mathcal{N}$ 
+\begin{algorithmic}[1]
+\WHILE{$\exists s' \in \mathcal{N}(s)$ takové, že $f(s') < f(s)$} 
+\STATE $s \gets ChooseImprovingNeighbor(\mathcal{N}(s))$ 
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Variable Neighborhood Descent (VND)}
+Rozšíření deterministického místního hledání, které využívá konečnou množinu více funkcí okolí $\{\mathcal{N}_1, \dots, \mathcal{N}_{k_{max}}\}$. Systematicky je prozkoumává, dokud není dosaženo řešení, které je lokálně optimální vůči všem těmto funkcím. Funkce jsou často seřazeny podle velikosti okolí: $|\mathcal{N}_1(s)| \le |\mathcal{N}_2(s)| \le \dots \le |\mathcal{N}_{k_{max}}(s)|$.
+
+\begin{algorithm}[H]
+\caption{Variable Neighborhood Descent (VND) }
+\textbf{Vstup:} počáteční řešení $s$, funkce okolí $\mathcal{N}_k, k=1,\dots,k_{max}$ 
+\begin{algorithmic}[1]
+\STATE $k \gets 1$ 
+\WHILE{$k \le k_{max}$} 
+\STATE $s' \gets ChooseBestNeighbor(\mathcal{N}_k(s))$ 
+\IF{$f(s') < f(s)$} 
+\STATE $s \gets s'$ 
+\STATE $k \gets 1$ 
+\ELSE
+\STATE $k \gets k + 1$ 
+\ENDIF
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+\section{Metaheuristiky}
+Metaheuristiky jsou obecné aproximační algoritmy, které kombinují konstruktivní heuristiky a místní hledání se strategiemi pro efektivní prohledávání stavového prostoru a především obsahují mechanismy pro únik z lokálních minim.
+
+\subsection{Greedy Randomized Adaptive Search Procedure (GRASP)}
+Kombinuje randomizovanou chamtivou konstrukci řešení s následnou aplikací místního hledání. Při konstrukci je z možných rozšíření $Ext(s^p)$ vytvořen tzv. \textit{restricted candidate list} $L$, obsahující nejlepší komponenty, ze kterých se následně volí náhodně. Parametr délky seznamu $\alpha$ řídí míru diverzity a heuristického biasu.
+
+\begin{algorithm}[H]
+\caption{GRASP }
+\begin{algorithmic}[1]
+\WHILE{podmínky ukončení nejsou splněny} 
+\STATE $s \gets ConstructGreedyRandomizedSolution()$ 
+\STATE $s \gets LocalSearch(s)$ 
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Iterated Greedy (IG)}
+V každé iteraci je aktuální řešení $s$ částečně destruováno probabilistickým způsobem na částečné řešení $s^p$. Následně probíhá regenerační proces na kompletní řešení $s'$, na které může být (volitelně) aplikováno místní hledání.
+
+\begin{algorithm}[H]
+\caption{Iterated Greedy (IG) }
+\begin{algorithmic}[1]
+\STATE $s \gets GenerateInitialSolution()$ 
+\WHILE{podmínky ukončení nejsou splněny} 
+\STATE $s^p \gets DestroyPartially(s)$ 
+\STATE $s' \gets RecreateCompleteSolution(s^p)$ 
+\STATE $\hat{s'} \gets LocalSearch(s')$ \{volitelné\} 
+\STATE $s \gets ApplyAcceptanceCriterion(s, \hat{s'}, history)$ 
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Iterated Local Search (ILS)}
+Startovní řešení pro novou iteraci je generováno náhodnou perturbací aktuálního nejlepšího řešení. Perturbace by měla proces přesunout do jiné oblasti přitažlivosti (basin of attraction), ale měla by zůstat blízko aktuálnímu řešení.
+
+\begin{algorithm}[H]
+\caption{Iterated Local Search (ILS) }
+\begin{algorithmic}[1]
+\STATE $s \gets GenerateInitialSolution()$ 
+\STATE $s \gets LocalSearch(s)$ 
+\WHILE{podmínky ukončení nejsou splněny} 
+\STATE $s' \gets Perturbation(s, history)$ 
+\STATE $\hat{s'} \gets LocalSearch(s')$ 
+\STATE $s \gets ApplyAcceptanceCriterion(s, \hat{s'}, history)$ 
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Simulated Annealing (SA)}
+Metaheuristika inspirovaná procesem žíhání kovů a skla. Dovoluje tahy k horším řešením (tzv. uphill moves) v závislosti na parametru teploty $T_k$ a rozdílu $f(s') - f(s)$. Pravděpodobnost přijetí horšího řešení běžně klesá v čase a je počítána dle Boltzmannova rozdělení.
+
+\begin{algorithm}[H]
+\caption{Simulated Annealing (SA) }
+\begin{algorithmic}[1]
+\STATE $s \gets GenerateInitialSolution()$ 
+\STATE $k \gets 0$ 
+\STATE $T_0 \gets SetInitialTemperature()$ 
+\WHILE{podmínky ukončení nejsou splněny} 
+\STATE $s' \gets SelectNeighborAtRandom(\mathcal{N}(s))$ 
+\IF{$f(s') < f(s)$} 
+\STATE $s \gets s'$ 
+\ELSE
+\STATE přijmi $s'$ jako nové řešení s pravděpodobností $p(s'|T_k, s)$ 
+\ENDIF
+\STATE $T_{k+1} \gets AdaptTemperature(T_k, k)$ 
+\STATE $k \gets k + 1$ 
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Tabu Search (TS)}
+Využívá krátkodobou paměť pro únik z lokálních minim a zamezení cyklení. Paměť je implementována jako tabu list ($TL$) omezené délky (tabu tenure), který uchovává historii nejnověji navštívených řešení a tím je omezuje v okolí. Vzniká tak restriktivní okolí $\mathcal{N}_a(s) = \mathcal{N}(s) \setminus TL$.
+
+\begin{algorithm}[H]
+\caption{Tabu Search (TS) }
+\begin{algorithmic}[1]
+\STATE $s \gets GenerateInitialSolution()$ 
+\STATE $TL \gets \emptyset$ 
+\WHILE{podmínky ukončení nejsou splněny} 
+\STATE $\mathcal{N}_a(s) \gets \mathcal{N}(s) \setminus TL$ 
+\STATE $s' \gets \operatorname{arg\,min} \{f(s'') | s'' \in \mathcal{N}_a(s)\}$ 
+\STATE $Update(TL, s, s')$ 
+\STATE $s \gets s'$ 
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Variable Neighborhood Search (VNS)}
+Pravděpodobnostní rozšíření deterministické metody VND, které mění funkce okolí pro diverzifikaci a únik z lokálních minim. Každá iterace obsahuje fázi "shaking" (náhodný výběr řešení z k-tého okolí), lokální prohledávání a posun.
+
+\begin{algorithm}[H]
+\caption{Variable Neighborhood Search (VNS) }
+\textbf{Vstup:} množina funkcí okolí $\mathcal{N}_k, k=1,\dots,k_{max}$ 
+\begin{algorithmic}[1]
+\STATE $s \gets GenerateInitialSolution()$ 
+\WHILE{podmínky ukončení nejsou splněny} 
+\STATE $k \gets 1$ 
+\WHILE{$k < k_{max}$} 
+\STATE $s' \gets PickAtRandom(\mathcal{N}_k(s))$ \{shaking phase\} 
+\STATE $s'' \gets LocalSearch(s')$ 
+\IF{$f(s'') < f(s)$} 
+\STATE $s \gets s''$ 
+\STATE $k \gets 1$ 
+\ELSE
+\STATE $k \gets k + 1$ 
+\ENDIF
+\ENDWHILE
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Ant Colony Optimization (ACO)}
+Inspirováno chováním mravenčích kolonií hledajících nejkratší cestu. Využívá parametrizovaný pravděpodobnostní feromonový model $\tau_i$, kde jsou feromony asociovány s komponentami řešení. Zpětná vazba ve formě updatu feromonů zesiluje komponenty obsažené v kvalitních řešeních.
+
+\begin{algorithm}[H]
+\caption{Ant Colony Optimization (ACO) }
+\begin{algorithmic}[1]
+\WHILE{podmínky ukončení nejsou splněny} 
+\STATE \textbf{Schedule Activities} 
+\STATE \quad $AntBasedSolutionConstruction()$ 
+\STATE \quad $PheromoneUpdate()$ 
+\STATE \quad $DaemonActions()$ \{volitelné\} 
+\STATE \textbf{end Schedule Activities} 
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Evolutionary Algorithms (EA)}
+Zjednodušené výpočetní modely evolučních procesů. Základem je populace jedinců $P$. Během každé iterace se volí podmnožina jedinců $P^s$ (selekce na základě fitness), probíhá křížení/rekombinace za vzniku potomků $P^{off}$ a následná případná mutace na množinu $P'$.
+
+\begin{algorithm}[H]
+\caption{Evolutionary Algorithm (EA) }
+\begin{algorithmic}[1]
+\STATE $P \gets GenerateInitialPopulation()$ 
+\WHILE{podmínky ukončení nejsou splněny} 
+\STATE $P^s \gets Selection(P)$ 
+\STATE $P^{off} \gets Recombination(P^s)$ 
+\STATE $P' \gets Mutation(P^{off})$ 
+\STATE $P \gets Replacement(P, P')$ 
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+
+\section{Přednáška 2 - Evoluční a memetické algoritmy, Exaktní metody}
+
+\subsection{Evoluční a memetické algoritmy}
+
+\subsubsection{Evoluční algoritmy (Evolutionary Algorithms - EA)}
+Evoluční algoritmy jsou silně zjednodušené výpočetní modely evolučních procesů inspirované přírodou a principem přežití nejsilnějšího jedince. Základem je populace $P$ (množina) jedinců, kteří představují kandidátní řešení optimalizačního problému. 
+V každé iteraci se na základě tzv. fitness (hodnoty účelové funkce) vybere podmnožina jedinců $P^s$, kteří slouží jako rodiče. Z nich se pomocí operátoru křížení (recombination/crossover) vytvoří potomci $P^{off}$. Následně se aplikuje operátor mutace, který způsobí drobné modifikace jedinců a vytvoří množinu $P'$. Nakonec se vybere populace pro další generaci pomocí operátoru nahrazení (replacement) z původní populace $P$ a potomků $P'$.
+
+\begin{algorithm}[H]
+\caption{Evolutionary Algorithm (EA)}
+\begin{algorithmic}[1]
+\STATE $P \gets GenerateInitialPopulation()$
+\WHILE{podmínky ukončení nejsou splněny}
+\STATE $P^s \gets Selection(P)$
+\STATE $P^{off} \gets Recombination(P^s)$
+\STATE $P' \gets Mutation(P^{off})$
+\STATE $P \gets Replacement(P, P')$
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Memetické algoritmy (Memetic Algorithms - MA)}
+Memetické algoritmy jsou rozšířením genetických a evolučních algoritmů, které kombinují populační přístup s procedurou učení jednotlivce (místní prohledávání/local search). Začleněním heuristik lokálního prohledávání do stochastického globálního hledání pomáhají memetické algoritmy snižovat pravděpodobnost předčasné konvergence. Zatímco křížení umožňuje skoky napříč prostorem (globální hledání) a mutace prozkoumává lokální okolí, místní prohledávání (LSP) prohledává malý prostor blízko aktuálního řešení a nahrazuje jej lepším. Memetické algoritmy tak využívají specifické znalosti o problému.
+
+\begin{algorithm}[H]
+\caption{Population-Based Search Engine (Základní šablona MA)}
+\begin{algorithmic}[1]
+\STATE Inicializuj $pop$ pomocí $GenerateInitialPopulation()$
+\REPEAT
+\STATE $newpop \gets GenerateNewPopulation(pop)$
+\STATE $pop \gets UpdatePopulation(pop, newpop)$
+\IF{$pop$ konvergovala}
+\STATE $pop \gets RestartPopulation(pop)$
+\ENDIF
+\UNTIL{TerminationCriterion()}
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Local search procedure (Procedura místního hledání v MA)}
+\begin{algorithmic}[1]
+\STATE \textbf{Funkce} $LSP(LLS, LS_r, LS_t, F, D, R, genotype)$
+\FOR{$i=0$ \TO $LLS - 1$}
+\STATE $new\_solution \gets Mutation(LS_r, LS_t, F, D, R, genotype)$
+\IF{$F(new\_solution) < F(genotype)$}
+\STATE $genotype \gets new\_solution$
+\ENDIF
+\ENDFOR
+\STATE $phenotype \gets genotype$
+\RETURN $phenotype$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Lamarckovské vs. Baldwinovské učení}
+V kontextu memetických algoritmů se rozlišuje genotyp (genetická výbava jednotlivce) a fenotyp (pozorovatelné rysy vyplývající z interakce genotypu a prostředí). Obě teorie předpokládají, že naučené chování (zlepšení z lokálního hledání) ovlivňuje vývoj populace.
+
+\begin{itemize}
+    \item \textbf{Baldwinovský přístup (Baldwin effect):} Naučené chování ovlivňuje mapování genotypů na fenotypy, což vede ke změnám ve fitness jednotlivců. Vylepšené řešení (fenotyp) se použije pouze k výpočtu fitness, ale samotné řešení (genotyp) se nemění a na potomky se přenáší původní genotyp. Tento přístup může pomoci vyhnout se lokálním optimům při konvergenci a zvyšuje diverzitu.
+    \item \textbf{Lamarckovský přístup (Lamarckian evolution):} Předpokládá, že naučené chování ovlivňuje nejen fitness, ale přímo modifikuje genotyp jedince. Změněné vylepšené řešení (fenotyp) je dědičné a přímo se přenáší na potomky. Tento postup potenciálně urychluje hledání globálních minim.
+\end{itemize}
+
+\subsection{Exaktní metody}
+
+I když jsou mnohé optimalizační problémy NP-těžké, instance relevantní v praxi mohou být dostatečně malé nebo mít strukturu vhodnou pro exaktní metody, které garantují nalezení optima. Tyto metody se navíc často kombinují s metaheuristikami (např. při křížení potomků).
+
+\begin{itemize}
+    \item \textbf{Metody prohledávání stromu (Tree search, Branch and Bound):} Exaktní metody založené na rekurzivním rozdělování stavového prostoru do disjunktních podprostorů (branching), typicky omezováním domény proměnných, dokud nevzniknou jednotlivá řešení. Metody Branch and Bound (BnB) lze využít i uvnitř memetických algoritmů jako heuristický operátor křížení (např. v Dynastically Optimal Recombination) pro nalezení nejlepší kombinace rodičovských vlastností.
+    \item \textbf{Dynamické programování:} Alternativní exaktní technika k prohledávání stavového prostoru, která je schopná i u velkých instancí efektivně najít optimální řešení.
+    \item \textbf{Příklad - 0-1 Multiple Knapsack Problem (MKP):} Problém batohu ilustruje definice obou výše uvedených exaktních metod. Instance je dána vektorem zisků $V = \{v_0, \dots, v_{n-1}\}$, vektorem kapacit $C = \{c_0, \dots, c_{m-1}\}$ a maticí koeficientů kapacitních omezení $M = \{m_{ij}\}$. Cílem je najít platný vektor $B$ (kde $M \cdot B \le C$) maximalizující účelovou funkci $m_P(y, x) = \sum_{i \in y} v_i$.
+    \item \textbf{Programování s omezujícími podmínkami (Constraint programming - CP):} Algoritmy šíření omezení (Constraint propagation) poskytují způsob, jak časově efektivně a dramaticky snížit efektivní prohledávaný prostor vysoce omezeného problému. Pokud jsou tyto postupy začleněny do stromového vyhledávání (tree search), počet uzlů vyhledávacího stromu může být udržován natolik malý, že v praxi lze dobře vyřešit i velké instance problémů splňování omezení (CSPs).
+\end{itemize}
+\section{Přednáška 3 - Neúplná řešení a dekodéry}
+
+\subsection{Nepřímá a neúplná reprezentace řešení (Incomplete/indirect solution representations)}
+Nepřímá reprezentace řešení (známá např. z genetických algoritmů jako rozdíl mezi genotypem a fenotypem) se používá k transformaci složitého stavového prostoru, který může obsahovat těžko zvládnutelné omezující podmínky, na prostor, ve kterém lze snáze aplikovat standardní operátory místního prohledávání. V případě neúplné reprezentace operuje metaheuristika pouze nad podmnožinou rozhodovacích proměnných, zatímco chybějící části doplňuje optimálně (nebo dostatečně kvalitně) tzv. dekodér.
+
+\subsection{Metaheuristiky založené na dekodérech (Decoder-based metaheuristics)}
+Základní myšlenkou je využití "inteligentního" algoritmu uvnitř metaheuristiky. Dekodér provádí transformaci zakódovaného řešení a zajišťuje doplnění chybějících částí. Dekodérem může být libovolný algoritmus, který je dostatečně rychlý – od konstruktivních heuristik, exaktních procedur, mixed integer programování (MIP), až po dynamické (DP) či omezující (CP) programování.
+
+\subsection{Aplikace: Zobecněná minimální kostra (Generalized Minimum Spanning Tree - GMST)}
+Problém GMST je definován na neorientovaném úplném grafu s ohodnocenými hranami $G = (V, E, c)$, kde množina uzlů $V$ je rozdělena do $r$ po dvou disjunktních clusterů $V_1, \dots, V_r$. Cílem je najít graf bez cyklů $S = (P, T)$ (kostru) s minimální cenou hran, který obsahuje právě jeden uzel z každého clusteru.
+
+\subsubsection{Počáteční řešení (Initial solutions)}
+Pro rychlé získání počátečního řešení se používají dvě heuristiky (přičemž se pro následné prohledávání vybere to lepší):
+\begin{itemize}
+    \item \textbf{Minimum Distance Heuristic (MDH):} Pro každý cluster vybere uzel s nejnižším součtem cen hran ke všem uzlům v ostatních clusterech. Na podgraf indukovaný těmito uzly se následně aplikuje Kruskalův algoritmus pro MST. Časová složitost je $O(|V|^2 + r^2 \log r)$.
+    \item \textbf{Iterated Kruskal-Based Heuristic (IKH):} Hrany jsou zpracovávány vzestupně podle ceny. Hrana je do množiny přidána právě tehdy, když nevytvoří cyklus a zároveň z obou odpovídajících clusterů ještě nebyla dříve vybrána žádná jiná hrana. Proces se iteruje tak, že vždy zafixujeme jeden specifický uzel $u \in V$, který musí v řešení být. Časová složitost je $O(|V||E|)$.
+\end{itemize}
+
+\subsubsection{NSB-VNS (Node set based VNS)}
+Řešení je v metaheuristice reprezentováno pouze výběrem uzlů (Node Set Based), tj. vektorem uzlů $p = (p_1, \dots, p_r) \in V_1 \times \dots \times V_r$. Dekodérem je v tomto případě Primův algoritmus pro MST s časovou složitostí $O(r^2)$, který doplní vhodné hrany.
+
+\begin{itemize}
+    \item \textbf{NEN (Node Exchange Neighborhood):} Okolí obsahuje všechny vektory uzlů, které se od aktuálního liší v právě jednom uzlu (jeden uzel je nahrazen jiným uzlem ze stejného clusteru). Obsahuje $O(|V|)$ sousedů. Aby se urychlilo vyhodnocení celého okolí, využívá se \textit{inkrementální vyhodnocení} (odstraněním uzlu vznikne několik komponent, ty se spojí s novým uzlem bez přepočítávání celého stromu).
+    \item \textbf{R2NEN (Restricted Two-Nodes Exchange Neighborhood):} Protože obecná výměna $k$ uzlů (k-NEN) je výpočetně příliš drahá ($O(|V|^k)$), využívá se omezená verze, kde se uvažuje současná výměna pouze takové dvojice uzlů, které jsou v aktuálním řešení spojeny hranou.
+    \item \textbf{Průběh:} Algoritmus využívá Variable Neighborhood Descent (VND) kombinující prohledávání NEN a R2NEN, dokud nenajde lokální optimum. Shaking využívá náhodný tah z obecného k-NEN ($k=3, \dots, k_{max}$).
+\end{itemize}
+
+\begin{algorithm}[H]
+\caption{Prozkoumávání okolí NEN (Výměna uzlu v NSB-VNS)}
+\textbf{Vstup:} Aktuální vektor uzlů $p = (p_1, \dots, p_r)$, aktuální kostra $S$ \\
+\textbf{Výstup:} Nejlepší nalezené sousední řešení
+\begin{algorithmic}[1]
+\STATE $best\_solution \gets S$
+\FORALL{cluster $V_i \in \{V_1, \dots, V_r\}$}
+    \FORALL{alternativní uzel $p_i' \in V_i$ takový, že $p_i' \neq p_i$}
+        \STATE Odstraň uzel $p_i$ a všechny jeho incidentní hrany z aktuálního stromu $S$
+        \STATE \textit{// Pozorování: Strom se rozpadl na $deg(p_i)$ odpojených komponent}
+        \STATE Přidej do grafu nový uzel $p_i'$
+        \STATE Pro každou odpojenou komponentu najdi nejkratší (nejlevnější) hranu, která ji spojuje s uzlem $p_i'$
+        \STATE Spoj komponenty s uzlem $p_i'$ pomocí těchto nejkratších hran, čímž vznikne nový strom $S'$
+        \STATE Vypočítej účelovou hodnotu nového stromu $S'$
+        \IF{cena($S'$) $<$ cena($best\_solution$)}
+            \STATE $best\_solution \gets S'$
+        \ENDIF
+        \STATE \textit{// Obnova původního stavu pro zkoušení dalšího uzlu}
+        \STATE Zruš propojení s $p_i'$, vrať původní uzel $p_i$ a jeho hrany (obnov $S$)
+    \ENDFOR
+\ENDFOR
+\RETURN $best\_solution$
+\end{algorithmic}
+\end{algorithm}
+
+
+\subsubsection{GESB-VNS (Global edge set based VNS)}
+Duální přístup k NSB. Řešení je zde neúplně reprezentováno jako strom složený z "globálních hran" $T^g$ propojující jednotlivé clustery $V_i$ (Global Edge Set) na globálním grafu $G^g$. Dekodérem je zde postup dynamického programování (DP), který dosazuje optimální volbu konkrétních uzlů.
+
+\begin{itemize}
+    \item \textbf{Dynamické programování pro dekódování:} Globální strom $S^g$ se zakoření v libovolném clusteru a prochází se metodou do hloubky (depth-first). Pro každý cluster $V_i$ a uzel $v \in V_i$ se vypočítá minimální cena podstromu zakořeněného ve $V_i$, pokud $v$ je vybraný uzel, podle rekurze:
+    \begin{equation}
+        c(T^g, V_i, v) = 
+        \begin{cases} 
+        0 & \text{pokud } V_i \text{ je list v } S^g \\
+        \sum_{V_l \in succ(V_i)} \min_{u \in V_l} \{ c(v,u) + c(T^g, V_l, u) \} & \text{jinak}
+        \end{cases}
+    \end{equation}
+    (kde $succ(V_i)$ jsou následníci $V_i$ v $S^g$). V nejhorším případě běží v čase $O(|V|^2)$.
+    
+    \item \textbf{GEEN (Global Edge Exchange Neighborhood):} Okolí obsahuje všechny přípustné kostry, které se od globálního stromu $T^g$ liší právě v jedné globální hraně. Odstranění hrany rozdělí strom na 2 komponenty, které se spojí jinou hranou ($O(r^3)$ sousedů). Ke zrychlení se využívá \textit{Inkrementální DP}, kdy se rekurze aktualizuje jen na cestě od modifikovaných clusterů ke kořeni.
+\end{itemize}
+
+\begin{algorithm}[H]
+\caption{Exploration of GEEN}
+\textbf{Vstup:} řešení $S$
+\begin{algorithmic}[1]
+\FORALL{globální hrany $(V_i, V_j) \in T^g$}
+\STATE odstraň $(V_i, V_j)$
+\STATE $M_1 \gets$ seznam clusterů v komponentě $K_1^g$ obsahující $V_i$, procházeno v preorder
+\STATE $M_2 \gets$ seznam clusterů v komponentě $K_2^g$ obsahující $V_j$, procházeno v preorder
+\FORALL{$V_k \in M_1$}
+\STATE ustav $V_k$ jako kořen $K_1^g$
+\FORALL{$V_l \in M_2$}
+\STATE ustav $V_l$ jako kořen $K_2^g$
+\STATE přidej $(V_k, V_l)$
+\STATE použij inkrementální DP pro určení kompletního řešení a jeho účelové hodnoty
+\IF{aktuální řešení je lepší než nejlepší}
+\STATE ulož aktuální řešení jako nejlepší
+\ENDIF
+\STATE odstraň $(V_k, V_l)$
+\ENDFOR
+\ENDFOR
+\ENDFOR
+\RETURN nejlepší řešení
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Combined VNS (COMB-VNS)}
+Kombinovaný přístup využívající obě neúplné reprezentace současně a ukázal se jako nejúspěšnější. 
+\begin{itemize}
+    \item Vnitřní VND aplikuje místní prohledávání postupně na okolí \textbf{NEN, GEEN a R2NEN}. Toto pořadí je dáno jejich výpočetní složitostí (nejrychlejší se vyhodnocuje první).
+    \item Shaking krok je prováděn přes oba typy reprezentací: $k$-tý shaking sestává z $k+1$ náhodných tahů v NEN následovaných $k$ náhodnými tahy v GEEN ($k=2, \dots, k_{max}$). Tím se zajistí mnohem větší diverzifikace vyhledávání.
+\end{itemize}
+
+\subsection{Algoritmické detaily inkrementálního vyhodnocování}
+
+Níže jsou formálně popsány procedury prozkoumávání okolí, které využívají inkrementální vyhodnocování (dočasné "rozbíjení" řešení) pro dramatické zrychlení výpočtu.
+
+
+
+
+\begin{algorithm}[H]
+\caption{Prozkoumávání okolí GEEN (Výměna globální hrany v GESB-VNS)}
+\textbf{Vstup:} Aktuální globální strom $T^g$, kompletní řešení $S$ s uzly dosazenými z DP \\
+\textbf{Výstup:} Nejlepší nalezené sousední řešení
+\begin{algorithmic}[1]
+\STATE $best\_solution \gets S$
+\FORALL{globální hranu $(V_i, V_j)$ v aktuálním globálním stromu $T^g$}
+    \STATE Odstraň hranu $(V_i, V_j)$ z $T^g$
+    \STATE \textit{// Pozorování: Strom $T^g$ se exaktně rozpadl na dvě komponenty $K_1^g$ (obsahuje $V_i$) a $K_2^g$ (obsahuje $V_j$)}
+    \FORALL{cluster $V_k$ patřící do komponenty $K_1^g$}
+        \STATE Dočasně ustav cluster $V_k$ jako kořen podstromu $K_1^g$
+        \FORALL{cluster $V_l$ patřící do komponenty $K_2^g$}
+            \STATE Dočasně ustav cluster $V_l$ jako kořen podstromu $K_2^g$
+            \STATE Propoj komponenty přidáním nové testovací globální hrany $(V_k, V_l)$
+            \STATE Aplikuj inkrementální Dynamické Programování (DP): přepočítej optimální volbu uzlů pouze na cestě od modifikovaných clusterů $V_k$ a $V_l$ nahoru ke kořeni nového stromu
+            \STATE Nechť $S'$ je takto nově vygenerované kompletní řešení
+            \IF{cena($S'$) $<$ cena($best\_solution$)}
+                \STATE $best\_solution \gets S'$
+            \ENDIF
+            \STATE Odstraň testovací hranu $(V_k, V_l)$
+        \ENDFOR
+    \ENDFOR
+    \STATE Vrať původní hranu $(V_i, V_j)$ zpět do $T^g$ (obnova původního stromu)
+\ENDFOR
+\RETURN $best\_solution$
+\end{algorithmic}
+\end{algorithm}
+
+
+
+\section{Přednáška 4 - Redukce instancí problému (Problem Instance Reduction)}
+
+\subsection{Algoritmus Construct, Merge, Solve \& Adapt (CMSA)}
+Obecné přesné (exaktní) řešiče jako CPLEX nebo GUROBI jsou velmi efektivní a obsahují dekády zkušeností z operačního výzkumu, ale narazí, pokud je instance problému příliš velká. Hlavní myšlenkou hybridní metaheuristiky CMSA je chytře zredukovat původní velkou instanci problému na mnohem menší pod-instanci (sub-instance), a tuto zredukovanou verzi následně předat exaktnímu řešiči. Pokud je redukce provedena chytře, sub-instance stále obsahuje vysoce kvalitní (nebo dokonce optimální) komponenty řešení.
+
+Algoritmus iteruje přes 4 hlavní fáze:
+\begin{itemize}
+    \item \textbf{Construct (Konstrukce):} Pravděpodobnostní generování sady platných řešení pomocí rychlé konstruktivní heuristiky.
+    \item \textbf{Merge (Sloučení):} Komponenty (části) z vygenerovaných řešení se "slijí" (merge) do jedné omezené množiny $C_{sub}$, která představuje naši zredukovanou instanci problému.
+    \item \textbf{Solve (Řešení):} Exaktní řešič (např. ILP solver) najde optimální řešení \textit{pouze} za použití komponent z této omezené množiny $C_{sub}$.
+    \item \textbf{Adapt (Adaptace):} Množina $C_{sub}$ se dynamicky čistí od zbytečných komponent pomocí parametru "věku" (ageing), aby sub-instance v další iteraci neúměrně nenarostla a nezahltila řešič.
+\end{itemize}
+
+\begin{algorithm}[H]
+\caption{Construct, Merge, Solve \& Adapt (CMSA)}
+\textbf{Vstup:} Instance problému, $n_a$ (počet konstrukcí na iteraci), $age_{max}$ (max. věk nepoužité komponenty) \\
+\textbf{Výstup:} Nejlepší nalezené řešení $s_{best}$
+\begin{algorithmic}[1]
+\STATE $C_{sub} \gets \emptyset$ \textit{// Inicializace množiny komponent sub-instance}
+\STATE $s_{best} \gets \emptyset$
+\WHILE{podmínky ukončení nejsou splněny (např. časový limit)}
+    \STATE $S_{cons} \gets \emptyset$
+    
+    \STATE \textit{/// 1. Fáze: Construct}
+    \FOR{$i=1$ \TO $n_a$}
+        \STATE $s \gets ProbabilisticConstructiveHeuristic()$
+        \STATE $S_{cons} \gets S_{cons} \cup \{s\}$
+    \ENDFOR
+    
+    \STATE $\forall c \in C_{sub}: age(c) \gets age(c) + 1$ \textit{// Zestárnutí všech dosavadních komponent}
+    
+    \STATE \textit{/// 2. Fáze: Merge}
+    \STATE $C_{sub} \gets C_{sub} \cup \{c \mid c \text{ je komponenta některého } s \in S_{cons}\}$
+    
+    \STATE \textit{/// 3. Fáze: Solve}
+    \STATE $s_{opt} \gets ExactSolver(C_{sub})$ \textit{// Vyřešení zredukované instance pomocí exaktní metody}
+    \IF{cena($s_{opt}$) $<$ cena($s_{best}$)}
+        \STATE $s_{best} \gets s_{opt}$
+    \ENDIF
+    
+    \STATE \textit{/// 4. Fáze: Adapt}
+    \STATE $\forall c \in s_{opt}: age(c) \gets 0$ \textit{// Resetování věku těch komponent, které řešič reálně využil}
+    \STATE $C_{sub} \gets C_{sub} \setminus \{c \in C_{sub} \mid age(c) > age_{max}\}$ \textit{// Smazání starých a nepotřebných komponent}
+\ENDWHILE
+\RETURN $s_{best}$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Aplikace: Minimum Common String Partition (MCSP)}
+MCSP je NP-těžký problém kombinatorické optimalizace, nejčastěji se vyskytující v bioinformatice při porovnávání genových sekvencí. Na vstupu jsou dány dva řetězce $s_1$ a $s_2$ složené z konečné abecedy (musí obsahovat stejnou multimnožinu znaků). 
+
+Cílem je rozdělit $s_1$ na množinu nepřekrývajících se podřetězců $P_1$ a $s_2$ na množinu podřetězců $P_2$ tak, aby platilo $P_1 = P_2$ (tzn. obě množiny obsahují identické podřetězce), a zároveň byl celkový počet podřetězců $|P_1|$ \textbf{minimální} (co nejmenší).
+
+\subsubsection{Probabilistic solution generation (Pravděpodobnostní generování řešení)}
+Aby mohl CMSA fungovat, potřebuje získat základní platná řešení (fáze Construct). V případě MCSP to probíhá následovně:
+\begin{itemize}
+    \item Algoritmus heuristicky s určitou dávkou náhody vybírá dosud nepokryté pozice v řetězcích.
+    \item Snaží se najít shodu (stejný znak či blok znaků) mezi $s_1$ a $s_2$ a tento nalezený podřetězec se pokusí co nejvíce prodloužit.
+    \item Vzniklý sdílený podřetězec se stane komponentou řešení a příslušné pozice v obou řetězcích se zablokují (označí jako pokryté).
+    \item Pokud už nejde najít žádný delší blok, zbytek znaků se pokryje triviálním řešením (bloky o délce přesně 1 znak). 
+    \item Výsledné nalezené podřetězce se "slijí" (Merge) do globální množiny kandidátních komponent $C_{sub}$.
+\end{itemize}
+
+\subsubsection{Solving reduced sub-instances (Řešení zredukovaných instancí)}
+Pokud bychom exaktnímu ILP modelu předali k řešení kompletní problém MCSP se stovkami tisíc možných párování všech podřetězců, výpočet by trval roky. 
+
+Trik CMSA spočívá v tom, že řešiči (např. CPLEXu) předáme **výhradně** podřetězce, které se zrovna teď nacházejí v naší omezené množině $C_{sub}$. Zredukovaný ILP model pak řeší mnohem jednodušší otázku: \textit{"Jaký je matematicky nejmenší počet komponent z množiny $C_{sub}$, kterými dokážu beze zbytku pokrýt oba řetězce $s_1$ i $s_2$?"}. 
+
+Jelikož je $C_{sub}$ relativně malá, řešič najde prověřené optimum pro tuto sub-instanci bleskově. Následná adaptace (Ageing) se pak postará o to, že podřetězce v $C_{sub}$, které řešič systematicky ignoruje, jsou smazány, aby udělaly místo novým podřetězcům v další iteraci.
+
+\section{Přednáška 5 - Hledání ve velkém okolí (Large Neighborhood Search - LNS)}
+
+\subsection{Základní myšlenka a MIP-based LNS}
+Hlavní myšlenkou metody Large Neighborhood Search (LNS) je v každé iteraci vzít aktuálně platné (incumbent) řešení a \textbf{částečně jej destruovat} (odstranit určité komponenty), čímž vznikne neúplné, částečné řešení (tzv. partial solution $S_{partial}$). Fáze destrukce definuje ono "velké okolí". 
+
+Zatímco klasické lokální hledání by zkoušelo chybějící prvky doplnit jednoduchou heuristikou, MIP-based LNS na toto částečné řešení zavolá \textbf{exaktní MIP řešič} (Mixed Integer Programming solver, např. CPLEX). Řešič operuje nad původním ILP modelem problému, ke kterému se přidají omezující podmínky fixující proměnné z $S_{partial}$. Díky tomu, že je velká část proměnných zafixována, je problém výpočetně mnohem menší a MIP řešič je schopen v něm najít exaktní (nebo velmi kvalitní) optimum mnohem rychleji než u celého problému.
+
+\begin{algorithm}[H]
+\caption{MIP-based Large Neighborhood Search (MIP-LNS)}
+\textbf{Vstup:} Instance problému $I$, časový limit $t_{max}$ pro MIP řešič
+\begin{algorithmic}[1]
+\STATE $S_{cur} \gets GenerateInitialSolution()$
+\STATE $S_{bsf} \gets S_{cur}$ \textit{// bsf = best so far}
+\WHILE{CPU time limit není dosažen}
+    \STATE $S_{partial} \gets DestroyPartially(S_{cur})$ \textit{// Destrukce: fixace proměnných}
+    \STATE $S_{opt}' \gets ApplyExactSolver(S_{partial}, t_{max})$ \textit{// Oprava: exaktní dořešení zbytku}
+    \IF{$S_{opt}'$ je lepší než $S_{bsf}$}
+        \STATE $S_{bsf} \gets S_{opt}'$
+    \ENDIF
+    \STATE $S_{cur} \gets ApplyAcceptanceCriterion(S_{opt}', S_{cur})$ \textit{// Např. vždy přijmi lepší, nebo použij Simulated Annealing}
+\ENDWHILE
+\RETURN $S_{bsf}$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Aplikace 1: Problém minimální dominující množiny s vahami (MWDS)}
+Dán neorientovaný graf $G = (V, E)$ a pozitivní váha $w(v)$ pro každý uzel $v \in V$. Hledáme podmnožinu uzlů $S \subseteq V$ takovou, že každý uzel $v \in V$ buď patří do $S$, nebo má v $S$ alespoň jednoho souseda. Cílem je minimalizovat sumu vah vybraných uzlů. 
+
+Základní ILP formulace:
+\begin{align}
+\min \quad & \sum_{i=1}^{n} w(v_i) \cdot x_i \\
+\text{s.t.} \quad & \sum_{v_j \in N[v_i]} x_j \ge 1 \quad \forall v_i \in V \\
+& x_i \in \{0,1\} \quad \forall i=1, \dots, n
+\end{align}
+Kde $N[v_i]$ je uzavřené okolí (uzel + jeho sousedé). Rovnice (4.2) exaktně zajišťuje, že je každý uzel grafu pokryt.
+
+\subsubsection{Počáteční řešení (Greedy heuristika pro MWDS)}
+Konstruktivní heuristika postupně přidává uzly s nejlepším poměrem nově pokrytých sousedů vůči váze uzlu, dokud nejsou pokryty všechny uzly. Označme $V_{cov}$ množinu dosud pokrytých uzlů. Počet dosud nepokrytých sousedů pro uzel $v$ je definován jako $deg(v | V_{cov}) = |N(v) \cap V \setminus V_{cov}|$.
+
+\begin{algorithm}[H]
+\caption{Greedy Heuristic for MWDS}
+\textbf{Vstup:} Graf $G = (V,E)$, váhy $w(v)$
+\begin{algorithmic}[1]
+\STATE $S \gets \emptyset$, $V_{cov} \gets \emptyset$
+\WHILE{$V_{cov} \neq V$}
+    \STATE $v^* \gets \operatorname{arg\,max}_{v \in V \setminus V_{cov}} \left\{ \frac{deg(v | V_{cov})}{w(v)} \right\}$
+    \STATE $S \gets S \cup \{v^*\}$
+    \STATE $V_{cov} \gets V_{cov} \cup N[v^*]$
+\ENDWHILE
+\RETURN $S$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Částečná destrukce a aplikace MIP (MIP-LNS pro MWDS)}
+Fáze destrukce se řídí podílem $perc_{dest}$, který určuje procento uzlů k odstranění z aktuálního řešení $S_{cur}$. Přesný počet odstraňovaných uzlů $d$ je dán jako $d = \max\left\{3, \lfloor \frac{perc_{dest} \cdot |S_{cur}|}{100} \rfloor\right\}$.
+
+Uzly k odstranění se volí dvěma strategiemi:
+\begin{itemize}
+    \item $type_{dest} = 0$: Uzly se odstraňují zcela rovnoměrně náhodně.
+    \item $type_{dest} = 1$: Uzly se odstraňují pravděpodobnostně se zaujetím (heuristically biased). Pravděpodobnost odstranění $p(v)$ je úměrná nevýhodnosti uzlu (velká váha a malý stupeň):
+    \begin{equation}
+        p(v) = \frac{w(v) / deg(v)}{\sum_{v' \in S_{cur}} w(v') / deg(v')} \quad \forall v \in S_{cur} \text{}
+    \end{equation}
+\end{itemize}
+Hodnota $perc_{dest}$ se v průběhu iterací dynamicky adaptuje. Pokud algoritmus najde zlepšení, $perc_{dest}$ se resetuje na spodní hranici $perc_{dest}^l$. Pokud se nezlepší, zvýší se o 5 \%, aby algoritmus ve zhoršujících se případech v dalším kroku destruoval větší část řešení a prohledal tak širší okolí. 
+
+\textbf{Aplikace řešiče:} Nechť $S_{partial}$ je množina uzlů, která po destrukci v řešení zbyla. MIP řešič pak řeší původní ILP pro MWDS obohacené o podmínku $x_i = 1 \quad \forall v_i \in S_{partial}$.
+
+\subsection{Aplikace 2: Zobecněná minimální kostra (GMST)}
+
+V minulé přednášce (přednáška 3) jsme definovali algoritmus COMB-VNS pracující s neúplnými reprezentacemi. Zde je do něj přidáno další "velké" okolí, konkrétně \textbf{Global Subtree Optimization Neighborhood (GSON)}. 
+
+Princip GSON je následující:
+\begin{itemize}
+    \item Uvažujeme aktuální řešení $S=(P,T)$ a jeho globální strom $S^g = (V^g, T^g)$.
+    \item $S^g$ se zakoření v náhodném clusteru $V_{root}$ a pomocí prohledávání do hloubky (DFS) se určí všechny platné podstromy $Q_1, \dots, Q_k$, které obsahují minimálně $N_{min}$ a maximálně $N_{max}$ clusterů.
+    \item V každé iteraci velkého okolí je vybraný podstrom $Q_i$ oddělen od hlavního stromu $S^g$. 
+    \item Uzly a clustery obsažené v podstromu $Q_i$ jsou vnímány jako zcela izolovaný, samostatný menší problém GMST, který se exaktně vyřeší pomocí lokálně-globálního MIP modelu, čímž získáme nově provázaný, plně optimalizovaný podstrom $Q_i'$.
+    \item Následně se $Q_i'$ připojí zpět ke zbytku řešení tím nejlepším možným způsobem (podobně jako v okolí GEEN z 3. přednášky).
+\end{itemize}
+
+\begin{algorithm}[H]
+\caption{Exploration of GSON}
+\textbf{Vstup:} Aktuální řešení $S$, parametry $N_{min}, N_{max}$
+\begin{algorithmic}[1]
+\STATE Urči kořeny $V_1, \dots, V_k$ příslušných podstromů $Q_1, \dots, Q_k$ splňujících omezení $N_{min}$ a $N_{max}$ na počet clusterů
+\FOR{$i = 1 \dots k$}
+    \STATE Odstraň hranu spojující $V_i$ s jejím rodičem (čímž se $Q_i$ izoluje od $S$)
+    \STATE Optimalizuj podstrom $Q_i$ zavoláním exaktního MIP řešiče
+    \STATE Připoj vylepšený podstrom $Q_i$ zpět do $S$ nejlepším možným způsobem (reconnection)
+    \IF{aktuální řešení je levnější než dosud nejlepší}
+        \STATE Ulož jej jako nejlepší nalezené
+    \ENDIF
+    \STATE Obnov původní stav (vrať se zpět k výchozímu $S$ před odříznutím) pro zkoušení dalšího podstromu
+\ENDFOR
+\RETURN nejlepší nalezené řešení
+\end{algorithmic}
+\end{algorithm}
+
+\section{Přednáška 6 - Paralelní a nezávislá konstrukce řešení (Parallel Non-independent Construction)}
+
+\subsection{Obecná myšlenka (General idea)}
+Většina metaheuristik (jako např. Ant Colony Optimization - ACO nebo GRASP) konstruuje řešení sekvenčně a zcela nezávisle na sobě. Procházejí vyhledávací prostor probabilisticky a využívají pouze tzv. \textit{primární znalost problému} (heuristickou/chamtivou informaci). 
+
+Na druhou stranu, klasické metody prohledávání stromu (jako Branch-and-Bound nebo Beam Search) využívají navíc \textit{komplementární znalost problému} – informace o mezích (dolní nebo horní meze, tzv. bounds). Tyto meze slouží k prořezávání větví vyhledávacího stromu a k rozlišování kvality částečných řešení na stejné úrovni stromu. Tyto metody tak konstruují řešení (pseudo-)paralelním a vzájemně závislým (non-independent) způsobem. Cílem této kapitoly je obohatit metaheuristiky o tyto vlastnosti.
+
+\subsection{Beam Search}
+Beam Search je deterministická metoda (neúplná varianta Branch-and-Bound), která prohledává strom řešení do šířky (breadth-first search). 
+\begin{itemize}
+    \item Na každé úrovni stromu udržuje množinu částečných řešení $B$, zvanou \textbf{paprsek (beam)}.
+    \item Každé částečné řešení v $B$ je rozšířeno nanejvýš $k_{ext}$ způsoby na základě chamtivé funkce (greedy weight), čímž vznikne nová množina částečných řešení $B'$.
+    \item Množina $B'$ je následně zredukována na maximálně $b_{width}$ řešení (tzv. \textbf{beam width} - šířka paprsku). Tato redukce probíhá na základě ohodnocení pomocí omezující funkce (upper bound $UB$ pro maximalizaci nebo lower bound $LB$ pro minimalizaci).
+\end{itemize}
+
+\begin{algorithm}[H]
+\caption{Beam Search (pro maximalizaci)}
+\textbf{Vstup:} Instance problému $I$, parametry $k_{ext}$ a $b_{width}$
+\begin{algorithmic}[1]
+\STATE $S_{partial} \gets \emptyset$, $B \gets \{S_{partial}\}$, $S_{bsf} \gets \text{NULL}$
+\WHILE{$B$ není prázdná}
+    \STATE $B' \gets \emptyset$
+    \FORALL{$S_{partial} \in B$}
+        \IF{$S_{partial}$ je kompletní řešení}
+            \STATE Aktualizuj nejlepší nalezené řešení $S_{bsf}$
+        \ELSE
+            \STATE Vyber nanejvýš $k_{ext}$ nejlepších rozšíření podle heuristické funkce $g$ a přidej je do $B'$
+        \ENDIF
+    \ENDFOR
+    \STATE $B \gets$ vyber nejlepších $\min\{|B'|, b_{width}\}$ částečných řešení z $B'$ podle jejich horní meze $UB()$
+\ENDWHILE
+\RETURN $S_{bsf}$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Beam-ACO: Beam search + Ant Colony Optimization}
+Beam-ACO je hybridní metaheuristika, která spojuje sílu ACO s algoritmem Beam Search. Její celkový rámec zůstává jako u ACO (využívá feromony, dělá se update atd.), ale s jedním zásadním rozdílem: \textbf{Místo nezávislé konstrukce $n_a$ řešení v každé iteraci mravenci aplikují pravděpodobnostní Beam Search}. 
+
+Tento pravděpodobnostní Beam Search nevybírá rozšíření řešení čistě deterministicky, ale probabilisticky – na základě kombinace chamtivé heuristické informace a uložených feromonových hodnot. 
+
+\subsection{Aplikace: Vícerozměrný problém batohu (Multidimensional Knapsack Problem - MKP)}
+MKP je NP-těžký problém. Je dána množina položek $I = \{1, \dots, n\}$ a množina zdrojů $K = \{1, \dots, m\}$. Každý zdroj $k$ má kapacitu $c_k$ a každá položka $i$ vyžaduje spotřebu $r_{i,k}$ od zdroje $k$. Každá položka má také zisk $p_i$. Cílem je vybrat podmnožinu položek tak, aby maximalizovala celkový zisk a nepřekročila kapacity zdrojů.
+
+ILP model využívá binární proměnné $x_i \in \{0,1\}$: $\max \sum_{i=1}^{n} p_i x_i$ za podmínek $\sum_{i=1}^{n} r_{i,k} x_i \le c_k$ pro všechna $k$.
+
+\subsubsection{Chamtivá heuristika (Greedy heuristic)}
+Heuristika předpokládá, že položky jsou seřazeny sestupně podle jejich užitkové hodnoty (utility) $u_i$, která je definována jako poměr zisku a celkové relativní spotřeby zdrojů:
+\begin{equation}
+    u_i = \frac{p_i}{\sum_{k=1}^m r_{i,k} / c_k} \quad i = 1, \dots, n \text{}
+\end{equation}
+Algoritmus (Constructive Heuristic) prochází seřazené položky a přidává je do řešení $S$, dokud se vejdou do zbývajících kapacit všech zdrojů.
+
+\subsubsection{Beam search pro MKP}
+V rámci deterministického Beam Search je potřeba kvalitní omezující funkce $UB(S_{partial})$ pro redukci paprsku na velikost $b_{width}$. 
+Jako $UB(S_{partial})$ se pro MKP využívá \textbf{Lineární programovací (LP) relaxace} původního ILP modelu řešená exaktně (např. CPLEXem). 
+Relaxace spočívá v tom, že položkám již vybraným do $S_{partial}$ se proměnná fixuje na $x_i = 1$, zatímco doména zbývajících proměnných se uvolní na reálná čísla $0 \le x_i \le 1$. Bylo experimentálně ověřeno, že tato LP relaxace má obrovskou \textit{diskriminační sílu} a spolehlivě dokáže určit, které částečné řešení povede k lepšímu konečnému výsledku.
+
+\subsubsection{Čistý ACO přístup (pure-ACO)}
+Čistý ACO implementuje variantu \textit{MAX-MIN Ant System (MMAS)} v rámci \textit{Hyper-Cube Frameworku (HCF)}.
+\begin{itemize}
+    \item Feromony $\tau_i \ge 0$ jsou uloženy na položkách a jsou inicializovány na 0.5.
+    \item Konstrukce řešení vychází z chamtivé heuristiky, ale s parametrem $d_{rate}$ určujícím míru determinismu. V každém kroku se vytvoří množina $L$ kandidátů o velikosti $l_{size}$. S pravděpodobností $d_{rate}$ se vybere nejlepší, jinak se volí z $L$ náhodně. 
+    \item Update feromonů probíhá pomocí tří řešení: iteration-best ($S_{ib}$), restart-best ($S_{rb}$) a best-so-far ($S_{bsf}$), přičemž jejich váha závisí na dynamicky počítaném \textit{konvergenčním faktoru} $cf$.
+\end{itemize}
+
+\subsubsection{Beam-ACO pro MKP}
+Jak již bylo naznačeno, Beam-ACO přejímá rámec čistého ACO (včetně updatu feromonů, $S_{ib}$, $S_{rb}$ a $S_{bsf}$), ale nezávislou konstrukci řešení nahrazuje.
+Fáze konstrukce se změní tak, že se zavolá algoritmus Beam Search z předchozí podkapitoly, ovšem výběr $k_{ext}$ rozšíření do množiny $B'$ již není exaktní (deterministický) podle heuristiky, ale probíhá probabilisticky jako u ACO, přičemž využívá jak užitkovou funkci $u_i$, tak hodnotu feromonů $\tau_i$.
+
+\subsection{Zastřešující ACO algoritmus pro MKP}
+
+Tento algoritmus představuje hlavní smyčku čistého ACO přístupu (pure-ACO) pro vícerozměrný problém batohu (MKP). Využívá tři referenční řešení pro aktualizaci feromonů: nejlepší v iteraci ($S_{ib}$), nejlepší od posledního restartu ($S_{rb}$) a absolutně nejlepší dosud nalezené ($S_{bsf}$).
+
+Zároveň obsahuje mechanismus pro restart feromonů. Míru konvergence měří tzv. konvergenční faktor $cf \in [0, 1]$. Pokud se feromony příliš usadí ($cf > 0.99$), algoritmus nejprve zkusí změnit strategii updatu (přepne \texttt{bs\_update}), a pokud to nepomůže, feromony kompletně vyresetuje.
+
+\begin{algorithm}[H]
+\caption{ACO pro MKP (MAX-MIN Ant System)}
+\textbf{Vstup:} Instance problému MKP, parametry $d_{rate}, l_{size}, n_a$ (počet mravenců)
+\begin{algorithmic}[1]
+\STATE $S_{bsf} \gets \emptyset$, $S_{rb} \gets \emptyset$
+\STATE $cf \gets 0$, $bs\_update \gets \text{FALSE}$
+\STATE $\tau_i \gets 0.5$ pro všechny feromony $\tau_i \in \Upsilon$ \textit{// Inicializace feromonů na neutrální střední hodnotu}
+
+\WHILE{CPU time limit není dosažen}
+    \STATE \textit{/// 1. Fáze: Konstrukce řešení mravenci}
+    \FOR{$cnt = 1$ \TO $n_a$}
+        \STATE $S_{cnt} \gets \text{ConstructSolution()}$ \textit{// Zde se volá algoritmus z předchozí podkapitoly}
+    \ENDFOR
+    
+    \STATE \textit{/// 2. Fáze: Vyhodnocení a aktualizace nejlepších řešení}
+    \STATE $S_{ib} \gets \operatorname{arg\,max} \{f(S_{cnt}) \mid cnt = 1, \dots, n_a\}$ \textit{// Nejlepší řešení v aktuální iteraci}
+    
+    \IF{$f(S_{ib}) > f(S_{rb})$}
+        \STATE $S_{rb} \gets S_{ib}$ \textit{// Aktualizace nejlepšího řešení od posledního restartu}
+    \ENDIF
+    \IF{$f(S_{ib}) > f(S_{bsf})$}
+        \STATE $S_{bsf} \gets S_{ib}$ \textit{// Aktualizace globálně nejlepšího řešení}
+    \ENDIF
+    
+    \STATE \textit{/// 3. Fáze: Aktualizace feromonů a konvergence}
+    \STATE $\text{ApplyPheromoneUpdate}(cf, bs\_update, \Upsilon, S_{ib}, S_{rb}, S_{bsf})$ \textit{// Přidá feromony na položky z nejlepších řešení a vypaří ostatní}
+    \STATE $cf \gets \text{ComputeConvergenceFactor()}$ \textit{// Spočítá, jak moc jsou feromony "ustálené"}
+    
+    \STATE \textit{/// 4. Fáze: Zpracování uvíznutí (Restart mechanismus)}
+    \IF{$cf > 0.99$}
+        \IF{$bs\_update == \text{TRUE}$}
+            \STATE $\tau_i \gets 0.5$ pro všechny feromony $\tau_i \in \Upsilon$ \textit{// Tvrdý restart feromonů}
+            \STATE $S_{rb} \gets \text{NULL}$
+            \STATE $bs\_update \gets \text{FALSE}$
+        \ELSE
+            \STATE $bs\_update \gets \text{TRUE}$ \textit{// Změna strategie (příprava na restart)}
+        \ENDIF
+    \ENDIF
+\ENDWHILE
+
+\RETURN $S_{bsf}$ \textit{// Vrácení globálně nejlepšího řešení}
+\end{algorithmic}
+\end{algorithm}
+
+\section{Přednáška 7 - Konstrukce řešení a Constraint Programming (CP)}
+
+\subsection{Hybridizace konstruktivních metaheuristik a Constraint Programming}
+Při řešení těžkých kombinatorických problémů často narážíme na dva protichůdné cíle: nalezení \textit{platného} řešení (splnění všech tvrdých omezení) a nalezení \textit{optimálního} řešení (minimalizace/maximalizace účelové funkce). 
+
+Základní myšlenka této hybridizace staví na komplementárních vlastnostech dvou přístupů:
+\begin{itemize}
+    \item \textbf{Constraint Programming (CP):} Exceluje v prořezávání vyhledávacího prostoru (tzv. \textit{domain filtering} a \textit{constraint propagation}). Dokáže rychle detekovat slepé uličky a zajistit, aby algoritmus neporušil tvrdá omezení. Nevýhodou CP je ale slabá schopnost optimalizace (postrádá silnou globální vizi, jak najít to \textit{nejlepší} z platných řešení). 
+    \item \textbf{Konstruktivní metaheuristiky (např. ACO, GRASP):} Excelují v optimalizaci díky učení a globální paměti (feromony). Skvěle navigují vyhledávacím prostorem směrem k optimu. Jejich slabinou je ale "slepota" vůči složitým tvrdým omezením – mravenci často zbytečně plýtvají časem generováním neplatných řešení, která pak musí penalizovat nebo zahazovat.
+\end{itemize}
+
+Spojením vzniká hybrid (často označovaný jako \textbf{CP-based ACO}), kde CP slouží jako "ochranný mantinel", který v každém kroku omezí možnosti, a ACO slouží jako "mozek", který z těchto povolených možností vybere tu nejlepší.
+
+\subsection{Integrace Ant Colony Optimization (ACO) a Constraint Programming (CP)}
+Integrace probíhá na velmi nízké úrovni (\textit{low-level, tight coupling}). Mravenec nestaví řešení sám, ale v každém kroku se dotazuje CP modulu, jaké tahy jsou bezpečné. 
+
+Proces probíhá následovně:
+\begin{enumerate}
+    \item \textbf{Inicializace:} Vytvoří se CP model s proměnnými a jejich doménami (všemi možnými hodnotami). Spustí se prvotní propagace omezení, která rovnou smaže hodnoty porušující pravidla.
+    \item \textbf{Dotaz na CP (Krok mravence):} Než mravenec vybere další komponentu (např. další uzel nebo úlohu), podívá se na aktuální zredukovanou doménu dané proměnné.
+    \item \textbf{Pravděpodobnostní výběr:} Mravenec aplikuje standardní ACO pravidlo (kombinace feromonů $\tau$ a heuristiky $\eta$) \textbf{výhradně na hodnoty, které prošly přes CP filtr}.
+    \item \textbf{Aplikace tahu a Propagace:} Mravenec provede volbu. Tato volba se předá do CP modulu jako nové omezení (proměnná = hodnota). CP modul okamžitě proběhne zbytek domén ostatních proměnných a prořeže je (odstraní hodnoty, které by v budoucnu vedly ke konfliktu s tímto novým tahem).
+\end{enumerate}
+
+\begin{algorithm}[H]
+\caption{ACO + CP Integrace (Konstrukce řešení mravencem)}
+\textbf{Vstup:} Inicializovaný CP model, Feromonová matice $\tau$
+\begin{algorithmic}[1]
+\STATE $S \gets \emptyset$ \textit{// Prázdné řešení}
+\STATE $CP.Propagate()$ \textit{// Úvodní prořezání domén}
+\WHILE{řešení $S$ není kompletní}
+    \STATE $X_i \gets$ vyber další proměnnou k přiřazení
+    \STATE $D(X_i) \gets CP.GetDomain(X_i)$ \textit{// Získej pouze platné hodnoty z CP}
+    
+    \IF{$D(X_i)$ je prázdná}
+        \STATE \textbf{Odmítnutí:} Zde selhala konstrukce (slepá ulička, nutný backtrack)
+        \RETURN \text{Infeasible}
+    \ENDIF
+    
+    \STATE \textit{// Pravděpodobnostní výběr mravence pouze z platných možností}
+    \STATE $v^* \gets \text{ProbabilisticChoice}(D(X_i), \tau, \eta)$ 
+    
+    \STATE $S \gets S \cup \{(X_i = v^*)\}$
+    \STATE $CP.AssignAndPropagate(X_i = v^*)$ \textit{// CP zafixuje hodnotu a prořeže zbytek prostoru}
+\ENDWHILE
+\RETURN $S$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Aplikace: Rozvrhování strojů se sekvenčně závislými časy přípravy (Machine Scheduling with Sequence-dependent Setup Times)}
+
+Tato hybridní metoda je ideální pro silně omezené rozvrhovací problémy, jako je rozvrhování na jednom stroji (Single Machine Scheduling), kde čas potřebný na přípravu (setup time $s_{ij}$) silně závisí na tom, jaká úloha $i$ předcházela úloze $j$ (např. čištění stroje při změně černé barvy na bílou trvá déle než z bílé na černou).
+
+Kromě sekvenčně závislých časů problém obvykle obsahuje **tvrdá časová okna**:
+\begin{itemize}
+    \item $r_j$ (release date): Úloha nesmí začít dříve než v tento čas.
+    \item $d_j$ (due date / deadline): Úloha musí být dokončena nejpozději do tohoto času.
+\end{itemize}
+
+\textbf{Jak zde funguje CP + ACO:}
+\begin{itemize}
+    \item \textbf{Role CP (Tvrdá omezení):} CP model si udržuje nejčasnější možný čas začátku ($EST$) a nejpozdější možný čas začátku ($LST$) pro každou dosud nezařazenou úlohu. Když mravenec zařadí úlohu $A$, CP model okamžitě připočítá čas běhu úlohy $A$ a časy přípravy $s_{A, j}$ ke všem zbývajícím úlohám $j$. Pokud u nějaké úlohy zjistí, že by už nestihla svůj deadline (tzv. $EST_j > LST_j$), CP modul okamžitě zakáže zařadit úlohu $A$ a odstraní ji z aktuální domény mravence.
+    \item \textbf{Role ACO (Optimalizace):} Ze všech úloh, které aktuálně lze naplánovat tak, abychom neporušili žádný deadline (což mravenci řekne CP), si mravenec vybírá podle toho, kde jsou nejsilnější feromony (která sekvence se z dlouhodobého hlediska kolonie nejvíce vyplatí) a podle heuristiky (např. pravidlo nejbližšího deadline nebo nejkratšího času přípravy).
+\end{itemize}
+
+Výsledek? Mravenci nestráví $90\,\%$ času generováním rozvrhů, které jsou nepoužitelné kvůli porušení termínů. Staví pouze platné rozvrhy a plně se soustředí na minimalizaci celkového času přestaveb strojů.
+
+\section{Přednáška 8 - Hybridizace založená na kompletních archivech řešení (Complete Solution Archives)}
+
+\subsection{Základní myšlenka}
+Většina metaheuristik (jako např. evoluční algoritmy) sdílí společnou slabinu: v průběhu hledání často opakovaně generují, navštěvují a vyhodnocují naprosto stejná kandidátní řešení. Toto chování plýtvá cenným výpočetním časem, zvláště v pozdějších fázích hledání (kdy konverguje a ztrácí diverzitu) a u problémů, kde je samotné ohodnocení řešení (fitness) výpočetně velmi drahé.
+
+Základní myšlenkou je proto rozšířit metaheuristiku o paměťově efektivní \textbf{kompletní archiv řešení (Complete Solution Archive)}, který:
+\begin{itemize}
+    \item Ukládá všechna kandidátní řešení, která algoritmus dosud zvažoval.
+    \item Umožňuje extrémně rychlou kontrolu, zda je nově vygenerované řešení duplikát (zda už v archivu je).
+    \item Poskytuje efektivní funkci pro \textbf{transformaci} duplicitního řešení na garantovaně nové, doposud neprozkoumané řešení, které je ale tomu původnímu velmi podobné (tzv. informovaná mutace).
+\end{itemize}
+
+\subsection{Archiv řešení založený na struktuře Trie}
+Pro efektivní implementaci archivu se nevyužívají standardní hashovací tabulky (ty neumí efektivní transformaci), ale datová struktura zvaná \textbf{Trie} (prefixový strom).
+
+Předpokládejme problém s binární reprezentací o délce $l$ (prostor $\{0,1\}^l$). Trie je binární strom o maximální výšce $l-1$, kde $i$-tá úroveň stromu odpovídá proměnné $x_i$. Každý uzel má dva ukazatele (pro $x_i = 0$ a $x_i = 1$). Ukazatel může odkazovat na další uzel, nebo obsahovat jeden ze dvou speciálních příznaků:
+\begin{itemize}
+    \item \textbf{empty (prázdný):} V tomto podprostoru zatím nebylo navštíveno žádné řešení.
+    \item \textbf{completed (kompletní):} Všechna možná řešení v tomto podprostoru již algoritmus navštívil.
+\end{itemize}
+Aby strom zbytečně nerostl, uplatňuje se \textbf{pruning (prořezávání)}: jakmile mají obě větve daného uzlu příznak \textit{completed}, celý uzel se smaže a jeho rodiči se do dané větve zapíše \textit{completed}.
+
+\subsubsection{Transformace řešení (Informed Mutation)}
+Když evoluční algoritmus vygeneruje řešení $x$, které už v archivu existuje (dojdeme po cestě až na příznak \textit{completed}), musíme ho transformovat na řešení $x'$. Algoritmus se vrací po stromu nahoru k uzlu, který má alespoň jednu větev bez příznaku \textit{completed} (tzv. bod odklonu). Zde proměnnou překlopí ($x_i = 1 - x_i$) a následně jde dolů, přičemž se snaží zachovat co nejvíce původních hodnot z $x$, aby bylo nové řešení $x'$ co nejpodobnější.
+
+Existují dvě hlavní strategie pro výběr bodu odklonu:
+\begin{itemize}
+    \item \textbf{Deepest Position Transformation (DPT):} Vždy vybere nejhlubší možný bod odklonu. Má nevýhodu (bias) v tom, že mění převážně proměnné s vysokými indexy na konci řetězce.
+    \item \textbf{Random Position Transformation (RPT):} Bod odklonu vybere zcela náhodně ze všech dostupných na cestě, čímž eliminuje tento bias.
+\end{itemize}
+
+\begin{algorithm}[H]
+\caption{Transformace řešení (Transform Solution v Trie)}
+\textbf{Vstup:} Duplicitní řešení $x$, kořen Trie $root$ \\
+\textbf{Výstup:} Garantovaně nové (dosud nenavštívené) řešení $x'$
+\begin{algorithmic}[1]
+\STATE Najdi $x$ v Trie a ulož si všechny možné body odklonu (kde druhá větev $\neq$ \textit{completed}) do seznamu $devpoints$
+\STATE $(i, p) \gets$ vyber bod odklonu z $devpoints$ (dle strategie DPT nebo RPT)
+\STATE $x_i \gets 1 - x_i$ \textit{// Provedení odklonu (mutace)}
+\WHILE{$i \le l$}
+    \IF{$p.next[x_i] == \text{\textit{completed}}$}
+        \STATE $x_i \gets 1 - x_i$ \textit{// Původní hodnota nelze použít, musíme vzít tu druhou}
+    \ENDIF
+    \IF{$p.next[x_i] == \text{\textit{empty}}$}
+        \STATE Vytvoř nový uzel a napoj ho
+    \ENDIF
+    \STATE $p \gets p.next[x_i]$
+    \STATE $i \gets i + 1$
+\ENDWHILE
+\STATE Označ nový list jako \textit{completed} a proveď prořezání stromu zespodu nahoru (pruning)
+\RETURN $x'$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Aplikace na GMST a prořezávání (Bounding)}
+Archiv řešení lze aplikovat i na složitější reprezentace, jako je NSB (vektor uzlů) a GESB (globální hrany) u problému Generalized Minimum Spanning Tree (GMST). Zatímco u binárního stromu měl každý uzel jen dvě větve, u NSB stromu má tolik větví, kolik je uzlů v daném clusteru.
+
+Zásadním a extrémně silným vylepšením Trie archivu je však přidání konceptu \textbf{určování mezí (Bounding)}, známého z metody Branch-and-Bound.
+
+\subsubsection{Pruning the Trie by Bounding}
+Kromě odstraňování uzlů, které jsou plně prozkoumané, můžeme prořezávat i uzly, u kterých \textit{teoreticky} dokážeme, že se v nich neskrývá žádné dobré řešení:
+\begin{enumerate}
+    \item Pro částečné řešení (odpovídající danému uzlu v Trie) algoritmus heuristicky spočítá \textbf{dolní mez (Lower Bound)}. 
+    \item V případě NSB reprezentace se dolní mez počítá tak, že se zafixované clustery spojí přesně určenými uzly, zatímco u volných (nezafixovaných) clusterů se povolí spojení jakýmkoliv nejlevnějším uzlem (relaxace problému) a na to celé se pustí algoritmus pro minimální kostru (MST).
+    \item Pokud je tato vypočtená dolní mez \textbf{horší nebo rovna} objektivní hodnotě dosud nejlepšího nalezeného řešení ($S_{bsf}$), znamená to, že i ten nejlepší možný výsledek v tomto podstromu by byl k ničemu.
+    \item Algoritmus proto do tohoto uzlu zapíše příznak \textit{completed} (čímž celou obrovskou část prostoru nenávratně zahodí a zmenší tak prohledávaný prostor), aniž by ho reálně musel prohledávat.
+\end{enumerate}
+
+Tato integrace metaheuristiky (Evoluční algoritmus), kompletního archivu řešení a exaktního prořezávání (Bounding) ukazuje další silnou úroveň hybridizace, která dramaticky zrychluje proces u výpočetně náročných instancí.
+
+
+\end{document}

@@ -1,0 +1,169 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\section*{NOPT061 Tentative schedule}
+
+\begin{itemize}
+
+    % LECTURE 1
+    \item \textbf{Lecture 1 - Introduction, Heuristics, Metaheuristics}
+    \begin{itemize}
+        \item Combinatorial optimization
+        \begin{itemize}
+            \item Examples: Traveling Salesman Problem (TSP), Knapsack
+            \item Exact method, heuristic, metaheuristic, hybrid metaheuristic
+        \end{itemize}
+        \item Basic heuristic methods
+        \begin{itemize}
+            \item Constructive heuristics (example: greedy)
+            \item Local search (LS)
+            \begin{itemize}
+                \item extension: Variable neighborhood descent
+            \end{itemize}
+        \end{itemize}
+        \item Metaheuristics
+        \begin{itemize}
+            \item Greedy randomized adaptive search procedure (GRASP)
+            \item Iterated greedy algorithms
+            \item Iterated local search
+            \item Simulated annealing
+            \item Tabu search
+            \item Variable neighborhood search (VNS)
+            \item Ant colony optimization (ACO)
+        \end{itemize}
+        \item \textbf{Resources:} [powerful] Introduction, 1.1-1.2 (skip 1.2.8)
+    \end{itemize}
+
+    % LECTURE 2
+    \item \textbf{Lecture 2 - Evolutionary and Memetic Algorithms, Exact Methods}
+    \begin{itemize}
+        \item Evolutionary and memetic algorithms
+        \begin{itemize}
+            \item Evolutionary algorithms
+            \item Memetic algorithms
+            \item Lamarckian vs. Baldwinian learning
+        \end{itemize}
+        \item Exact methods
+        \begin{itemize}
+            \item Tree search methods (Branch and Bound, example: Knapsack)
+            \item Dynamic programming (example: Knapsack)
+            \item Mixed integer programming (MIP) (review of LP, if necessary)
+            \item Constraint programming (CP)
+        \end{itemize}
+        \item \textbf{Resources:} [powerful] Subsection 1.2.8, Section 1.7; [handbook] Chapter 9 (An Accelerated Introduction to Memetic Algorithms); [comparing-memetic] Section 2 (and the rest)
+    \end{itemize}
+
+    % LECTURE 3
+    \item \textbf{Lecture 3 - Incomplete Solutions and Decoders}
+    \begin{itemize}
+        \item Incomplete/indirect solution representations
+        \item Decoder-based metaheuristics
+        \item Application: Generalized Minimum Spanning Tree
+        \begin{itemize}
+            \item Initial solutions
+            \item Node set based VNS
+            \item Global edge set based VNS
+            \item Combined VNS
+        \end{itemize}
+        \item \textbf{Resources:} [powerful] Chapter 2
+    \end{itemize}
+
+    % LECTURE 4
+    \item \textbf{Lecture 4 - Problem Instance Reduction}
+    \begin{itemize}
+        \item Construct, Merge, Solve \& Adapt Algorithm (CSMA)
+        \item Application: Minimum Common String Partition
+        \begin{itemize}
+            \item Probabilistic solution generation
+            \item Solving reduced sub-instances
+        \end{itemize}
+        \item \textbf{Resources:} [powerful] Chapter 3
+    \end{itemize}
+
+    % LECTURE 5
+    \item \textbf{Lecture 5 - Large Neighborhood Search}
+    \begin{itemize}
+        \item MIP-based Large neighborhood search
+        \item Application: Minimum Weight Dominating Set
+        \begin{itemize}
+            \item initial solution (greedy heuristic)
+            \item partial destruction of solutions
+        \end{itemize}
+        \item Application: Generalized Minimum Spanning Tree
+        \begin{itemize}
+            \item global subtree optimization neighborhood
+        \end{itemize}
+        \item \textbf{Resources:} [powerful] Chapter 4
+    \end{itemize}
+
+    % LECTURE 6
+    \item \textbf{Lecture 6 - Parallel Non-independent Construction}
+    \begin{itemize}
+        \item General idea
+        \item Beam Search
+        \item Beam-ACO: Beam search + Ant Colony Optimization
+        \item Application: Multidimensional Knapsack (MK)
+        \begin{itemize}
+            \item greedy heuristic
+            \item beam search for MK
+            \item pure-ACO approach to MK
+            \item Beam-ACO for MK
+        \end{itemize}
+        \item \textbf{Resources:} [powerful] Chapter 5
+    \end{itemize}
+
+    % LECTURE 7
+    \item \textbf{Lecture 7 - Construction and Constraint Programming}
+    \begin{itemize}
+        \item Hybrids of constructive metaheuristics and constraint programming
+        \item Ant-Colony optimization + constraint programming integration
+        \item Application: Machine Scheduling with Sequence-dependent Setup Times
+        \item \textbf{Resources:} [emerging] Paper 6
+    \end{itemize}
+
+    % LECTURE 8
+    \item \textbf{Lecture 8 - Complete solution archives}
+    \begin{itemize}
+        \item General idea
+        \item Trie-based archive
+        \item Application: Generalized Minimum Spanning Tree (GMST)
+        \begin{itemize}
+            \item Archive-Enhanced Evolutionary Algorithm for GMST
+        \end{itemize}
+        \item \textbf{Resources:} [powerful] Chapter 6, Sections 6.1 \& 6.3
+    \end{itemize}
+
+    % LECTURE 9
+    \item \textbf{Lecture 9 - Hyper-heuristics}
+    \begin{itemize}
+        \item Introduction
+        \item Hyper-heuristics for
+        \begin{itemize}
+            \item Boolean Satisfiability
+            \item Timetabling
+            \item Packing
+        \end{itemize}
+        \item \textbf{Resources:} [search-methodologies] Chapter 20
+    \end{itemize}
+
+    % LECTURE 10
+    \item \textbf{Lecture 10 - Recent trends and applications}
+    \begin{itemize}
+        \item Fixed Set Search Applied to the Traveling Salesman Problem
+        \item Ant Colony Optimization with Policy Gradients and Replay (intro)
+        \item \textbf{Resources:} [fixed-set-search], [policy-gradients]
+    \end{itemize}
+
+    % LECTURE 11
+    \item \textbf{Lecture 11 - Recent trends and applications}
+    \begin{itemize}
+        \item Ant Colony Optimization with Policy Gradients and Replay (continued)
+        \item Letting a Large Neighborhood Search for an Electric Dial-A-Ride Problem Fly: On-The-Fly Charging Station Insertion
+        \item \textbf{Resources:} [policy-gradients], [on-the-fly-insertion]
+    \end{itemize}
+
+\end{itemize}
+
+\end{document}
