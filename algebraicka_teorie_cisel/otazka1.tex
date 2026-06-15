@@ -1,0 +1,117 @@
+\documentclass[a4paper,12pt]{article}
+
+% Podpora češtiny a kódování
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[czech]{babel}
+
+% Vzdušnější formátování odstavců (odstraní odsazení a přidá mezery mezi odstavci)
+\usepackage{parskip}
+
+% Matematické balíčky (nutné pro znaky jako \mathbb{N}, \pm a prostředí proof)
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+% Nastavení okrajů stránky
+\usepackage[margin=2.5cm]{geometry}
+
+% Informace o dokumentu
+\title{Algebraická teorie čísel - Příprava ke zkoušce}
+\author{Poznámky z konzultací}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\subsection*{Otázka 1: Dokažte, že diofantická rovnice $x^4 - 3y^2 = 1$ má pouze triviální řešení $(\pm 1, 0)$}
+
+\begin{proof}
+Abychom vyřešili rovnici $x^4 - 3y^2 = 1$, potřebujeme najít řešení tvaru $x_n = m^2$, kde $n, m \in \mathbb{N}_0$ a $x_n$ pochází z řešení Pellovy rovnice $x^2 - 3y^2 = 1$ definované v Tvrzení 1.1.2.
+
+Rozdělíme důkaz na dva případy podle parity $n$:
+
+\textbf{1. Případ: $n$ je liché}
+\vspace{0.5em}
+
+Nechť $n = 2n_0 + 1$. Podle vzorců z Tvrzení 1.1.3 získáme rovnost:
+$$(m - y_{n_0} - y_{n_0+1})(m + y_{n_0} + y_{n_0+1}) = 1$$
+
+Z tohoto součinu nutně plyne, že $m = \pm 1$ a zároveň $y_{n_0} + y_{n_0+1} = 0$. To je ovšem nemožné (spor), protože pro složky řešení Pellovy rovnice vždy platí $y_{n_0} + y_{n_0+1} > 0$.
+
+\vspace{1em}
+\textbf{2. Případ: $n$ je sudé}
+\vspace{0.5em}
+
+Nechť $n = 2n_0$ je sudé. Podle Tvrzení 1.1.3 platí $2x_{n_0}^2 - 1 = x_{2n_0} = x_n = m^2$, z čehož vyplývá rovnice $2x_{n_0}^2 - m^2 = 1$. 
+
+Redukcí této rovnice modulo 4 zjistíme, že $x_{n_0}$ musí být liché. 
+
+Dle Tvrzení 1.1.3 je $x_k$ liché právě tehdy, když je jeho index sudý, můžeme tedy psát $n_0 = 2n_1$ a opětovným použitím tvrzení získáme $x_{n_0} = x_{2n_1} = 2x_{n_1}^2 - 1$.
+
+Důsledek 1.3.2 nám dále ukazuje, že existují čísla $a, b \in \mathbb{N}_0$ taková, že $a^2 - 2b^2 = 1$ a zároveň platí:
+$$2x_{n_1}^2 - 1 = x_{n_0} = 2a^2 - 1 \pm 2ab$$
+
+Z toho po úpravě získáme:
+$$x_{n_1}^2 = a(a \pm b)$$
+
+Protože $a$ a $b$ jsou nesoudělná, jsou nesoudělná i čísla $a$ a $a \pm b$. Podle principu mocnin PP1 (Tvrzení 1.2.2) z toho plyne, že číslo $a$ musí být čtverec. 
+
+Podle Tvrzení 1.3.3 (řešícího rovnici $x^4 - 2y^2 = 1$) z toho vyplývá, že $a = 1$. 
+
+Pokud $a = 1$, dostáváme $b = 0$, $x_n = x_{n_0} = 1$ a ve výsledku $x = \pm 1, y = 0$.
+
+Tím jsme vyčerpali všechny možnosti a dokázali, že rovnice $x^4 - 3y^2 = 1$ má pouze triviální řešení $(\pm 1, 0)$.
+\end{proof}
+
+\subsection*{Otázka 2: Dokažte, že jedinými celočíselnými řešeními rovnice $x^2 - y^3 = 1$ jsou dvojice $(\pm3,2)$, $(\pm1,0)$ a $(0,-1)$}
+
+\begin{proof}
+Nechť $x, y \in \mathbb{Z}$ splňují rovnici $x^2 - y^3 = 1$. Pravou stranu rovnice vyjádříme pomocí algebraického rozkladu:
+$$x^2 = y^3 + 1 = (y + 1)(y^2 - y + 1) = (y + 1)\big((y + 1)(y - 2) + 3\big)$$ 
+
+Protože pro reálná čísla platí $y^2 - y + 1 = (y - 1/2)^2 + 3/4 \ge 0$ a z rovnice víme, že $x^2 \ge 0$, nutně dostáváme podmínku $y + 1 \ge 0$. Pro největší společný dělitel obou činitelů ze struktury výrazu vyplývá, že $\gcd(y + 1, y^2 - y + 1) \in \{1, 3\}$. Celý důkaz proto rozdělíme na dva hlavní případy:
+
+\textbf{1. Případ: $\gcd(y + 1, y^2 - y + 1) = 1$}
+\vspace{0.5em}
+
+Pokud jsou tito dva činitelé nesoudělní, pak z jejich součinu rovného čtverci $x^2$ podle principu mocnin PP1 (Tvrzení 1.2.2) plyne, že oba činitelé musí být samostatnými čtverci. Platí tedy $y^2 - y + 1 = a^2$ pro nějaké $a \in \mathbb{N}_0$. Vynásobením celé rovnice čtyřmi získáme:
+$$4y^2 - 4y + 4 = (2a)^2 \implies (2y - 1)^2 + 3 = (2a)^2 \implies 3 = (2a - 2y + 1)(2a + 2y - 1)$$ 
+
+Číslo 3 lze nad celými čísly rozložit na součin dvou činitelů pouze jako $1 \cdot 3$ nebo $(-1) \cdot (-3)$. Vyřešením odpovídajících jednoduchých soustav rovnic pro neznámé $a$ a $y$ dostáváme pouze dvě možné dvojice: $\langle a, y \rangle = \langle \pm1, 1 \rangle$ nebo $\langle \pm1, 0 \rangle$.
+\begin{itemize}
+    \item Pro $y = 1$ dostáváme prvek $y + 1 = 2$, což ovšem není čtverec, což je ve sporu s předpokladem z principu PP1.
+    \item Pro $y = 0$ dostáváme z původní rovnice $x^2 = 1$, což nám dává validní celočíselná řešení $(\pm1, 0)$.
+\end{itemize}
+
+\vspace{1em}
+\textbf{2. Případ: $\gcd(y + 1, y^2 - y + 1) = 3$}
+\vspace{0.5em}
+
+Podle zobecněného principu mocnin PP2 (Tvrzení 1.2.3) v tomto případě existují nesoudělná čísla $a, b \in \mathbb{N}_0$ taková, že platí rovnosti:
+$$y + 1 = 3a^2 \quad \text{a} \quad y^2 - y + 1 = 3b^2$$ 
+
+Vyjádřením výrazu $(2y - 1)^2$ a úpravou druhé rovnice získáme rovnost $3(2b)^2 - (2y - 1)^2 = 3$. Z ní vidíme, že člen $2y - 1$ musí být dělitelný 3, můžeme tedy položit $2y - 1 = 3Y$ pro nějaké $Y \in \mathbb{Z}$. S zavedením substituce $X = 2b \in \mathbb{N}_0$ získáme normovaný tvar Pellovy rovnice spolu s podmínkou pro $Y$:
+$$X^2 - 3Y^2 = 1 \quad \text{a} \quad Y = 2a^2 - 1$$ 
+
+Tento systém rovnic má jedno zřejmé triviální řešení pro zápornou hodnotu $Y$, konkrétně trojici $\langle X, Y, a \rangle = \langle 2, -1, 0 \rangle$. To odpovídá hodnotě $2y - 1 = -3 \implies y = -1$, což po dosazení zpět do zadání dává řešení $(0, -1)$.
+
+Dále již můžeme bez újmy na obecnosti předpokládat, že $Y \ge 0$. Hledáme index $n \in \mathbb{N}_0$ takový, aby platilo $Y = y_n = 2a^2 - 1$, kde $y_n$ je složka řešení Pellovy rovnice z Tvrzení 1.1.2. Protože hodnota $y_n = 2a^2 - 1$ je zjevně lichá, musí být index $n$ nutně lichým číslem. Podle explicitních vzorců z Tvrzení 1.1.3 vyjádříme $y_n$ pro liché indexy tvaru $n = 2m + 1$ jako $y_{2m+1} = 2x_m y_{m+1} - 1$. Porovnáním obou vyjádření dostáváme klíčovou rovnost:
+$$2a^2 - 1 = 2x_m y_{m+1} - 1 \implies a^2 = x_m y_{m+1}$$ 
+
+Z aritmetických vlastností řešení Pellových rovnic platí vztah $\gcd(x_m, y_{m+1}) = \gcd(x_m, x_m + 2y_m) \in \{1, 2\}$. Nyní musíme podrobně vyšetřit tyto dvě možnosti dělitelnosti:
+
+\begin{itemize}
+    \item \textbf{Pokud $\gcd(x_m, y_{m+1}) = 1$:} Podle principu mocnin PP1 (Tvrzení 1.2.2) musí být samotné číslo $x_m$ čtvercem. Z pomocné Věty 1.3.4 (kterou jsme dokázali v Otázce 1) však víme, že $x_m$ je čtvercem pouze tehdy, když $x_m = 1$, což přímo odpovídá indexu $m = 0$. Pro $m = 0$ dostáváme $n = 1$, z čehož vyplývá $Y = y_1 = 1$. Ze substitučního vztahu $2y - 1 = 3 \cdot 1$ pak získáme $y = 2$, což dosazením dává slavné netriviální řešení $(\pm3, 2)$.
+    
+    \item \textbf{Pokud $\gcd(x_m, y_{m+1}) = 2$:} Podle principu mocnin PP2 (Tvrzení 1.2.3) platí, že složka $y_{m+1}$ musí splňovat vztah $y_{m+1} = 2c^2$ pro nějaké $c \in \mathbb{N}_0$. Index $m+1$ musí být v tomto případě sudý (neboť $y_{m+1}$ je sudé), položme tedy $m+1 = 2k$ pro $k \in \mathbb{N}$. Podle Tvrzení 1.1.3 víme, že platí $y_{2k} = 2x_k y_k$, takže po dosazení dostáváme:
+    $$2c^2 = 2x_k y_k \implies c^2 = x_k y_k$$ 
+    Protože jsou čísla $x_k$ a $y_k$ prokazatelně nesoudělná, podle principu PP1 (Tvrzení 1.2.2) z toho vyplývá, že $x_k$ musí být čtverec. Podle Věty 1.3.4 to však pro jakékoliv $k \ge 1$ není možné. V tomto podpřípadě tedy žádná další řešení nevznikají.
+\end{itemize}
+
+Tím jsme vyčerpali všechny větve důkazu a ověřili, že jedinými celočíselnými řešeními rovnice $x^2 - y^3 = 1$ jsou skutečně pouze dvojice $(\pm3,2)$, $(\pm1,0)$ a $(0,-1)$.
+\end{proof}
+
+\end{document}
