@@ -863,5 +863,70 @@ Kromě odstraňování uzlů, které jsou plně prozkoumané, můžeme prořezá
 
 Tato integrace metaheuristiky (Evoluční algoritmus), kompletního archivu řešení a exaktního prořezávání (Bounding) ukazuje další silnou úroveň hybridizace, která dramaticky zrychluje proces u výpočetně náročných instancí.
 
+\section{Přednáška 9 - Hyper-heuristiky (Hyper-heuristics)}
+
+\subsection{Základní koncept a motivace}
+V praxi (např. při dynamickém plánování rozvozů nebo rozvrhování) jsou exaktní metody často výpočetně neúnosné a tradiční heuristiky mívají specifické slabiny, kvůli kterým mohou v určitých situacích selhat. Navíc nalezení absolutního optima často nedává smysl, protože problém se v reálném čase mění a optimum může být velmi křehké. 
+
+Zatímco klasické metaheuristiky prohledávají prostor řešení, \textbf{hyper-heuristiky prohledávají prostor heuristik}. Jsou definovány jako "heuristiky pro výběr heuristik" nebo přesněji jako automatizované metodologie pro výběr nebo generování heuristik k řešení těžkých výpočetních problémů. 
+
+Hyper-heuristiky se dělí na dva hlavní směry:
+\begin{enumerate}
+    \item \textbf{Výběr heuristik (Heuristic Selection):} Algoritmus zkoumá, jak chytře zkombinovat a přepínat mezi již existujícími (nízkoúrovňovými) heuristikami tak, aby se vyrušily jejich individuální slabiny.
+    \item \textbf{Generování heuristik (Heuristic Generation):} Algoritmus (často pomocí Genetického programování) automaticky objevuje a skládá zcela nové heuristiky ze základních stavebních bloků.
+\end{enumerate}
+
+\subsection{Aplikace 1: Výběrové hyper-heuristiky pro rozvrhování (Timetabling)}
+Problémy jako tvorba univerzitních rozvrhů (Timetabling) lze modelovat jako \textbf{barvení grafu (Graph-coloring)}. Události (přednášky) jsou uzly, a pokud dvě události nesmí probíhat současně, vede mezi nimi hrana. Cílem je přiřadit uzlům barvy (časová okna).
+
+Místo jedné heuristiky dáváme hyper-heuristice k dispozici sadu jednoduchých konstruktivních (nízkoúrovňových) heuristik, které určují, jaký uzel obarvit dál:
+\begin{itemize}
+    \item \textbf{LD (Largest Degree):} Vybere událost s největším počtem tvrdých omezení.
+    \item \textbf{LWD (Largest Weighted Degree):} Jako LD, ale omezení mají různé váhy.
+    \item \textbf{CD (Color Degree):} Vybere událost, která koliduje s nejvíce již naplánovanými událostmi.
+    \item \textbf{LE (Largest Enrolment):} Vybere událost s největším počtem účastníků.
+    \item \textbf{SD (Saturation Degree):} Vybere událost, které zbývá nejméně volných časových oken.
+    \item \textbf{RO (Random Order):} Vybere událost zcela náhodně.
+\end{itemize}
+
+Vysokoúrovňový řídící algoritmus (např. Tabu Search) následně hledá \textbf{optimální sekvenci} těchto heuristik (např. sekvenci \textit{LD-SD-SD-LE...}), kdy každá heuristika v sekvenci umístí přesně dvě události a předá řízení další. Pokud sekvence vytvoří neplatný rozvrh, její problémová pod-sekvence se umístí na Tabu list.
+
+\begin{algorithm}[H]
+\caption{Výběrová hyper-heuristika (Selection Hyper-heuristic)}
+\textbf{Vstup:} Sada nízkoúrovňových heuristik $H = \{h_1, h_2, \dots, h_k\}$, instance problému \\
+\textbf{Výstup:} Nejlepší nalezené řešení $S_{best}$
+\begin{algorithmic}[1]
+\STATE Inicializuj řídící algoritmus (např. Tabu Search) a vygeneruj počáteční sekvenci heuristik $seq$
+\STATE $S_{best} \gets \text{NULL}$
+\WHILE{není dosaženo kritéria ukončení}
+    \STATE $S \gets \emptyset$ \textit{// Prázdné částečné řešení}
+    \FORALL{heuristice $h_i$ v sekvenci $seq$}
+        \STATE $S \gets$ Aplikuj $h_i$ na $S$ pro zařazení dalšího prvku
+    \ENDFOR
+    \STATE $S \gets$ Aplikuj lokální prohledávání na $S$ pro finální vylepšení
+    \IF{Cena($S$) $<$ Cena($S_{best}$)}
+        \STATE $S_{best} \gets S$
+    \ENDIF
+    \STATE $seq \gets$ Uprav sekvenci pomocí Tabu Search (změň pořadí nebo typ heuristik)
+\ENDWHILE
+\RETURN $S_{best}$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Aplikace 2: Generativní hyper-heuristiky pro splnitelnost (Boolean SAT)}
+Problém Boolean Satisfiability (SAT) hledá ohodnocení logických proměnných tak, aby byla splněna logická formule. Existují fixní heuristiky jako \textit{GSAT} (překlop proměnnou, která splní nejvíce klauzulí) nebo \textit{WalkSat}.
+
+Generativní hyper-heuristika používá \textbf{Genetické programování (GP)}, aby tyto pevné přístupy nahradila evolucí. GP strom reprezentuje vlastní program (novou heuristiku). Netrénují se konkrétní řešení, ale \textbf{rozhodovací stromy}, které pracují s funkcemi jako:
+\begin{itemize}
+    \item \texttt{FLIP(v)}: Překlopí hodnotu zadané proměnné.
+    \item \texttt{MAX\_SCR(list)}: Vrátí proměnnou ze seznamu, která po překlopení získá nejvyšší počet splněných klauzulí (chamtivý výběr).
+    \item \texttt{IFV(prob, v1, v2)}: S pravděpodobností $prob$ vrátí proměnnou $v1$, jinak $v2$ (stochastický prvek).
+\end{itemize}
+Jedinci v populaci (různé stromy/heuristiky) jsou hodnoceni podle toho, kolik cvičných problémů dokázali úspěšně vyřešit a kolik tahů k tomu potřebovali. Výsledná wygenerovaná heuristika se pak nasadí na zcela nové, neviděné instance.
+
+\subsection{Teoretické ukotvení: No Free Lunch (NFL) teorém}
+Zásadní teoretickou otázkou je: Může hyper-heuristika najít algoritmus, který je absolutně "nejlepší"? Odpověď dává slavný \textbf{No Free Lunch (NFL) teorém} (Wolpert, 1995). Ten matematicky dokazuje, že zprůměrujeme-li výkon přes \textit{naprosto všechny} představitelné problémy, mají všechny optimalizační algoritmy přesně stejnou efektivitu. 
+
+Znamená to, že se snažíme zbytečně? Ne. Schumacher et al. ukázali, že NFL teorém platí pouze pro množiny problémů, které jsou uzavřené vůči permutaci hodnot (tedy pro zcela náhodné "šumové" problémy bez jakékoliv struktury). Reálné problémy (jako TSP, SAT nebo balení batohu) v sobě mají vysokou míru struktury a nejsou náhodné. Hyper-heuristiky tedy dávají obrovský smysl, protože nehledají jeden univerzální algoritmus pro všechno, ale učí se najít algoritmus perfektně ušitý na míru \textbf{specifické struktuře} dané rodiny problémů.
 
 \end{document}
