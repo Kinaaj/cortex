@@ -226,7 +226,7 @@ Z Důsledku 2.1.2 víme, že pokud máme součet několika čísel a právě jed
 
 \subsection*{Otázka 4: Dokažte, že rovnice $x^2 - y^q = 1$ pro libovolné prvočíslo $q > 3$ nemá nenulové řešení}
 
-\textbf{Věta (Chao Ko, 1965):} Nechť $q \ge 5$ je prvočíslo. Diofantická rovnice $x^2 - y^q = 1$ má pouze triviální řešení $(\pm 1, 0)$ a $(0, -1)$ [cite: 574-576].
+\textbf{Věta (Chao Ko, 1965):} Nechť $q \ge 5$ je prvočíslo. Diofantická rovnice $x^2 - y^q = 1$ má pouze triviální řešení $(\pm 1, 0)$ a $(0, -1)$ .
 
 Důkaz (podle E. Z. Cheina) provedeme tak, že si nejprve dokážeme dvě pomocná tvrzení o vlastnostech hypotetického nenulového řešení, která nás následně dovedou k přímému sporu.
 
@@ -234,20 +234,20 @@ Důkaz (podle E. Z. Cheina) provedeme tak, že si nejprve dokážeme dvě pomocn
 \textbf{Tvrzení 3.2.1: Pokud $q \ge 3$ je prvočíslo a $x, y \in \mathbb{Z}^*$ splňují $x^2 - y^q = 1$, pak $q$ dělí $x$.}
 \vspace{0.5em}
 \begin{proof}
-Předpokládejme pro spor, že $q$ nedělí $x$ ($\neg(q|x)$)[cite: 542]. Rovnici si přepíšeme jako $x^2 = y^q + 1$ a pravou stranu algebraicky rozložíme:
-$$x^2 = (y + 1) \cdot \frac{y^q + 1}{y + 1} \text{ [cite: 543]}$$
+Předpokládejme pro spor, že $q$ nedělí $x$ ($\neg(q|x)$). Rovnici si přepíšeme jako $x^2 = y^q + 1$ a pravou stranu algebraicky rozložíme:
+$$x^2 = (y + 1) \cdot \frac{y^q + 1}{y + 1} $$
 
-Z pomocného Lemmatu 3.1.1 plyne, že největší společný dělitel těchto dvou činitelů musí dělit číslo $q$[cite: 542]. Protože jsme ale předpokládali, že $q$ nedělí $x$, nemůže $q$ dělit ani $x^2$, a tudíž musí být tito dva činitelé absolutně nesoudělní[cite: 544]. 
+Z pomocného Lemmatu 3.1.1 plyne, že největší společný dělitel těchto dvou činitelů musí dělit číslo $q$. Protože jsme ale předpokládali, že $q$ nedělí $x$, nemůže $q$ dělit ani $x^2$, a tudíž musí být tito dva činitelé absolutně nesoudělní. 
 
-Podle principu mocnin PP1 (Tvrzení 1.2.2) z toho plyne, že činitel $(y + 1)$ musí být čtverec, tedy $y + 1 = u^2$ pro nějaké $u \in \mathbb{N}$[cite: 545]. (Z parity řešení víme, že $y$ je sudé, a tedy $u$ je liché [cite: 545]). Z rovnice si nyní můžeme zkonstruovat dvě různá řešení Pellovy rovnice $X^2 - yY^2 = 1$:
-$$x^2 - y \cdot (y^{(q-1)/2})^2 = 1 \quad \text{a} \quad u^2 - y \cdot 1^2 = 1 \text{ [cite: 546]}$$
+Podle principu mocnin PP1 (Tvrzení 1.2.2) z toho plyne, že činitel $(y + 1)$ musí být čtverec, tedy $y + 1 = u^2$ pro nějaké $u \in \mathbb{N}$. (Z parity řešení víme, že $y$ je sudé, a tedy $u$ je liché ). Z rovnice si nyní můžeme zkonstruovat dvě různá řešení Pellovy rovnice $X^2 - yY^2 = 1$:
+$$x^2 - y \cdot (y^{(q-1)/2})^2 = 1 \quad \text{a} \quad u^2 - y \cdot 1^2 = 1 $$
 
-Máme tedy řešení $\langle x, y^{(q-1)/2} \rangle$ a zjevně minimální řešení $\langle u, 1 \rangle$ [cite: 547-549]. Podle teorie Pellových rovnic (Tvrzení 1.1.1) musí existovat přirozené číslo $m$ takové, že v oboru $\mathbb{Z}[\sqrt{y}]$ platí:
-$$x + y^{(q-1)/2}\sqrt{y} = (u + \sqrt{y})^m \text{ [cite: 550-551]}$$
+Máme tedy řešení $\langle x, y^{(q-1)/2} \rangle$ a zjevně minimální řešení $\langle u, 1 \rangle$ . Podle teorie Pellových rovnic (Tvrzení 1.1.1) musí existovat přirozené číslo $m$ takové, že v oboru $\mathbb{Z}[\sqrt{y}]$ platí:
+$$x + y^{(q-1)/2}\sqrt{y} = (u + \sqrt{y})^m $$
 
-Pokud tuto rovnost rozvineme a redukujeme modulo $y$, zjistíme, že $y$ musí dělit výraz $m u^{m-1}$ [cite: 553-554]. Protože je $y$ sudé a $u$ liché, musí být index $m$ sudé číslo[cite: 554]. 
-Když pravou stranu přepíšeme pro sudé $m$ do tvaru $(u^2 + y + 2u\sqrt{y})^{m/2}$ a zredukujeme modulo $u$, zjistíme, že $u$ musí dělit $y^{(q-1)/2}$ [cite: 556-557]. 
-Avšak z předpokladu $y + 1 = u^2$ víme, že $u$ a $y$ jsou nesoudělná[cite: 557]. Z toho nutně plyne $u = \pm 1$, což po dosazení dává $y = 0$ [cite: 557-558]. To je ale spor s tím, že hledáme nenulové řešení[cite: 558]. Tvrzení je tak dokázáno a $q$ musí dělit $x$[cite: 541].
+Pokud tuto rovnost rozvineme a redukujeme modulo $y$, zjistíme, že $y$ musí dělit výraz $m u^{m-1}$ . Protože je $y$ sudé a $u$ liché, musí být index $m$ sudé číslo. 
+Když pravou stranu přepíšeme pro sudé $m$ do tvaru $(u^2 + y + 2u\sqrt{y})^{m/2}$ a zredukujeme modulo $u$, zjistíme, že $u$ musí dělit $y^{(q-1)/2}$ . 
+Avšak z předpokladu $y + 1 = u^2$ víme, že $u$ a $y$ jsou nesoudělná. Z toho nutně plyne $u = \pm 1$, což po dosazení dává $y = 0$ . To je ale spor s tím, že hledáme nenulové řešení. Tvrzení je tak dokázáno a $q$ musí dělit $x$.
 \end{proof}
 
 \vspace{1em}
@@ -255,38 +255,38 @@ Avšak z předpokladu $y + 1 = u^2$ víme, že $u$ a $y$ jsou nesoudělná[cite:
 \vspace{0.5em}
 \begin{proof}
 Bez újmy na obecnosti můžeme vyjádřit činitele $(x-1)$ a $(x+1)$ podle Lemmatu 3.1.2 pomocí nesoudělných čísel $a, b \in \mathbb{Z}$ ve tvaru:
-$$x - 1 = 2^{q-1}a^q \quad \text{a} \quad x + 1 = 2b^q \text{ [cite: 562-563]}$$
+$$x - 1 = 2^{q-1}a^q \quad \text{a} \quad x + 1 = 2b^q $$
 
 Pomocí algebraických úprav těchto vztahů můžeme zkonstruovat rovnost:
-$$b^{2q} - (2a)^q = \left(\frac{x+1}{2}\right)^2 - 2(x-1) = \left(\frac{x-3}{2}\right)^2 \text{ [cite: 563-564]}$$
+$$b^{2q} - (2a)^q = \left(\frac{x+1}{2}\right)^2 - 2(x-1) = \left(\frac{x-3}{2}\right)^2 $$
 
 Levou stranu opět rozložíme na součin:
-$$(b^2 - 2a) \cdot \left(\frac{b^{2q} - (2a)^q}{b^2 - 2a}\right) = \left(\frac{x-3}{2}\right)^2 \text{ [cite: 564]}$$
+$$(b^2 - 2a) \cdot \left(\frac{b^{2q} - (2a)^q}{b^2 - 2a}\right) = \left(\frac{x-3}{2}\right)^2 $$
 
-Jelikož jsou čísla $2a$ a $b^2$ nesoudělná, podle Lemmatu 3.1.1 platí, že největší společný dělitel těchto dvou činitelů na levé straně dělí $q$[cite: 565]. Nastávají tak jen dvě možnosti pro tento největší společný dělitel:
+Jelikož jsou čísla $2a$ a $b^2$ nesoudělná, podle Lemmatu 3.1.1 platí, že největší společný dělitel těchto dvou činitelů na levé straně dělí $q$. Nastávají tak jen dvě možnosti pro tento největší společný dělitel:
 \begin{itemize}
-    \item \textbf{Dělitel je $q$:} Pak je výraz $(x-3)^2$ dělitelný $q$, z čehož rovnou plyne $x \equiv 3 \pmod q$ (respektive $x \equiv \pm 3 \pmod q$ před případnou změnou znaménka v Lemmatu)[cite: 566].
-    \item \textbf{Dělitel je 1 (činitelé jsou nesoudělní):} Podle principu mocnin PP1 musí existovat $c \in \mathbb{N}$ takové, že $b^2 - 2a = c^2$[cite: 568]. Ze vzdálenosti nejbližších čtverců lze odvodit nerovnost $|a| \ge |b|$ [cite: 569-570]. Z druhé strany, porovnáním velikostí původních předpisů pro $a^q$ a $b^q$, platí hraniční nerovnost $|a|^q < |b|^q$, z čehož vyplývá $|a| < |b|$ [cite: 571-572]. To je přímý spor, takže tento případ nemůže nastat[cite: 572].
+    \item \textbf{Dělitel je $q$:} Pak je výraz $(x-3)^2$ dělitelný $q$, z čehož rovnou plyne $x \equiv 3 \pmod q$ (respektive $x \equiv \pm 3 \pmod q$ před případnou změnou znaménka v Lemmatu).
+    \item \textbf{Dělitel je 1 (činitelé jsou nesoudělní):} Podle principu mocnin PP1 musí existovat $c \in \mathbb{N}$ takové, že $b^2 - 2a = c^2$. Ze vzdálenosti nejbližších čtverců lze odvodit nerovnost $|a| \ge |b|$ . Z druhé strany, porovnáním velikostí původních předpisů pro $a^q$ a $b^q$, platí hraniční nerovnost $|a|^q < |b|^q$, z čehož vyplývá $|a| < |b|$ . To je přímý spor, takže tento případ nemůže nastat.
 \end{itemize}
-Tím je dokázáno, že nutně platí $x \equiv \pm 3 \pmod q$[cite: 561].
+Tím je dokázáno, že nutně platí $x \equiv \pm 3 \pmod q$.
 \end{proof}
 
 \vspace{1em}
 \textbf{Závěrečný krok důkazu věty Chao Ko:}
 \vspace{0.5em}
 
-Předpokládejme, že pro nějaké prvočíslo $q \ge 5$ existuje nenulové řešení $x, y \in \mathbb{Z}^*$ rovnice $x^2 - y^q = 1$[cite: 577]. 
+Předpokládejme, že pro nějaké prvočíslo $q \ge 5$ existuje nenulové řešení $x, y \in \mathbb{Z}^*$ rovnice $x^2 - y^q = 1$. 
 Podle Tvrzení 3.2.1 musí platit, že $q$ dělí $x$, což v modulární aritmetice zapíšeme jako:
-$$x \equiv 0 \pmod q \text{ [cite: 577]}$$
+$$x \equiv 0 \pmod q $$
 
 Zároveň však podle Tvrzení 3.2.2 pro stejné číslo $x$ musí platit:
-$$x \equiv \pm 3 \pmod q \text{ [cite: 577-578]}$$
+$$x \equiv \pm 3 \pmod q $$
 
 Když obě kongruence spojíme, dostaneme:
-$$0 \equiv \pm 3 \pmod q \text{ [cite: 578]}$$
+$$0 \equiv \pm 3 \pmod q $$
 
-Tato podmínka říká, že prvočíslo $q$ musí dělit číslo 3[cite: 578]. Jediné prvočíslo, které dělí 3, je však samotná 3. Náš předpoklad ale od začátku striktně požaduje, aby $q \ge 5$[cite: 578]. 
+Tato podmínka říká, že prvočíslo $q$ musí dělit číslo 3. Jediné prvočíslo, které dělí 3, je však samotná 3. Náš předpoklad ale od začátku striktně požaduje, aby $q \ge 5$. 
 
-Dostali jsme jasný matematický spor. Diophantická rovnice $x^2 - y^q = 1$ tedy pro žádné prvočíslo $q > 3$ nenulové celočíselné řešení nemá[cite: 578].
+Dostali jsme jasný matematický spor. Diophantická rovnice $x^2 - y^q = 1$ tedy pro žádné prvočíslo $q > 3$ nenulové celočíselné řešení nemá.
 
 \end{document}
